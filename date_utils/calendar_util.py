@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #  calendar_util.py: -*- Python -*-  DESCRIPTIVE TEXT.
 #
 #  Author: Phil Schwartz (phil_schwartz@users.sourceforge.net)
@@ -11,7 +12,7 @@
 # Meeus, Jean. Astronomical Algorithms . Richmond: Willmann-Bell, 1991. ISBN 0-943396-35-2.
 #    The essential reference for computational positional astronomy.
 #
-from astro import *
+import astro
 
 
 J0000 = 1721424.5  # // Julian date of Gregorian epoch: 0000-01-01
@@ -50,6 +51,299 @@ Weekdays = ("Sunday", "Monday", "Tuesday", "Wednesday",
             "Thursday", "Friday", "Saturday")
 
 
+class Julianday(float):
+
+    def floor(self):
+        # the python math module astro.floor func returns a float
+        return int(self)
+
+    @property
+    def gregorian(jd):
+        wjd = astro.floor(jd - 0.5) + 0.5
+        depoch = wjd - GREGORIAN_EPOCH
+        quadricent = astro.floor(depoch / 146097)
+        dqc = depoch % 146097
+        cent = astro.floor(dqc / 36524)
+        dcent = dqc % 36524
+        quad = astro.floor(dcent / 1461)
+        dquad = dcent % 1461
+        yindex = astro.floor(dquad / 365)
+        year = (quadricent * 400) + (cent * 100) + (quad * 4) + yindex
+        if not (cent == 4 or yindex == 4):
+            year += 1
+        yearday = wjd - gregorian_to_jd(year, 1, 1)
+        if wjd < gregorian_to_jd(year, 3, 1):
+            leap_adj = 0
+        elif leap_gregorian(year):
+            leap_adj = 1
+        else:
+            leap_adj = 2
+        month = astro.floor((((yearday + leap_adj) * 12) + 373) / 367)
+        day = int(wjd - gregorian_to_jd(year, month, 1)) + 1
+        return (year, month, day)
+
+    @property
+    def hebrew(jd):
+        jd = jd.floor() + 0.5
+        count = astro.floor(((jd - HEBREW_EPOCH) * 98496.0) / 35975351.0)
+        year = count - 1
+        i = count
+        while jd >= hebrew_to_jd(i, 7, 1):
+            i += 1
+            year += 1
+
+        if jd < hebrew_to_jd(year, 1, 1):
+            first = 7
+        else:
+            first = 1
+
+        month = i = first
+        while jd > hebrew_to_jd(year, i, hebrew_month_days(year, i)):
+            i += 1
+            month += 1
+
+        day = int(jd - hebrew_to_jd(year, month, 1)) + 1
+        return (year, month, day)
+
+    @property
+    def iso(jd):
+        #//  JD_TO_ISO  --  Return tuple of ISO (year, week, day) for Julian day
+        year = Julianday(jd - 3).gregorian[0]
+        if jd >= iso_to_julian(year + 1, 1, 1):
+            year += 1
+        week = astro.floor((jd - iso_to_julian(year, 1, 1)) / 7) + 1
+        day = astro.jwday(jd)
+        if day == 0:
+            day = 7
+
+        return (year, week, day)
+
+    @property
+    def iso_day(jd):
+        #//  JD_TO_ISO_DAY  --  Return tuple of ISO (year, day_of_year) for Julian day
+        year = jd.gregorian[0]
+        day = astro.floor(jd - gregorian_to_jd(year, 1, 1)) + 1
+        return (year, day)
+
+    @property
+    def julian(td):
+        #//  JD_TO_JULIAN  --  Calculate Julian calendar date from Julian day
+
+        td += 0.5
+        z = astro.floor(td)
+
+        a = z
+        b = a + 1524
+        c = astro.floor((b - 122.1) / 365.25)
+        d = astro.floor(365.25 * c)
+        e = astro.floor((b - d) / 30.6001)
+
+        if astro.floor(e < 14):
+            month = e - 1
+        else:
+            month = e - 13
+
+        if astro.floor(month > 2):
+            year = c - 4716
+        else:
+            year = c - 4715
+
+        day = b - d - astro.floor(30.6001 * e)
+
+        #/*  If year is less than 1, subtract one to convert from
+        #    a zero based date system to the common era system in
+        #    which the year -1 (1 B.C.E) is followed by year 1 (1 C.E.).  */
+
+        if year < 1:
+            year -= 1
+
+        return (year, month, day)
+
+    @property
+    def annee_da_la_revolution(jd):
+        #/*  ANNEE_DE_LA_REVOLUTION  --  Determine the year in the French
+        #                                revolutionary calendar in which a
+        #                                given Julian day falls.  Returns an
+        #                                array of two elements:
+        #
+        #                                    [0]  Année de la Révolution
+        #                                    [1]  Julian day number containing
+        #                                         equinox for this year.
+        #*/
+        guess = jd.gregorian[0] - 2
+
+        lasteq = paris_equinoxe_jd(guess)
+        while lasteq > jd:
+            guess -= 1
+            lasteq = paris_equinoxe_jd(guess)
+
+        nexteq = lasteq - 1
+        while not (lasteq <= jd and jd < nexteq):
+            lasteq = nexteq
+            guess += 1
+            nexteq = paris_equinoxe_jd(guess)
+
+        # not sure if python round and javascript math.round behave
+        # identically?
+        adr = round((lasteq - FRENCH_REVOLUTIONARY_EPOCH) / astro.TropicalYear) + 1
+        return (adr, lasteq)
+
+    @property
+    def french_republican(jd):
+        #/*  JD_TO_FRENCH_REVOLUTIONARY  --  Calculate date in the French Revolutionary
+        #                                    calendar from Julian day.  The five or six
+        #                                    "sansculottides" are considered a thirteenth
+        # month in the results of this function.  */
+        jd = Julianday(astro.floor(jd) + 0.5)
+        adr = jd.annee_da_la_revolution
+        an = int(adr[0])
+        equinoxe = adr[1]
+        mois = astro.floor((jd - equinoxe) / 30) + 1
+        jour = (jd - equinoxe) % 30
+        decade = astro.floor(jour / 10) + 1
+        jour = int(jour % 10) + 1
+
+        return (an, mois, decade, jour)
+
+    @property
+    def islamic(jd):
+        #//  JD_TO_ISLAMIC  --  Calculate Islamic date from Julian day
+
+        jd = astro.floor(jd) + 0.5
+        year = astro.floor(((30 * (jd - ISLAMIC_EPOCH)) + 10646) / 10631)
+        month = min(12,
+                    astro.ceil((jd - (29 + islamic_to_jd(year, 1, 1))) / 29.5) + 1)
+        day = int(jd - islamic_to_jd(year, month, 1)) + 1
+        return (year, month, day)
+
+    @property
+    def persian(jd):
+        #//  JD_TO_PERSIAN  --  Calculate Persian date from Julian day
+        jd = astro.floor(jd) + 0.5
+
+        depoch = jd - persian_to_jd(475, 1, 1)
+        cycle = astro.floor(depoch / 1029983)
+        cyear = (depoch % 1029983)
+        if cyear == 1029982:
+            ycycle = 2820
+        else:
+            aux1 = astro.floor(cyear / 366)
+            aux2 = (cyear % 366)
+            ycycle = astro.floor(
+                ((2134 * aux1) + (2816 * aux2) + 2815) / 1028522) + aux1 + 1
+
+        year = ycycle + (2820 * cycle) + 474
+        if (year <= 0):
+            year -= 1
+
+        yday = (jd - persian_to_jd(year, 1, 1)) + 1
+        if yday <= 186:
+            month = astro.ceil(yday / 31)
+        else:
+            month = astro.ceil((yday - 6) / 30)
+
+        day = int(jd - persian_to_jd(year, month, 1)) + 1
+        return (year, month, day)
+
+    @property
+    def mayan_count(jd):
+        #//  JD_TO_MAYAN_COUNT  --  Calculate Mayan long count from Julian day
+        d = jd - MAYAN_COUNT_EPOCH
+        baktun = astro.floor(d / 144000)
+        d = (d % 144000)
+        katun = astro.floor(d / 7200)
+        d = (d % 7200)
+        tun = astro.floor(d / 360)
+        d = (d % 360)
+        uinal = astro.floor(d / 20)
+        kin = int((d % 20))
+
+        return (baktun, katun, tun, uinal, kin)
+
+    @property
+    def mayan_haab(jd):
+        #//  JD_TO_MAYAN_HAAB  --  Determine Mayan Haab "month" and day from Julian day
+        lcount = jd - MAYAN_COUNT_EPOCH
+        day = (lcount + 8 + ((18 - 1) * 20) % 365)
+
+        return (astro.floor(day / 20) + 1, int((day % 20)))
+
+    @property
+    def mayan_tzolkin(jd):
+        #//  JD_TO_MAYAN_TZOLKIN  --  Determine Mayan Tzolkin "month" and day from Julian day
+        lcount = jd - MAYAN_COUNT_EPOCH
+        return (int(astro.amod(lcount + 20, 20)), int(astro.amod(lcount + 4, 13)))
+
+    @property
+    def bahai(jd):
+        #//  JD_TO_BAHAI  --  Calculate Bahai date from Julian day
+
+        jd = Julianday(jd.floor() + 0.5)
+        gy = jd.gregorian[0]
+        bstarty = Julianday(BAHAI_EPOCH).gregorian[0]
+
+        if jd <= gregorian_to_jd(gy, 3, 20):
+            x = 1
+        else:
+            x = 0
+        # verify this next line...
+        bys = gy - (bstarty + (((gregorian_to_jd(gy, 1, 1) <= jd) and x)))
+        major = astro.floor(bys / 361) + 1
+        cycle = astro.floor((bys % 361) / 19) + 1
+        year = (bys % 19) + 1
+        days = jd - bahai_to_jd(major, cycle, year, 1, 1)
+        bld = bahai_to_jd(major, cycle, year, 20, 1)
+        if jd >= bld:
+            month = 20
+        else:
+            month = astro.floor(days / 19) + 1
+        day = int((jd + 1) - bahai_to_jd(major, cycle, year, month, 1))
+
+        return (major, cycle, year, month, day)
+
+    @property
+    def indian_civil(jd):
+        #//  JD_TO_INDIAN_CIVIL  --  Calculate Indian Civil date from Julian day
+        #// Offset in years from Saka era to Gregorian epoch
+        Saka = 79 - 1
+        start = 80
+        # // Day offset between Saka and Gregorian
+
+        jd = Julianday(jd.floor() + 0.5)
+        greg = jd.gregorian  # // Gregorian date for Julian day
+        leap = leap_gregorian(greg[0])  # // Is this a leap year?
+        year = greg[0] - Saka  # // Tentative year in Saka era
+        # // JD at start of Gregorian year
+        greg0 = gregorian_to_jd(greg[0], 1, 1)
+        yday = jd - greg0  # // Day number (0 based) in Gregorian year
+
+        if leap:
+            Caitra = 31  # // Days in Caitra this year
+        else:
+            Caitra = 30
+
+        if yday < start:
+            #//  Day is at the end of the preceding Saka year
+            year -= 1
+            yday += Caitra + (31 * 5) + (30 * 3) + 10 + start
+
+        yday -= start
+        if yday < Caitra:
+            month = 1
+            day = yday + 1
+        else:
+            mday = yday - Caitra
+            if (mday < (31 * 5)):
+                month = astro.floor(mday / 31) + 2
+                day = (mday % 31) + 1
+            else:
+                mday -= 31 * 5
+                month = astro.floor(mday / 30) + 7
+                day = (mday % 30) + 1
+
+        return (year, month, int(day))
+
+
 def leap_gregorian(year):
     return (year % 4 == 0 and
             not ((year % 100) == 0 and (year % 400) != 0))
@@ -63,46 +357,19 @@ def gregorian_to_jd(year, month, day):
     else:
         leap_adj = -2
 
-    return ((GREGORIAN_EPOCH - 1) +
+    return Julianday((GREGORIAN_EPOCH - 1) +
            (365 * (year - 1)) +
-            floor((year - 1) / 4) +
-           (-floor((year - 1) / 100)) +
-            floor((year - 1) / 400) +
-            floor((((367 * month) - 362) / 12) +
+            astro.floor((year - 1) / 4) +
+           (-astro.floor((year - 1) / 100)) +
+            astro.floor((year - 1) / 400) +
+            astro.floor((((367 * month) - 362) / 12) +
                   leap_adj +
                   day))
 
 
-def jd_to_gregorian(jd):
-    wjd = floor(jd - 0.5) + 0.5
-    depoch = wjd - GREGORIAN_EPOCH
-    quadricent = floor(depoch / 146097)
-    dqc = mod(depoch, 146097)
-    cent = floor(dqc / 36524)
-    dcent = mod(dqc, 36524)
-    quad = floor(dcent / 1461)
-    dquad = mod(dcent, 1461)
-    yindex = floor(dquad / 365)
-    year = (quadricent * 400) + (cent * 100) + (quad * 4) + yindex
-    if not (cent == 4 or yindex == 4):
-        year += 1
-
-    yearday = wjd - gregorian_to_jd(year, 1, 1)
-    if wjd < gregorian_to_jd(year, 3, 1):
-        leap_adj = 0
-    elif leap_gregorian(year):
-        leap_adj = 1
-    else:
-        leap_adj = 2
-
-    month = floor((((yearday + leap_adj) * 12) + 373) / 367)
-    day = int(wjd - gregorian_to_jd(year, month, 1)) + 1
-    return (year, month, day)
-
-
 def hebrew_leap(year):
     #//  Is a given Hebrew year a leap year ?
-    return mod(((year * 7) + 1), 19) < 7
+    return (((year * 7) + 1) % 19) < 7
 
 
 def hebrew_year_months(year):
@@ -120,7 +387,7 @@ def hebrew_delay_1(year):
     parts = 12084 + (13753 * months)
     day = (months * 29) + parts / 25920
 
-    if mod((3 * (day + 1)), 7) < 3:
+    if ((3 * (day + 1)) % 7) < 3:
         day += 1
 
     return day
@@ -158,11 +425,11 @@ def hebrew_month_days(year, month):
         return 29
 
     #//  If it's Heshvan, days depend on length of year
-    if month == 8 and not (mod(hebrew_year_days(year), 10) == 5):
+    if month == 8 and (hebrew_year_days(year) % 10) != 5:
         return 29
 
     #//  Similarly, Kislev varies with the length of year
-    if month == 9 and mod(hebrew_year_days(year), 10) == 3:
+    if month == 9 and (hebrew_year_days(year) % 10) == 3:
         return 29
 
     #//  Nope, it's a 30 day month
@@ -186,31 +453,8 @@ def hebrew_to_jd(year, month, day):
     return jd
 
 
-def jd_to_hebrew(jd):
-    jd = floor(jd) + 0.5
-    count = floor(((jd - HEBREW_EPOCH) * 98496.0) / 35975351.0)
-    year = count - 1
-    i = count
-    while jd >= hebrew_to_jd(i, 7, 1):
-        i += 1
-        year += 1
-
-    if jd < hebrew_to_jd(year, 1, 1):
-        first = 7
-    else:
-        first = 1
-
-    month = i = first
-    while jd > hebrew_to_jd(year, i, hebrew_month_days(year, i)):
-        i += 1
-        month += 1
-
-    day = int(jd - hebrew_to_jd(year, month, 1)) + 1
-    return (year, month, day)
-
-
 def weekday_before(weekday, jd):
-    return jd - jwday(jd - weekday)
+    return jd - astro.jwday(jd - weekday)
 
 
 def search_weekday(weekday, jd, direction, offset):
@@ -269,32 +513,12 @@ def iso_day_to_jd(year, day):
 
 def iso_to_julian(year, week, day):
     #//  ISO_TO_JULIAN  --  Return Julian day of given ISO year, week, and day
-    return day + n_weeks(0, gregorian_to_jd(year - 1, 12, 28), week)
-
-
-def jd_to_iso(jd):
-    #//  JD_TO_ISO  --  Return tuple of ISO (year, week, day) for Julian day
-    year = jd_to_gregorian(jd - 3)[0]
-    if jd >= iso_to_julian(year + 1, 1, 1):
-        year += 1
-    week = floor((jd - iso_to_julian(year, 1, 1)) / 7) + 1
-    day = jwday(jd)
-    if day == 0:
-        day = 7
-
-    return (year, week, day)
+    return Julianday(day + n_weeks(0, gregorian_to_jd(year - 1, 12, 28), week))
 
 
 def iso_day_to_julian(year, day):
     #//  ISO_DAY_TO_JULIAN  --  Return Julian day of given ISO year, and day of year
-    return ((day - 1) + gregorian_to_jd(year, 1, 1))
-
-
-def jd_to_iso_day(jd):
-    #//  JD_TO_ISO_DAY  --  Return tuple of ISO (year, day_of_year) for Julian day
-    year = jd_to_gregorian(jd)[0]
-    day = floor(jd - gregorian_to_jd(year, 1, 1)) + 1
-    return (year, day)
+    return Julianday((day - 1) + gregorian_to_jd(year, 1, 1))
 
 
 def leap_julian(year):
@@ -316,43 +540,9 @@ def julian_to_jd(year, month, day):
         year -= 1
         month += 12
 
-    return ((floor((365.25 * (year + 4716))) +
-            floor((30.6001 * (month + 1))) +
+    return Julianday((astro.floor((365.25 * (year + 4716))) +
+            astro.floor((30.6001 * (month + 1))) +
             day) - 1524.5)
-
-
-def jd_to_julian(td):
-    #//  JD_TO_JULIAN  --  Calculate Julian calendar date from Julian day
-
-    td += 0.5
-    z = floor(td)
-
-    a = z
-    b = a + 1524
-    c = floor((b - 122.1) / 365.25)
-    d = floor(365.25 * c)
-    e = floor((b - d) / 30.6001)
-
-    if floor(e < 14):
-        month = e - 1
-    else:
-        month = e - 13
-
-    if floor(month > 2):
-        year = c - 4716
-    else:
-        year = c - 4715
-
-    day = b - d - floor(30.6001 * e)
-
-    #/*  If year is less than 1, subtract one to convert from
-    #    a zero based date system to the common era system in
-    #    which the year -1 (1 B.C.E) is followed by year 1 (1 C.E.).  */
-
-    if year < 1:
-        year -= 1
-
-    return (year, month, day)
 
 
 def equinoxe_a_paris(year):
@@ -361,13 +551,13 @@ def equinoxe_a_paris(year):
     # a given Gregorian year.  */
 
     #//  September equinox in dynamical time
-    equJED = equinox(year, 2)
+    equJED = astro.equinox(year, 2)
 
     #//  Correct for delta T to obtain Universal time
-    equJD = equJED - (deltat(year) / (24 * 60 * 60))
+    equJD = equJED - (astro.deltat(year) / (24 * 60 * 60))
 
     #//  Apply the equation of time to yield the apparent time at Greenwich
-    equAPP = equJD + equationOfTime(equJED)
+    equAPP = equJD + astro.equationOfTime(equJED)
 
     #/*  Finally, we must correct for the constant difference between
     #    the Greenwich meridian and that of Paris, 2°20'15" to the
@@ -385,71 +575,26 @@ def paris_equinoxe_jd(year):
     #                           meridian, occurred for a given Gregorian
     #                           year.  */'
     ep = equinoxe_a_paris(year)
-    epg = floor(ep - 0.5) + 0.5
+    epg = astro.floor(ep - 0.5) + 0.5
 
-    return epg
-
-
-def annee_da_la_revolution(jd):
-    #/*  ANNEE_DE_LA_REVOLUTION  --  Determine the year in the French
-    #                                revolutionary calendar in which a
-    #                                given Julian day falls.  Returns an
-    #                                array of two elements:
-    #
-    #                                    [0]  Année de la Révolution
-    #                                    [1]  Julian day number containing
-    #                                         equinox for this year.
-    #*/
-    guess = jd_to_gregorian(jd)[0] - 2
-
-    lasteq = paris_equinoxe_jd(guess)
-    while lasteq > jd:
-        guess -= 1
-        lasteq = paris_equinoxe_jd(guess)
-
-    nexteq = lasteq - 1
-    while not (lasteq <= jd and jd < nexteq):
-        lasteq = nexteq
-        guess += 1
-        nexteq = paris_equinoxe_jd(guess)
-
-    # not sure if python round and javascript math.round behave identically?
-    adr = round((lasteq - FRENCH_REVOLUTIONARY_EPOCH) / TropicalYear) + 1
-    return (adr, lasteq)
+    return Julianday(epg)
 
 
-def jd_to_french_revolutionary(jd):
-    #/*  JD_TO_FRENCH_REVOLUTIONARY  --  Calculate date in the French Revolutionary
-    #                                    calendar from Julian day.  The five or six
-    #                                    "sansculottides" are considered a thirteenth
-    # month in the results of this function.  */
-    jd = floor(jd) + 0.5
-    adr = annee_da_la_revolution(jd)
-    an = int(adr[0])
-    equinoxe = adr[1]
-    mois = floor((jd - equinoxe) / 30) + 1
-    jour = (jd - equinoxe) % 30
-    decade = floor(jour / 10) + 1
-    jour = int(jour % 10) + 1
-
-    return (an, mois, decade, jour)
-
-
-def french_revolutionary_to_jd(an, mois, decade, jour):
+def french_republican_to_jd(an, mois, decade, jour):
     #/*  FRENCH_REVOLUTIONARY_TO_JD  --  Obtain Julian day from a given French
     #                                    Revolutionary calendar date.  */
 
-    guess = FRENCH_REVOLUTIONARY_EPOCH + (TropicalYear * ((an - 1) - 1))
+    guess = FRENCH_REVOLUTIONARY_EPOCH + (astro.TropicalYear * ((an - 1) - 1))
     adr = (an - 1, 0)
 
     while adr[0] < an:
-        adr = annee_da_la_revolution(guess)
-        guess = adr[1] + (TropicalYear + 2)
+        adr = Julianday(guess).annee_da_la_revolution
+        guess = adr[1] + (astro.TropicalYear + 2)
 
     equinoxe = adr[1]
 
     jd = equinoxe + (30 * (mois - 1)) + (10 * (decade - 1)) + (jour - 1)
-    return jd
+    return Julianday(jd)
 
 
 def leap_islamic(year):
@@ -459,22 +604,11 @@ def leap_islamic(year):
 
 def islamic_to_jd(year, month, day):
     #//  ISLAMIC_TO_JD  --  Determine Julian day from Islamic date
-    return ((day +
-            ceil(29.5 * (month - 1)) +
+    return Julianday((day +
+            astro.ceil(29.5 * (month - 1)) +
             (year - 1) * 354 +
-            floor((3 + (11 * year)) / 30) +
+            astro.floor((3 + (11 * year)) / 30) +
             ISLAMIC_EPOCH) - 1)
-
-
-def jd_to_islamic(jd):
-    #//  JD_TO_ISLAMIC  --  Calculate Islamic date from Julian day
-
-    jd = floor(jd) + 0.5
-    year = floor(((30 * (jd - ISLAMIC_EPOCH)) + 10646) / 10631)
-    month = min(12,
-                ceil((jd - (29 + islamic_to_jd(year, 1, 1))) / 29.5) + 1)
-    day = int(jd - islamic_to_jd(year, month, 1)) + 1
-    return (year, month, day)
 
 
 def leap_persian(year):
@@ -497,53 +631,24 @@ def persian_to_jd(year, month, day):
     else:
         y = 473
     epbase = year - y
-    epyear = 474 + mod(epbase, 2820)
+    epyear = 474 + (epbase % 2820)
 
     if month <= 7:
         m = (month - 1) * 31
     else:
         m = (month - 1) * 30 + 6
 
-    return (day +
+    return Julianday(day +
             m +
-            floor(((epyear * 682) - 110) / 2816) +
+            astro.floor(((epyear * 682) - 110) / 2816) +
             (epyear - 1) * 365 +
-            floor(epbase / 2820) * 1029983 +
+            astro.floor(epbase / 2820) * 1029983 +
             (PERSIAN_EPOCH - 1))
-
-
-def jd_to_persian(jd):
-    #//  JD_TO_PERSIAN  --  Calculate Persian date from Julian day
-    jd = floor(jd) + 0.5
-
-    depoch = jd - persian_to_jd(475, 1, 1)
-    cycle = floor(depoch / 1029983)
-    cyear = mod(depoch, 1029983)
-    if cyear == 1029982:
-        ycycle = 2820
-    else:
-        aux1 = floor(cyear / 366)
-        aux2 = mod(cyear, 366)
-        ycycle = floor(
-            ((2134 * aux1) + (2816 * aux2) + 2815) / 1028522) + aux1 + 1
-
-    year = ycycle + (2820 * cycle) + 474
-    if (year <= 0):
-        year -= 1
-
-    yday = (jd - persian_to_jd(year, 1, 1)) + 1
-    if yday <= 186:
-        month = ceil(yday / 31)
-    else:
-        month = ceil((yday - 6) / 30)
-
-    day = int(jd - persian_to_jd(year, month, 1)) + 1
-    return (year, month, day)
 
 
 def mayan_count_to_jd(baktun, katun, tun, uinal, kin):
     #//  MAYAN_COUNT_TO_JD  --  Determine Julian day from Mayan long count
-    return (MAYAN_COUNT_EPOCH +
+    return Julianday(MAYAN_COUNT_EPOCH +
            (baktun * 144000) +
            (katun * 7200) +
            (tun * 360) +
@@ -551,39 +656,10 @@ def mayan_count_to_jd(baktun, katun, tun, uinal, kin):
             kin)
 
 
-def jd_to_mayan_count(jd):
-    #//  JD_TO_MAYAN_COUNT  --  Calculate Mayan long count from Julian day
-    d = jd - MAYAN_COUNT_EPOCH
-    baktun = floor(d / 144000)
-    d = mod(d, 144000)
-    katun = floor(d / 7200)
-    d = mod(d, 7200)
-    tun = floor(d / 360)
-    d = mod(d, 360)
-    uinal = floor(d / 20)
-    kin = int(mod(d, 20))
-
-    return (baktun, katun, tun, uinal, kin)
-
-
-def jd_to_mayan_haab(jd):
-    #//  JD_TO_MAYAN_HAAB  --  Determine Mayan Haab "month" and day from Julian day
-    lcount = jd - MAYAN_COUNT_EPOCH
-    day = mod(lcount + 8 + ((18 - 1) * 20), 365)
-
-    return (floor(day / 20) + 1, int(mod(day, 20)))
-
-
-def jd_to_mayan_tzolkin(jd):
-    #//  JD_TO_MAYAN_TZOLKIN  --  Determine Mayan Tzolkin "month" and day from Julian day
-    lcount = jd - MAYAN_COUNT_EPOCH
-    return (int(amod(lcount + 20, 20)), int(amod(lcount + 4, 13)))
-
-
 def bahai_to_jd(major, cycle, year, month, day):
     #//  BAHAI_TO_JD  --  Determine Julian day from Bahai date
     gy = (361 * (major - 1)) + (19 * (cycle - 1)) + \
-        (year - 1) + jd_to_gregorian(BAHAI_EPOCH)[0]
+        (year - 1) + Julianday(BAHAI_EPOCH).gregorian[0]
 
     if month != 20:
         m = 0
@@ -593,33 +669,6 @@ def bahai_to_jd(major, cycle, year, month, day):
         else:
             m = -15
     return (gregorian_to_jd(gy, 3, 20) + (19 * (month - 1)) + m + day)
-
-
-def jd_to_bahai(jd):
-    #//  JD_TO_BAHAI  --  Calculate Bahai date from Julian day
-
-    jd = floor(jd) + 0.5
-    gy = jd_to_gregorian(jd)[0]
-    bstarty = jd_to_gregorian(BAHAI_EPOCH)[0]
-
-    if jd <= gregorian_to_jd(gy, 3, 20):
-        x = 1
-    else:
-        x = 0
-    # verify this next line...
-    bys = gy - (bstarty + (((gregorian_to_jd(gy, 1, 1) <= jd) and x)))
-    major = floor(bys / 361) + 1
-    cycle = floor(mod(bys, 361) / 19) + 1
-    year = mod(bys, 19) + 1
-    days = jd - bahai_to_jd(major, cycle, year, 1, 1)
-    bld = bahai_to_jd(major, cycle, year, 20, 1)
-    if jd >= bld:
-        month = 20
-    else:
-        month = floor(days / 19) + 1
-    day = int((jd + 1) - bahai_to_jd(major, cycle, year, month, 1))
-
-    return (major, cycle, year, month, day)
 
 
 def indian_civil_to_jd(year, month, day):
@@ -652,60 +701,13 @@ def indian_civil_to_jd(year, month, day):
     return jd
 
 
-def jd_to_indian_civil(jd):
-    #//  JD_TO_INDIAN_CIVIL  --  Calculate Indian Civil date from Julian day
-    #// Offset in years from Saka era to Gregorian epoch
-    Saka = 79 - 1
-    start = 80
-    # // Day offset between Saka and Gregorian
-
-    jd = floor(jd) + 0.5
-    greg = jd_to_gregorian(jd)  # // Gregorian date for Julian day
-    leap = leap_gregorian(greg[0])  # // Is this a leap year?
-    year = greg[0] - Saka  # // Tentative year in Saka era
-    greg0 = gregorian_to_jd(greg[0], 1, 1)  # // JD at start of Gregorian year
-    yday = jd - greg0  # // Day number (0 based) in Gregorian year
-
-    if leap:
-        Caitra = 31  # // Days in Caitra this year
-    else:
-        Caitra = 30
-
-    if yday < start:
-        #//  Day is at the end of the preceding Saka year
-        year -= 1
-        yday += Caitra + (31 * 5) + (30 * 3) + 10 + start
-
-    yday -= start
-    if yday < Caitra:
-        month = 1
-        day = yday + 1
-    else:
-        mday = yday - Caitra
-        if (mday < (31 * 5)):
-            month = floor(mday / 31) + 2
-            day = (mday % 31) + 1
-        else:
-            mday -= 31 * 5
-            month = floor(mday / 30) + 7
-            day = (mday % 30) + 1
-
-    return (year, month, int(day))
-
-
-#
-
-
 def verify(jd, func, args_tuple):
 
-    jd_cmp = apply(func, args_tuple)
+    jd_cmp = func(*args_tuple)
 
     if jd != jd_cmp:
-        print "ERROR: %s(%s) = %s did not match jd (%s)" % (func,
-                                                            str(args).
-                                                            str(jd_cmp),
-                                                            str(jd))
-        return 0
+        e = "ERROR: {0}({1}) = {2} did not match jd ({3})"
+        raise e.format(func, args, jd_cmp, jd)
     else:
         return 1
 
@@ -732,18 +734,19 @@ if __name__ == '__main__':
 
     cals = ('hebrew', 'islamic', 'persian', 'indian_civil', 'iso',
             'iso_day', 'julian', 'mayan_count', 'mayan_haab',
-            'mayan_tzolkin', 'bahai', 'french_revolutionary')
+            'mayan_tzolkin', 'bahai', 'french_republican')
 
     errors = 0
     for cal in cals:
-        func = eval("jd_to_%s" % cal)
-        val = apply(func, (jd,))
-        print "%s: %s" % (cal, str(val))
+        val = getattr(jd, cal)
+        print "%s: %s" % (cal, val)
 
         try:
-            func = eval("%s_to_jd" % cal)
-            if not verify(jd, func, val):
-                errors += 1
+            func = eval("{0}_to_jd".format(cal))
+
+            assert type(jd) == Julianday
+
+            assert verify(jd, func, val) == 1
 
         except NameError:
             # print str(func), "does not exist"

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #  holidays.py: -*- Python -*-  DESCRIPTIVE TEXT.
 #
 #  Author: Phil Schwartz (phil_schwartz@users.sourceforge.net)

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #  calendar_util.py: -*- Python -*-  DESCRIPTIVE TEXT.
 #
 #  Author: Phil Schwartz (phil_schwartz@users.sourceforge.net)
@@ -67,9 +68,6 @@ def dcos(d):
 def fixangr(a):
     #/*  FIXANGR  --  Range reduce angle in radians.  */
     return a - (2 * pi) * (floor(a / (2 * pi)))
-
-
-#
 
 
 #/*  OBLIQEQ  --  Calculate the obliquity of the ecliptic for a given
@@ -476,7 +474,7 @@ def equationOfTime(jd):
     return E
 
 
-def sunpos(jd):
+def sunpos(jd, rettype='tuple'):
     # /*  SUNPOS  --  Position of the Sun.  Please see the comments
     #            on the return statement at the end of this function
     #            which describe the tuple it returns.  We return
@@ -488,6 +486,7 @@ def sunpos(jd):
     T2 = T * T
     L0 = 280.46646 + (36000.76983 * T) + (0.0003032 * T2)
 
+    # Geometric mean longitude of the Sun
     L0 = fixangle(L0)
     M = 357.52911 + (35999.05029 * T) + (-0.0001537 * T2)
     M = fixangle(M)
@@ -510,20 +509,36 @@ def sunpos(jd):
     AlphaApp = fixangle(AlphaApp)
     DeltaApp = rtd(asin(dsin(epsilon) * dsin(Lambda)))
 
-    return (  # //  Angular quantities are expressed in decimal degrees
-        L0,
-        #//  [0] Geometric mean longitude of the Sun
-        M,  # //  [1] Mean anomaly of the Sun
-        e,
-            #//  [2] Eccentricity of the Earth's orbit
-        C,  # //  [3] Sun's equation of the Centre
-        sunLong,  # //  [4] Sun's true longitude
-        sunAnomaly,  # //  [5] Sun's true anomaly
-        sunR,  # //  [6] Sun's radius vector in AU
-        Lambda,
-            #//  [7] Sun's apparent longitude at true equinox of the date
-        Alpha,  # //  [8] Sun's true right ascension
-        Delta,  # //  [9] Sun's true declination
-        AlphaApp,  # // [10] Sun's apparent right ascension
-        DeltaApp  # // [11] Sun's apparent declination
-    )
+    # Angular quantities are expressed in decimal degrees
+    if rettype == 'dict':
+        return {
+            'geomean_longitude':    L0,  # Geometric mean longitude of the Sun
+            'anomaly':              M,  # Mean anomaly of the Sun
+            'earth_eccentricity':   e, #Eccentricity of the Earth's orbit
+            'centre':               C,  # Sun's equation of the Centre
+            'long':                 sunLong,  # Sun's true longitude
+            'anomaly':              sunAnomaly,  # Sun's true anomaly
+            'radius':               sunR,  # Sun's radius vector in AU
+            'apparent_long':        Lambda, # Sun's apparent longitude at true equinox of the date
+            'right_ascension':      Alpha,  # Sun's true right ascension
+            'true_declination':     Delta,  # Sun's true declination
+            'apparent_ascension':   AlphaApp,  # Sun's apparent right ascension
+            'apparent_declination': DeltaApp  # Sun's apparent declination
+        }
+
+    else:
+
+        return (  
+            L0, #[0] Geometric mean longitude of the Sun
+            M,  # [1] Mean anomaly of the Sun
+            e, #[2] Eccentricity of the Earth's orbit
+            C,  # [3] Sun's equation of the Centre
+            sunLong,  # [4] Sun's true longitude
+            sunAnomaly,  # [5] Sun's true anomaly
+            sunR,  # [6] Sun's radius vector in AU
+            Lambda, #[7] Sun's apparent longitude at true equinox of the date
+            Alpha,  # [8] Sun's true right ascension
+            Delta,  # [9] Sun's true declination
+            AlphaApp,  # [10] Sun's apparent right ascension
+            DeltaApp  # [11] Sun's apparent declination
+        )
