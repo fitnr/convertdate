@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Holiday Test Page</title>
+  </head>
+  <body bgcolor=white>
+    <center>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <form method=get action=/cgi-bin/holidays-cgi.py target=bottom>
+      <table border=0>
+	<tr>
+	  <td><center><b>Holiday</b></center></td>
+	  <td><center><b>Year</b></center></td>
+	  <td>&nbsp;</td>
+	</tr>
+	<tr>
+	  <td><select name=holiday>
+	      <option value="">Choose...
+	      <option value="set_new_years">New Years
+	      <option value="set_christmas">Christmas
+	      <option value="set_thanksgiving">Thanksgiving
+	      <option value="set_4th_of_july">4th of July
+	      <option value="set_flag_day">Flag Day
+	      <option value="set_election_day">Election Day
+	      <option value="set_presidents_day">Presidents Day
+	      <option value="set_washingtons_birthday">Washingtons Birthday
+	      <option value="set_lincolns_birthday">Lincolns Birthday
+	      <option value="set_memorial_day">Memorial Day
+	      <option value="set_labor_day">Labor Day
+	      <option value="set_columbus_day">Columbus Day
+	      <option value="set_veterans_day">Veterans Day
+	      <option value="set_valentines_day">Valentines Day
+	      <option value="set_halloween">Halloween
+	      <option value="set_mothers_day">Mothers Day
+	      <option value="set_fathers_day">Fathers Day
+	      <option value="set_easter">Easter
+	      <option value="set_hanukkah">Hanukkah
+	      <option value="set_rosh_hashanah">Rosh Hashanah
+	      <option value="set_yom_kippur">Yom Kippur
+	      <option value="set_passover">Passover
+	      <option value="set_martin_luther_king_day">Martin Luther King Day
+	    </select>
+	  </td>
+	  <td><input name=year size=5 maxsize=5 value=2003>
+	  </td>
+	  <td><input type=submit value="Find date"></td>
+	</tr>
+      </table>
+    </form>
+    </center>
+
+  </body>
+</html>
