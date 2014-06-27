@@ -12,15 +12,7 @@ import julian
 import mayan
 import persian
 
-def verify(jd, func, args_tuple):
-    jd_cmp = func(*args_tuple)
-
-    if jd != jd_cmp:
-        e = "ERROR: {0}({1}) = {2} did not match jd ({3})"
-        raise e.format(func, args_tuple, jd_cmp, jd)
-    else:
-        return 1
-
+"python -m unittest date_utils.tests"
 
 class CalTestCase(unittest.TestCase):
 
@@ -28,27 +20,43 @@ class CalTestCase(unittest.TestCase):
         tm = time.localtime()
         self.gregoriandate = (tm[0], tm[1], tm[2])
 
-        print "\nRunning date conversion test script:"
-        print "-------------------------------------"
+        self.jd = gregorian.to_jd(self.gregoriandate[0], self.gregoriandate[1], self.gregoriandate[2])        
 
-        print "gregorian date:", self.gregoriandate
+        self.c = gregorian.to_jd(1492, 10, 12)
+        self.x = gregorian.to_jd(2016, 2, 29)
 
-        self.jd = gregorian.to_jd(self.gregoriandate[0], self.gregoriandate[1], self.gregoriandate[2])
-        print "julian day:", self.jd
-
+    def test_jd(self):
+        assert self.c == 2266295.5
+        assert self.x == 2457447.5  
 
     def test_gregorian(self):
         assert self.gregoriandate == gregorian.from_jd(self.jd)
         assert gregorian.to_jd(2000, 1, 1) == 2451544.5
 
-    def test_mayan(self):
+    def test_mayan_count(self):
         assert self.jd == mayan.to_jd(*mayan.from_jd(self.jd))
         assert mayan.to_jd(13, 0, 0, 0, 0) == 2456282.5
-        'mayan_haab', 'mayan_tzolkin'
+
+        assert mayan.from_gregorian(2012, 12, 21) == (13, 0, 0, 0, 0)
+        assert mayan.to_gregorian(13, 0, 0, 0, 0) == (2012, 12, 21)
+
+        assert mayan.from_jd(self.c) == (11, 13, 12, 4, 13)
+
+    def test_mayan_haab(self):
+        # haab
+        assert mayan.to_haab(2456282.5) == (3, "K'ank'in")
+        assert mayan.to_haab(self.c) == (12, "B'en")
+
+    def test_mayan_tzolkin(self):
+        # tzolkin
+        assert mayan.to_tzolkin(2456282.5) == (4, 'Ajaw')
+        assert mayan.to_tzolkin(self.c) == (16, "Sotz'")
 
     def test_french_republican(self):
         assert self.jd == fr.to_jd(*fr.from_jd(self.jd))
+
         assert fr.from_jd(gregorian.to_jd(2014, 6, 14)) == (222, 10, 3, 8)
+
         # 9 Thermidor II
         assert gregorian.to_jd(1794, 7, 27) == fr.to_jd(2, 11, 1, 9)
 
@@ -76,5 +84,3 @@ class CalTestCase(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-
-"python -m unittest date_utils.tests"
