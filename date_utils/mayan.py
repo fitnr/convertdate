@@ -35,13 +35,16 @@ def from_jd(jd):
 def to_haab(jd):
     '''Determine Mayan Haab "month" and day from Julian day'''
     lcount = jd - EPOCH
-    day = (lcount + 8 + ((18 - 1) * 20) % 365)
-
-    return (floor(day / 20) + 1, int((day % 20)))
+    day = (lcount + 8 + (17 * 20)) % 365
+    count = floor(day / 20) + 1
+    month = int((day % 20))
+    return count, HAAB_MONTHS[month]
 
 
 def to_tzolkin(jd):
     '''Determine Mayan Tzolkin "month" and day from Julian day'''
     lcount = jd - EPOCH
-    return (int(amod(lcount + 20, 20)), int(amod(lcount + 4, 13)))
+    day = int(amod(lcount + 20, 20))
+    month = TZOLKIN_MONTHS[int(amod(lcount + 4, 13)) - 1]
+    return day, month
 

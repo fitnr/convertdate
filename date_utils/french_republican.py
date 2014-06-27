@@ -1,8 +1,25 @@
 # -*- coding: utf-8 -*-
 import astro
+import gregorian
 from utils import floor
 
 EPOCH = 2375839.5
+
+MOIS = [
+    'Vendémiaire',
+    'Brumaire',
+    'Frimaire',
+    'Nivôse',
+    'Pluviôse',
+    'Ventôse',
+    'Germinal',
+    'Floréal',
+    'Prairial',
+    'Messidor',
+    'Thermidor',
+    'Fructidor'
+]
+
 
 def annee_da_la_revolution(jd):
     '''Determine the year in the French revolutionary calendar in which a given Julian day falls.
@@ -10,7 +27,8 @@ def annee_da_la_revolution(jd):
        [0]  Année de la Révolution
        [1]  Julian day number containing equinox for this year.'''
 
-    guess = jd.gregorian[0] - 2
+    g = gregorian.from_jd(jd)
+    guess = g[0] - 2
 
     lasteq = paris_equinoxe_jd(guess)
     while lasteq > jd:
@@ -27,6 +45,7 @@ def annee_da_la_revolution(jd):
     # identically?
     adr = round((lasteq - EPOCH) / astro.TropicalYear) + 1
     return (adr, lasteq)
+
 
 def equinoxe_a_paris(year):
     '''Determine Julian day and fraction of the September equinox at the Paris meridian in a given Gregorian year.'''
@@ -51,7 +70,8 @@ def equinoxe_a_paris(year):
 
 
 def paris_equinoxe_jd(year):
-    '''Calculate Julian day during which the September equinox, reckoned from the Paris meridian, occurred for a given Gregorian year'''
+    '''Calculate Julian day during which the September equinox, reckoned from
+    the Paris meridian,occurred for a given Gregorian year'''
     ep = equinoxe_a_paris(year)
     return floor(ep - 0.5) + 0.5
 
@@ -71,19 +91,28 @@ def to_jd(an, mois, decade, jour):
     jd = equinoxe + (30 * (mois - 1)) + (10 * (decade - 1)) + (jour - 1)
     return jd
 
+
 def from_jd(jd):
     '''Calculate date in the French Revolutionary
     calendar from Julian day.  The five or six
-    "sansculottides" are considered a thirteenth'''
-    # month in the results of this function.
+    "sansculottides" are considered a thirteenth
+    month in the results of this function.'''
     jd = (floor(jd) + 0.5)
     adr = annee_da_la_revolution(jd)
+
     an = int(adr[0])
+
     equinoxe = adr[1]
     mois = floor((jd - equinoxe) / 30) + 1
+
     jour = (jd - equinoxe) % 30
+
     decade = floor(jour / 10) + 1
+
     jour = int(jour % 10) + 1
 
     return (an, mois, decade, jour)
 
+
+def format(an, mois, jour):
+    return "{0} {1} {2}".format(jour, MOIS[mois - 1], an)
