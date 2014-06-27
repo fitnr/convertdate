@@ -7,7 +7,8 @@
 import time
 from copy import copy
 import calendar
-import calendar_util
+import gregorian
+import hebrew
 
 
 # time tuple/list index
@@ -137,14 +138,14 @@ class Holidays(object):
             # we'll first try 3760 if conversion to gregorian isn't the same
             # year that was passed to this method, then it must be 3761.
             for y in (year + HEBREW_YEAR_OFFSET, year + HEBREW_YEAR_OFFSET + 1):
-                jd = calendar_util.hebrew_to_jd(y, hebrew_month, hebrew_day)
-                gd = calendar_util.jd_to_gregorian(jd)
+                jd = hebrew.to_jd(y, hebrew_month, hebrew_day)
+                gd = gregorian.from_jd(jd)
                 if gd[YEAR] == year:
                     break
                 else:
                     gd = None
         else:
-            jd = calendar_util.hebrew_to_jd(year, hebrew_month, hebrew_day)
+            jd = hebrew.to_jd(year, hebrew_month, hebrew_day)
             gd = jd.to_gregorian
 
         if not gd:  # should never occur, but just incase...

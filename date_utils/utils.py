@@ -1,7 +1,33 @@
-import astro
+# -*- coding: utf-8 -*-
+from math import ceil as pyceil
+
+# Math utilities
+
+def floor(x):
+    # the python math module floor func returns a float
+    return int(x)
+
+
+def ceil(x):
+    return int(pyceil(x))
+
+
+def mod(x, y):
+    return x % y
+
+
+def amod(a, b):
+    #//  AMOD  --  Modulus function which returns numerator if modulus is zero
+    return mod(a - 1, b) + 1
+
+
+def jwday(j):
+    '''Calculate day of week from Julian day'''
+    return mod(floor((j + 1.5)), 7)
+
 
 def weekday_before(weekday, jd):
-    return jd - astro.jwday(jd - weekday)
+    return jd - jwday(jd - weekday)
 
 
 def search_weekday(weekday, jd, direction, offset):

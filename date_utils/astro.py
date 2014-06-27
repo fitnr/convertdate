@@ -13,45 +13,21 @@
 #    The essential reference for computational positional astronomy.
 #
 
-from math import ceil as pyceil
 from math import pi, asin, atan2, cos, sin
-
-
-def floor(x):
-    # the python math module floor func returns a float
-    return int(x)
-
-
-def ceil(x):
-    return int(pyceil(x))
-
-
-def mod(x, y):
-    return x % y
-
-
-def amod(a, b):
-    #//  AMOD  --  Modulus function which returns numerator if modulus is zero
-    return mod(a - 1, b) + 1
-
-
-def jwday(j):
-    #//  JWDAY  --  Calculate day of week from Julian day
-    return mod(floor((j + 1.5)), 7)
-
+from utils import floor
 
 def dtr(d):
-    #/*  DTR  --  Degrees to radians.  */
+    '''Degrees to radians.'''
     return (d * pi) / 180.0
 
 
 def rtd(r):
-    #/*  RTD  --  Radians to degrees.  */
+    '''Radians to degrees.  '''
     return (r * 180.0) / pi
 
 
 def fixangle(a):
-    #/*  FIXANGLE  --  Range reduce angle in degrees.  */
+    '''Range reduce angle in degrees.  '''
     return (a - 360.0 * (floor(a / 360.0)))
 
 
@@ -66,7 +42,7 @@ def dcos(d):
 
 
 def fixangr(a):
-    #/*  FIXANGR  --  Range reduce angle in radians.  */
+    '''Range reduce angle in radians.  '''
     return a - (2 * pi) * (floor(a / (2 * pi)))
 
 
