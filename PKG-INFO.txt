@@ -1,10 +1,10 @@
-Metadata-Version: 1.0
+Metadata-Version: 2.0
 Name: python_date_utils
-Version: 1.0
-Summary: Python Date Utils package
-Home-page: http://sourceforge.net/projects/pythondateutils
-Author: Phil Schwartz
-Author-email: phil_schwartz@users.sourceforge.net
-License: UNKNOWN
-Description: UNKNOWN
-Platform: UNKNOWN
+Version: 2.0
+Summary: Python Date Utilities package
+Home-page: 
+Author: 
+Author-email: 
+License: 
+Description: 
+Platform: 
