@@ -1,4 +1,5 @@
-from utils import ceil, floor
+from math import trunc
+from utils import ceil
 
 
 EPOCH = 1948320.5
@@ -32,23 +33,23 @@ def to_jd(year, month, day):
     else:
         m = (month - 1) * 30 + 6
 
-    return day + m + floor(((epyear * 682) - 110) / 2816) + (epyear - 1) * 365 + floor(epbase / 2820) * 1029983 + (EPOCH - 1)
+    return day + m + trunc(((epyear * 682) - 110) / 2816) + (epyear - 1) * 365 + trunc(epbase / 2820) * 1029983 + (EPOCH - 1)
 
 
 def from_jd(jd):
     '''Calculate Persian date from Julian day'''
-    jd = floor(jd) + 0.5
+    jd = trunc(jd) + 0.5
 
     depoch = jd - to_jd(475, 1, 1)
-    cycle = floor(depoch / 1029983)
+    cycle = trunc(depoch / 1029983)
     cyear = (depoch % 1029983)
 
     if cyear == 1029982:
         ycycle = 2820
     else:
-        aux1 = floor(cyear / 366)
+        aux1 = trunc(cyear / 366)
         aux2 = cyear % 366
-        ycycle = floor(((2134 * aux1) + (2816 * aux2) + 2815) / 1028522) + aux1 + 1
+        ycycle = trunc(((2134 * aux1) + (2816 * aux2) + 2815) / 1028522) + aux1 + 1
 
     year = ycycle + (2820 * cycle) + 474
 

@@ -13,8 +13,7 @@
 #    The essential reference for computational positional astronomy.
 #
 
-from math import pi, asin, atan2, cos, sin
-from utils import floor
+from math import pi, asin, atan2, cos, sin, trunc
 
 def dtr(d):
     '''Degrees to radians.'''
@@ -28,7 +27,7 @@ def rtd(r):
 
 def fixangle(a):
     '''Range reduce angle in degrees.  '''
-    return (a - 360.0 * (floor(a / 360.0)))
+    return (a - 360.0 * (trunc(a / 360.0)))
 
 
 def dsin(d):
@@ -43,7 +42,7 @@ def dcos(d):
 
 def fixangr(a):
     '''Range reduce angle in radians.  '''
-    return a - (2 * pi) * (floor(a / (2 * pi)))
+    return a - (2 * pi) * (trunc(a / (2 * pi)))
 
 
 #/*  OBLIQEQ  --  Calculate the obliquity of the ecliptic for a given
@@ -406,7 +405,7 @@ deltaTtab = (
 def deltat(year):
 
     if year >= 1620 and year <= 2000:
-        i = floor((year - 1620) / 2)
+        i = trunc((year - 1620) / 2)
         f = ((year - 1620) / 2) - i  # /* Fractional part of year */
         dt = deltaTtab[i] + ((deltaTtab[i + 1] - deltaTtab[i]) * f)
     else:
@@ -444,7 +443,7 @@ def equationOfTime(jd):
     deltaPsi = nutation(jd)[0]
     epsilon = obliqeq(jd) + nutation(jd)[1]
     E = L0 + (-0.0057183) + (-alpha) + (deltaPsi * dcos(epsilon))
-    E = E - 20.0 * (floor(E / 20.0))
+    E = E - 20.0 * (trunc(E / 20.0))
     E = E / (24 * 60)
 
     return E

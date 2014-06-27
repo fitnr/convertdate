@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from calendar_util import Julianday
-from astro import floor
-
+from math import trunc
 
 EPOCH = 1721425.5
 
@@ -27,15 +26,15 @@ def to_jd(year, month, day):
 
 def from_jd(jd):
     '''Return Gregorian date in a (Y, M, D) tuple'''
-    wjd = floor(jd - 0.5) + 0.5
+    wjd = trunc(jd - 0.5) + 0.5
     depoch = wjd - EPOCH
-    quadricent = floor(depoch / 146097)
+    quadricent = trunc(depoch / 146097)
     dqc = depoch % 146097
-    cent = floor(dqc / 36524)
+    cent = trunc(dqc / 36524)
     dcent = dqc % 36524
-    quad = floor(dcent / 1461)
+    quad = trunc(dcent / 1461)
     dquad = dcent % 1461
-    yindex = floor(dquad / 365)
+    yindex = trunc(dquad / 365)
     year = (quadricent * 400) + (cent * 100) + (quad * 4) + yindex
     if not (cent == 4 or yindex == 4):
         year += 1
@@ -47,7 +46,7 @@ def from_jd(jd):
     else:
         leap_adj = 2
 
-    month = floor((((yearday + leap_adj) * 12) + 373) / 367)
+    month = trunc((((yearday + leap_adj) * 12) + 373) / 367)
 
     day = int(wjd - to_jd(year, month, 1)) + 1
 

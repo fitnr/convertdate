@@ -1,15 +1,8 @@
 # -*- coding: utf-8 -*-
-from math import ceil as pyceil
-
-# Math utilities
-
-def floor(x):
-    # the python math module floor func returns a float
-    return int(x)
-
+import math
 
 def ceil(x):
-    return int(pyceil(x))
+    return int(math.ceil(x))
 
 
 def mod(x, y):
@@ -17,30 +10,29 @@ def mod(x, y):
 
 
 def amod(a, b):
-    #//  AMOD  --  Modulus function which returns numerator if modulus is zero
+    '''Modulus function which returns numerator if modulus is zero'''
     return mod(a - 1, b) + 1
 
 
 def jwday(j):
     '''Calculate day of week from Julian day'''
-    return mod(floor((j + 1.5)), 7)
+    return mod(math.trunc((j + 1.5)), 7)
 
 
 def weekday_before(weekday, jd):
     return jd - jwday(jd - weekday)
 
 
+# @param weekday      Day of week desired, 0 = Sunday
+# @param jd           Julian date to begin search
+# @param direction    1 = next weekday, -1 = last weekday
+# @param offset       Offset from jd to begin search
 def search_weekday(weekday, jd, direction, offset):
-    #/*  SEARCH_WEEKDAY  --  Determine the Julian date for:
-    #        weekday      Day of week desired, 0 = Sunday
-    #        jd           Julian date to begin search
-    #        direction    1 = next weekday, -1 = last weekday
-    #        offset       Offset from jd to begin search
-    #*/
+    '''Determine the Julian date for the next or previous weekday'''
     return weekday_before(weekday, jd + (direction * offset))
 
 
-#//  Utility weekday functions, just wrappers for search_weekday
+#  Utility weekday functions, just wrappers for search_weekday
 
 def nearest_weekday(weekday, jd):
     return search_weekday(weekday, jd, 1, 3)

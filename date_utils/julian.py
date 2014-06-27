@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-
-from utils import floor
+from math import trunc
 
 J0000 = 1721424.5  # Julian date of Gregorian epoch: 0000-01-01
 J1970 = 2440587.5  # Julian date at Unix epoch: 1970-01-01
@@ -20,25 +19,25 @@ def to_julian(jd):
     '''Calculate Julian calendar date from Julian day'''
 
     jd += 0.5
-    z = floor(jd)
+    z = trunc(jd)
 
     a = z
     b = a + 1524
-    c = floor((b - 122.1) / 365.25)
-    d = floor(365.25 * c)
-    e = floor((b - d) / 30.6001)
+    c = trunc((b - 122.1) / 365.25)
+    d = trunc(365.25 * c)
+    e = trunc((b - d) / 30.6001)
 
-    if floor(e < 14):
+    if trunc(e < 14):
         month = e - 1
     else:
         month = e - 13
 
-    if floor(month > 2):
+    if trunc(month > 2):
         year = c - 4716
     else:
         year = c - 4715
 
-    day = b - d - floor(30.6001 * e)
+    day = b - d - trunc(30.6001 * e)
 
     #  If year is less than 1, subtract one to convert from
     #    a zero based date system to the common era system in
@@ -62,4 +61,4 @@ def to_jd(year, month, day):
         year -= 1
         month += 12
 
-    return (floor((365.25 * (year + 4716))) + floor((30.6001 * (month + 1))) + day) - 1524.5
+    return (trunc((365.25 * (year + 4716))) + trunc((30.6001 * (month + 1))) + day) - 1524.5

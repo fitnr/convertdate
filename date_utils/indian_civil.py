@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from utils import floor
+from math import trunc
 import gregorian
 
 INDIAN_CIVIL_WEEKDAYS = ("ravivara", "somavara", "mangalavara", "budhavara", "brahaspativara", "sukravara", "sanivara")
@@ -42,7 +42,7 @@ def from_jd(jd):
     start = 80
     # Day offset between Saka and Gregorian
 
-    jd = floor(jd) + 0.5
+    jd = trunc(jd) + 0.5
     greg = jd.gregorian  # Gregorian date for Julian day
     leap = gregorian.leap(greg[0])  # Is this a leap year?
     year = greg[0] - Saka  # Tentative year in Saka era
@@ -67,11 +67,11 @@ def from_jd(jd):
     else:
         mday = yday - Caitra
         if (mday < (31 * 5)):
-            month = floor(mday / 31) + 2
+            month = trunc(mday / 31) + 2
             day = (mday % 31) + 1
         else:
             mday -= 31 * 5
-            month = floor(mday / 30) + 7
+            month = trunc(mday / 30) + 7
             day = (mday % 30) + 1
 
     return (year, month, int(day))

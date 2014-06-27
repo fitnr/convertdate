@@ -1,4 +1,4 @@
-from utils import floor
+from math import trunc
 
 EPOCH = 347995.5
 
@@ -89,8 +89,8 @@ def to_jd(year, month, day):
     return jd
 
 def from_jd(jd):
-    jd = floor(jd) + 0.5
-    count = floor(((jd - EPOCH) * 98496.0) / 35975351.0)
+    jd = trunc(jd) + 0.5
+    count = trunc(((jd - EPOCH) * 98496.0) / 35975351.0)
     year = count - 1
     i = count
     while jd >= to_jd(i, 7, 1):

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from utils import amod, floor
+from math import trunc
+from utils import amod
 
 EPOCH = 584282.5
 HAAB_MONTHS = ("Pop", "Uo", "Zip", "Zotz", "Tzec", "Xul",
@@ -20,13 +21,13 @@ def to_jd(baktun, katun, tun, uinal, kin):
 def from_jd(jd):
     '''Calculate Mayan long count from Julian day'''
     d = jd - EPOCH
-    baktun = floor(d / 144000)
+    baktun = trunc(d / 144000)
     d = (d % 144000)
-    katun = floor(d / 7200)
+    katun = trunc(d / 7200)
     d = (d % 7200)
-    tun = floor(d / 360)
+    tun = trunc(d / 360)
     d = (d % 360)
-    uinal = floor(d / 20)
+    uinal = trunc(d / 20)
     kin = int((d % 20))
 
     return (baktun, katun, tun, uinal, kin)

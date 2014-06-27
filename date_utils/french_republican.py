@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
+from math import trunc
 import astro
 import gregorian
-from utils import floor
 
 EPOCH = 2375839.5
 
@@ -73,7 +73,7 @@ def paris_equinoxe_jd(year):
     '''Calculate Julian day during which the September equinox, reckoned from
     the Paris meridian,occurred for a given Gregorian year'''
     ep = equinoxe_a_paris(year)
-    return floor(ep - 0.5) + 0.5
+    return trunc(ep - 0.5) + 0.5
 
 
 def to_jd(an, mois, decade, jour):
@@ -97,17 +97,17 @@ def from_jd(jd):
     calendar from Julian day.  The five or six
     "sansculottides" are considered a thirteenth
     month in the results of this function.'''
-    jd = (floor(jd) + 0.5)
+    jd = (trunc(jd) + 0.5)
     adr = annee_da_la_revolution(jd)
 
     an = int(adr[0])
 
     equinoxe = adr[1]
-    mois = floor((jd - equinoxe) / 30) + 1
+    mois = trunc((jd - equinoxe) / 30) + 1
 
     jour = (jd - equinoxe) % 30
 
-    decade = floor(jour / 10) + 1
+    decade = trunc(jour / 10) + 1
 
     jour = int(jour % 10) + 1
 
