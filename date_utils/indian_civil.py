@@ -43,7 +43,7 @@ def from_jd(jd):
     # Day offset between Saka and Gregorian
 
     jd = trunc(jd) + 0.5
-    greg = jd.gregorian  # Gregorian date for Julian day
+    greg = gregorian.from_jd(jd)  # Gregorian date for Julian day
     leap = gregorian.leap(greg[0])  # Is this a leap year?
     year = greg[0] - Saka  # Tentative year in Saka era
     # JD at start of Gregorian year

@@ -23,7 +23,7 @@ def day_to_julian(year, day):
 
 def from_jd(jd):
     '''Return tuple of ISO (year, week, day) for Julian day'''
-    year = gregorian.to_jd(jd - 3).pop()
+    year = gregorian.from_jd(jd - 3)[0]
     if jd >= to_julian(year + 1, 1, 1):
         year += 1
     week = trunc((jd - to_julian(year, 1, 1)) / 7) + 1
@@ -36,6 +36,6 @@ def from_jd(jd):
 
 def from_jd_to_iso_day(jd):
     '''Return tuple of ISO (year, day_of_year) for Julian day'''
-    year = gregorian.to_jd(jd).pop()
+    year = gregorian.to_jd(jd)[0]
     day = trunc(jd - gregorian.to_jd(year, 1, 1)) + 1
     return (year, day)

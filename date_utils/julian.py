@@ -15,7 +15,7 @@ def leap(year):
         return 3
 
 
-def to_julian(jd):
+def from_jd(jd):
     '''Calculate Julian calendar date from Julian day'''
 
     jd += 0.5

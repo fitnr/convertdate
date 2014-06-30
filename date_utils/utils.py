@@ -5,18 +5,15 @@ def ceil(x):
     return int(math.ceil(x))
 
 
-def mod(x, y):
-    return x % y
-
-
 def amod(a, b):
     '''Modulus function which returns numerator if modulus is zero'''
-    return mod(a - 1, b) + 1
+    modded = (a % b)
+    return b if modded is 0 else modded
 
 
 def jwday(j):
     '''Calculate day of week from Julian day'''
-    return mod(math.trunc((j + 1.5)), 7)
+    return math.trunc((j + 0.5)) % 7
 
 
 def weekday_before(weekday, jd):

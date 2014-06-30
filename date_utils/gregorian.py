@@ -27,9 +27,6 @@ def to_jd(year, month, day):
 
     _legal_date(year, month, day)
 
-    if year > 2099 or year < 1801:
-        raise IndexError("Year out of range.")
-
     if month <= 2:
         year = year - 1
         month = month + 12
@@ -45,9 +42,6 @@ def to_jd2(year, month, day):
 
     _legal_date(year, month, day)
 
-    if year > 2099 or year < 1801:
-        raise IndexError("Year out of range.")
-
     if month <= 2:
         leap_adj = 0
     elif leap(year):
@@ -58,6 +52,7 @@ def to_jd2(year, month, day):
     return (EPOCH - 1 + (365 * (year - 1)) +
         trunc((year - 1) / 4) + (-trunc((year - 1) / 100)) +
         trunc((year - 1) / 400) + trunc((((367 * month) - 362) / 12) + leap_adj + day))
+
 
 def from_jd(jd):
     '''Return Gregorian date in a (Y, M, D) tuple'''

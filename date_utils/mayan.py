@@ -4,14 +4,14 @@ from utils import amod
 import gregorian
 
 EPOCH = 584282.5
-HAAB_MONTHS = ("Pop", "Wo'", "Zip", "Sotz'", "Sek", "Xul",
+HAAB_MONTHS = ["Pop", "Wo'", "Zip", "Sotz'", "Sek", "Xul",
                "Yaxk'in'", "Mol", "Ch'en", "Yax", "Sak'", "Keh",
-               "Mak", "K'ank'in", "Muwan'", "Pax", "K'ayab", "Kumk'u", "Wayeb'")
+               "Mak", "K'ank'in", "Muwan'", "Pax", "K'ayab", "Kumk'u", "Wayeb'"]
 
-TZOLKIN_MONTHS = ("Imix'", "Ik'", "Ak'b'al", "K'an", "Chikchan",
-                  "Kimi", "Manik'", "Lamat", "Muluk", "Ok",
-                  "Chuwen", "Eb'", "B'en", "Ix", "Men",
-                  "K'ib'", "Kab'an", "Etz'nab'", "KawaK", "Ajaw")
+TZOLKIN_NAMES = ["Imix'", "Ik'", "Ak'b'al", "K'an", "Chikchan",
+                 "Kimi", "Manik'", "Lamat", "Muluk", "Ok",
+                 "Chuwen", "Eb'", "B'en", "Ix", "Men",
+                 "K'ib'", "Kab'an", "Etz'nab'", "Kawak", "Ajaw"]
 
 
 def to_jd(baktun, katun, tun, uinal, kin):
@@ -38,29 +38,39 @@ def to_gregorian(baktun, katun, tun, uinal, kin):
     jd = to_jd(baktun, katun, tun, uinal, kin)
     return gregorian.from_jd(jd)
 
+
 def from_gregorian(year, month, day):
     jd = gregorian.to_jd(year, month, day)
     return from_jd(jd)
 
+
 def to_haab(jd):
     '''Determine Mayan Haab "month" and day from Julian day'''
-    lcount = jd - EPOCH
-    day = (lcount + 8 + (17 * 20)) % 365
+    # Number of days since the start of the long count
+    lcount = trunc(jd) + 0.5 - EPOCH
+    # Long Count begins 348 days after the start of the cycle
+    day = (lcount + 348) % 365
 
-    if day > 360:
-        count = day - 360
-        month = 13
-    else:
-        count = trunc(day / 20) + 1
-        month = int((day % 20))
+    count = day % 20
+    month = trunc(day / 20)
 
-    return count, HAAB_MONTHS[month]
+    return int(count), HAAB_MONTHS[month]
 
 
 def to_tzolkin(jd):
     '''Determine Mayan Tzolkin "month" and day from Julian day'''
-    lcount = jd - EPOCH
-    day = int(amod(lcount + 20, 20))
-    month = TZOLKIN_MONTHS[int(amod(lcount + 4, 13)) - 1]
-    return day, month
+    lcount = trunc(jd) + 0.5 - EPOCH
+    day = amod(lcount + 4, 13)
+    name = amod(lcount + 20, 20)
 
+    return int(day), TZOLKIN_NAMES[int(name) - 1]
+
+
+def lc_to_haab(baktun, katun, tun, uinal, kin):
+    jd = to_jd(baktun, katun, tun, uinal, kin)
+    return to_haab(jd)
+
+
+def lc_to_tzolkin(baktun, katun, tun, uinal, kin):
+    jd = to_jd(baktun, katun, tun, uinal, kin)
+    return to_tzolkin(jd)
