@@ -5,6 +5,7 @@ import time
 import pytz
 from datetime import datetime
 from convertdate import utils
+from convertdate import babylonian
 from convertdate import bahai
 from convertdate import french_republican as fr
 from convertdate import dublin
@@ -146,6 +147,15 @@ class CalTestCase(unittest.TestCase):
             assert mayan.to_haab(mayan.next_haab(h, self.c)) == (1, h)
 
         assert mayan.next_tzolkin_haab((13, "Ajaw"), (3, "Kumk'u"), 2456849.5) == 2463662.5
+
+    def test_babylon(self):
+        assert babylonian.from_jd(1736116) == (3, "Addaru", 351)
+        assert babylonian.from_jd(1736138) == (25, "Addaru", 351)
+        assert babylonian.from_jd(1626563) == (8, "Addaru", 52)
+        assert babylonian.from_jd(1494179) == (4, "Samna", None)
+
+    def test_bab_ry(self):
+        assert babylonian.regnalyear(-313) == (1, u'Nabopolassar')
 
     def test_french_republican(self):
         assert self.jd == fr.to_jd(*fr.from_jd(self.jd))
