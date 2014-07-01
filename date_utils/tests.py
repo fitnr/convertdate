@@ -26,7 +26,8 @@ class CalTestCase(unittest.TestCase):
 
         self.jd = gregorian.to_jd(self.gregoriandate[0], self.gregoriandate[1], self.gregoriandate[2])
 
-        self.c = gregorian.to_jd(1492, 10, 12)
+        self.c_greg = (1492, 10, 21)
+        self.c = gregorian.to_jd(*self.c_greg)
         self.x = gregorian.to_jd(2016, 2, 29)
 
     def test_utils(self):
@@ -39,6 +40,7 @@ class CalTestCase(unittest.TestCase):
         assert gregorian.to_jd2(*self.gregoriandate) == self.jd
 
     def test_gregorian_1(self):
+        assert self.c == 2266295.5
         assert gregorian.to_jd(2000, 1, 1) == 2451544.5
 
     def test_gregorian_2(self):
@@ -51,10 +53,10 @@ class CalTestCase(unittest.TestCase):
         assert gregorian.to_jd2(72, 6, 27) == 1747535.5
 
     def test_gregorian_1_ma(self):
-        assert gregorian.to_jd(1492, 10, 12) == 2266286.5
+        assert gregorian.to_jd(*self.c_greg) == 2266295.5
 
     def test_gregorian_2_ma(self):
-        assert gregorian.to_jd2(1492, 10, 12) == 2266286.5
+        assert gregorian.to_jd2(*self.c_greg) == 2266295.5
 
     def test_mayan_reflexive(self):
         assert self.jd == mayan.to_jd(*mayan.from_jd(self.jd))
@@ -63,18 +65,18 @@ class CalTestCase(unittest.TestCase):
         assert mayan.to_jd(13, 0, 0, 0, 0) == 2456282.5
         assert mayan.from_gregorian(2012, 12, 21) == (13, 0, 0, 0, 0)
         assert mayan.to_gregorian(13, 0, 0, 0, 0) == (2012, 12, 21)
-        assert mayan.from_jd(self.c) == (11, 13, 12, 4, 4)
+        assert mayan.from_jd(self.c) == (11, 13, 12, 4, 13)
 
     def test_mayan_haab(self):
         # haab
         assert mayan.HAAB_MONTHS[2] == 'Zip'
-        assert mayan.to_haab(self.c) == (7, "Sotz'")
+        assert mayan.to_haab(self.c) == (16, "Sotz'")
         assert mayan.to_haab(2456282.5) == (3, "K'ank'in")
 
     def test_mayan_tzolkin(self):
         # tzolkin
         assert mayan.TZOLKIN_NAMES[0] == "Imix'"
-        assert mayan.to_tzolkin(self.c) == (3, "K'an")
+        assert mayan.to_tzolkin(self.c) == (12, "B'en")
         assert mayan.to_tzolkin(2456282.5) == (4, 'Ajaw')
 
     def test_mayan_convenience(self):
@@ -108,6 +110,8 @@ class CalTestCase(unittest.TestCase):
 
     def test_julian(self):
         assert self.jd == julian.to_jd(*julian.from_jd(self.jd))
+        assert julian.from_jd(self.c) == (1492, 10, 12)
+        assert julian.from_jd(2400000.5) == (1858, 11, 5)
 
     def test_bahai(self):
         assert self.jd == bahai.to_jd(*bahai.from_jd(self.jd))
