@@ -72,6 +72,9 @@ def from_jd(cjdn):
     return (bd, MONTHS[bm], by)
 
 
+def to_jd(year, month, day):
+    key = [key for key, val in lunations.items() if val[0] == year and val[1] == month].pop()
+    return key + day - 1
 
 
 
