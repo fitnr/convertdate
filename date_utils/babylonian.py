@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from babylonian_data import *
+from babylonian_data import lunations, rulers
 
 MONTHS = {
     1: u"Nisānu",
@@ -19,6 +19,11 @@ MONTHS = {
 }
 
 INTERCALARY = u"Makaruša"
+
+# todo:
+# jd_to_seleucid_era
+# jd_to_arasid era
+#
 
 
 def regnalyear(by):
@@ -47,8 +52,16 @@ def arsacid_year(by):
         return by - 64
 
 
-def month_length(i):
-    return lunation_periods[i] - lunation_periods[i - 1]
+def get_start_jd_of_month(y, m):
+    return [key for key, val in lunations.items() if val[0] == y and val[1] == m].pop()
+
+def month_length(by, bm):
+    j = get_start_jd_of_month(by, bm)
+
+    possible_keys = [x for x in lunations if x < j + 31 and x > j]
+    next_month = possible_keys.pop()
+
+    return next_month - j + 1
 
 
 def from_jd(cjdn):
@@ -56,9 +69,10 @@ def from_jd(cjdn):
     if (cjdn < 1492871 or cjdn > 1748872):
         raise IndexError
 
-    # the CJDNs of the start of the lunations in the babylonian lunar calendar are stored in 'babycal_dat'
+    # the CJDNs of the start of the lunations in the babylonian lunar calendar
+    # are stored in 'babycal_dat'
     pd = [lu for lu in lunations if lu < cjdn and lu + 31 > cjdn].pop()
-    by, bm  = lunations[pd]
+    by, bm = lunations[pd]
 
     bd = cjdn - pd + 1
 
@@ -73,7 +87,7 @@ def from_jd(cjdn):
 
 
 def to_jd(year, month, day):
-    key = [key for key, val in lunations.items() if val[0] == year and val[1] == month].pop()
+    key = get_start_jd_of_month(year, month)
     return key + day - 1
 
 
