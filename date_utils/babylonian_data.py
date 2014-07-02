@@ -5,6 +5,10 @@
 # and http://www.staff.science.uu.nl/~gent0113/babylon/addfiles/babycal_dat.js
 
 # todo: figure out exactly what these 'years' are based on.
+# Doesn't appear that they're based on anything. Switch to babylonian-based years starting at year 0.
+# Create switches in jd function to export in regnal year or Arascid or Seleucid eras.
+
+
 # key: julian day count
 # value: (year, month)
 lunations = {
@@ -14,8 +18,8 @@ lunations = {
 # key: year reign began
 # value: name of ruler
 rulers = {
-    -436: u'Nabonassar',
-    -422: u'Nabu-nadin-zeri',
+    -436: u'Nabonassar', # Julian: 626 BC
+    -422: u'Nabu-nadin-zeri', # Julian: 604 BC
     -420: u'Nabu-mukin-zeri',
     -417: u'Tiglath-Pileser III [Pulu]',
     -415: u'Salmanassar V [Ululayu]',
@@ -60,4 +64,39 @@ rulers = {
     148: u'Antiochus V Eupator',
     150: u'Demetrius I Soter',
     162: u'Alexander Balas'
+}
+
+'''
+year: {
+    periods [ intercalations]
+}
+'''
+
+# years are astronomical (-1 = 2 BC)
+intercalations = {
+    -746: { 3: 'U'},
+    -727: {},
+    -708: {},
+    -689: { 13: 'A'},
+    -670: {},
+    -651: { 10: 'U'},
+    -632: {9: 'a', 12: 'u', 15: 'U', 18: 'U'},
+    -613: {1: 'u', 4: 'U', 6: 'u', 9: 'A', 12: 'U', 14: 'A', 17: 'U', 19: 'U'},
+    -594: {},
+    -575: {},
+    -556: {},
+    -537: {},
+    -518: {},
+    -499: {},
+    -480: {},
+    -461: {},
+    -442: {},
+    -423: {},
+    -404: {},
+    -385: {},
+    -366: {3: 'A', 5: 'A', 8: 'A', 11: 'A', 14: 'A', 17: 'U', 19: 'A'},
+    -347: {3: 'A', 5: 'A', 8: 'A', 11: 'A', 14: 'A', 17: 'U', 19: 'A'},
+    -5: {3: 'A', 5: 'A', 8: 'A', 11: 'A', 14: 'A', 17: 'U', 19: 'A'},
+    14: {3: 'A', 5: 'A', 8: 'A', 11: 'A', 14: 'A', 17: 'U', 19: 'A'},
+    33: {3: 'A', 5: 'A', 8: 'A', 11: 'A', 14: 'A'}
 }
