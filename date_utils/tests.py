@@ -70,6 +70,7 @@ class CalTestCase(unittest.TestCase):
     def test_mayan_haab(self):
         # haab
         assert mayan.HAAB_MONTHS[2] == 'Zip'
+        assert mayan.HAAB_MONTHS.index("Xul") == 5
         assert mayan.to_haab(self.c) == (16, "Sotz'")
         assert mayan.to_haab(2456282.5) == (3, "K'ank'in")
 
@@ -89,6 +90,7 @@ class CalTestCase(unittest.TestCase):
 
         assert mayan.lc_to_haab_tzolkin(9, 16, 12, 5, 17) == "6 Kab'an 10 Mol"
         
+        assert mayan.translate_haab("Wayeb'") == 'Nameless'
 
     def test_french_republican(self):
         assert self.jd == fr.to_jd(*fr.from_jd(self.jd))

@@ -8,10 +8,18 @@ HAAB_MONTHS = ["Pop", "Wo'", "Zip", "Sotz'", "Sek", "Xul",
                "Yaxk'in'", "Mol", "Ch'en", "Yax", "Sak'", "Keh",
                "Mak", "K'ank'in", "Muwan'", "Pax", "K'ayab", "Kumk'u", "Wayeb'"]
 
+HAAB_TRANSLATIONS = [
+    "Mat", "Frog", "Red", "Bat", "Bee", "Dog", "First Sun", "Water", "Cave", "Green",
+    "White", "Red", "Encloser", "Yellow Sun", "Screech Owl", "Planting Time", "Turtle", "Ripe Corn", "Nameless"]
+
 TZOLKIN_NAMES = ["Imix'", "Ik'", "Ak'b'al", "K'an", "Chikchan",
                  "Kimi", "Manik'", "Lamat", "Muluk", "Ok",
                  "Chuwen", "Eb'", "B'en", "Ix", "Men",
                  "K'ib'", "Kab'an", "Etz'nab'", "Kawak", "Ajaw"]
+
+TZOLKIN_TRANSLATIONS = ['Water', 'Air', 'Darkness', 'Net', 'Feathered Serpent', 'Death', 'Deer',
+                        'Seed', 'Jade', 'Dog', 'Thread', 'Path', 'Maize', 'Tiger', 'Bird', 'Will',
+                        'Wisdom', 'Obsidian Knife', 'Thunder', 'Sun']
 
 
 def to_jd(baktun, katun, tun, uinal, kin):
@@ -79,3 +87,11 @@ def lc_to_haab_tzolkin(baktun, katun, tun, uinal, kin):
     jd = to_jd(baktun, katun, tun, uinal, kin)
     dates = to_tzolkin(jd) + to_haab(jd)
     return "{0} {1} {2} {3}".format(*dates)
+
+
+def translate_haab(h):
+    return dict(zip(HAAB_MONTHS, HAAB_TRANSLATIONS)).get(h)
+
+
+def translate_tzolkin(tz):
+    return dict(zip(TZOLKIN_NAMES, TZOLKIN_TRANSLATIONS)).get(tz)
