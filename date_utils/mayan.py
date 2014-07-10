@@ -74,3 +74,8 @@ def lc_to_haab(baktun, katun, tun, uinal, kin):
 def lc_to_tzolkin(baktun, katun, tun, uinal, kin):
     jd = to_jd(baktun, katun, tun, uinal, kin)
     return to_tzolkin(jd)
+
+def lc_to_haab_tzolkin(baktun, katun, tun, uinal, kin):
+    jd = to_jd(baktun, katun, tun, uinal, kin)
+    dates = to_tzolkin(jd) + to_haab(jd)
+    return "{0} {1} {2} {3}".format(*dates)

@@ -83,6 +83,11 @@ class CalTestCase(unittest.TestCase):
 
         assert mayan.lc_to_haab(0, 0, 0, 0, 0) == (8, "Kumk'u")
         assert mayan.lc_to_tzolkin(0, 0, 0, 0, 0) == (4, "Ajaw")
+
+        assert mayan.lc_to_tzolkin(9, 16, 12, 5, 17) == (6, "Kab'an")
+        assert mayan.lc_to_haab(9, 16, 12, 5, 17) == (10, "Mol")
+
+        assert mayan.lc_to_haab_tzolkin(9, 16, 12, 5, 17) == "6 Kab'an 10 Mol"
         
 
     def test_french_republican(self):
