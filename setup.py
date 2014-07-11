@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 
-from distutils.core import setup, Extension
+from distutils.core import setup
 
-setup(name="python_date_utils",
-      version="1.0",
-      description="Python Date Utils package",
-      author="Phil Schwartz",
-      author_email="phil_schwartz@users.sourceforge.net",
-      url="http://sourceforge.net/projects/pythondateutils",
-      packages=["date_utils"]
-      )
+setup(
+    name="python_date_utils",
+    version="2.0",
+    description="Python Date Utils package",
+    author="Neil Freeman and Phil Schwartz",
+    author_email="contact@fakeisthenewreal.org",
+    url="https://github.com/fitnr/python-date-utils",
+    packages=["date_utils"]
+)

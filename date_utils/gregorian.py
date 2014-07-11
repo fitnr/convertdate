@@ -7,7 +7,7 @@ HAVE_30_DAYS = (4, 6, 9, 11)
 HAVE_31_DAYS = (1, 3, 5, 7, 8, 10, 12)
 
 def leap(year):
-    return (year % 4 == 0 and not ((year % 100) == 0 and (year % 400) != 0))
+    return year % 4 == 0 and not ((year % 100) == 0 and (year % 400) != 0)
 
 def _legal_date(year, month, day):
     if day > 31:
@@ -49,9 +49,11 @@ def to_jd2(year, month, day):
     else:
         leap_adj = -2
 
-    return (EPOCH - 1 + (365 * (year - 1)) +
+    return (
+        EPOCH - 1 + (365 * (year - 1)) +
         trunc((year - 1) / 4) + (-trunc((year - 1) / 100)) +
-        trunc((year - 1) / 400) + trunc((((367 * month) - 362) / 12) + leap_adj + day))
+        trunc((year - 1) / 400) + trunc((((367 * month) - 362) / 12) + leap_adj + day)
+        )
 
 
 def from_jd(jd):

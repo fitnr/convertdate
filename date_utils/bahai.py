@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from math import trunc
-import gregorian
+import date_utils.gregorian as gregorian
 
 EPOCH = 2394646.5
 EPOCH_GREGORIAN_YEAR = 1844
@@ -19,7 +19,7 @@ def to_jd(major, cycle, year, month, day):
             m = -14
         else:
             m = -15
-    return (gregorian.to_jd(gy, 3, 20) + (19 * (month - 1)) + m + day)
+    return gregorian.to_jd(gy, 3, 20) + (19 * (month - 1)) + m + day
 
 def from_jd(jd):
     '''Calculate Bahai date from Julian day'''

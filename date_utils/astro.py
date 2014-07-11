@@ -15,6 +15,7 @@
 
 from math import pi, asin, atan2, cos, sin, trunc
 
+
 def dtr(d):
     '''Degrees to radians.'''
     return (d * pi) / 180.0
@@ -27,7 +28,7 @@ def rtd(r):
 
 def fixangle(a):
     '''Range reduce angle in degrees.  '''
-    return (a - 360.0 * (trunc(a / 360.0)))
+    return a - 360.0 * (trunc(a / 360.0))
 
 
 def dsin(d):
@@ -268,10 +269,8 @@ def nutation(jd):
         for j in range(0, 5):
             if nutArgMult[(i * 5) + j] != 0:
                 ang += nutArgMult[(i * 5) + j] * ta[j]
-        dp += (nutArgCoeff[(i * 4) + 0] + nutArgCoeff[
-               (i * 4) + 1] * to10) * sin(ang)
-        de += (nutArgCoeff[(i * 4) + 2] + nutArgCoeff[
-               (i * 4) + 3] * to10) * cos(ang)
+        dp += (nutArgCoeff[(i * 4) + 0] + nutArgCoeff[(i * 4) + 1] * to10) * sin(ang)
+        de += (nutArgCoeff[(i * 4) + 2] + nutArgCoeff[(i * 4) + 3] * to10) * cos(ang)
 
     #/* Return the result, converting from ten thousandths of arc
     #   seconds to radians in the process. */
@@ -346,11 +345,13 @@ def equinox(year, which):
         JDE0tab = JDE0tab2000
         Y = (year - 2000) / 1000.0
 
-    JDE0 = (JDE0tab[which][0] +
-           (JDE0tab[which][1] * Y) +
-           (JDE0tab[which][2] * Y * Y) +
-           (JDE0tab[which][3] * Y * Y * Y) +
-           (JDE0tab[which][4] * Y * Y * Y * Y))
+    JDE0 = (
+        JDE0tab[which][0] +
+        (JDE0tab[which][1] * Y) +
+        (JDE0tab[which][2] * Y * Y) +
+        (JDE0tab[which][3] * Y * Y * Y) +
+        (JDE0tab[which][4] * Y * Y * Y * Y)
+        )
 
     T = (JDE0 - 2451545.0) / 36525
 
@@ -360,11 +361,10 @@ def equinox(year, which):
 
     #//  Sum the periodic terms for time T
     S = 0
-    j = 0
-    for i in range(0, 24):
+
+    for j in range(0, 24 * 3, 3):
         S += EquinoxpTerms[j] * dcos(
             EquinoxpTerms[j + 1] + (EquinoxpTerms[j + 2] * T))
-        j += 3
 
     JDE = JDE0 + ((S * 0.00001) / deltaL)
 # print "year, which:", year, which
@@ -432,11 +432,13 @@ TropicalYear = 365.24219878  # // Mean solar tropical year
 
 def equationOfTime(jd):
     tau = (jd - J2000) / JulianMillennium
-    L0 = (280.4664567 + (360007.6982779 * tau) +
-         (0.03032028 * tau * tau) +
-         ((tau * tau * tau) / 49931) +
-         (-((tau * tau * tau * tau) / 15300)) +
-         (-((tau * tau * tau * tau * tau) / 2000000)))
+    L0 = (
+        280.4664567 + (360007.6982779 * tau) +
+        (0.03032028 * tau * tau) +
+        ((tau * tau * tau) / 49931) +
+        (-((tau * tau * tau * tau) / 15300)) +
+        (-((tau * tau * tau * tau * tau) / 2000000))
+    )
 
     L0 = fixangle(L0)
     alpha = sunpos(jd)[10]
@@ -467,9 +469,11 @@ def sunpos(jd, rettype='tuple'):
     M = fixangle(M)
     e = 0.016708634 + (-0.000042037 * T) + (-0.0000001267 * T2)
 
-    C = (((1.914602 + (-0.004817 * T) + (-0.000014 * T2)) * dsin(M)) +
+    C = (
+        ((1.914602 + (-0.004817 * T) + (-0.000014 * T2)) * dsin(M)) +
         ((0.019993 - (0.000101 * T)) * dsin(2 * M)) +
-        (0.000289 * dsin(3 * M)))
+        (0.000289 * dsin(3 * M))
+    )
     sunLong = L0 + C
     sunAnomaly = M + C
     sunR = ((1.000001018 * (1 - (e * e))) / (1 + (e * dcos(sunAnomaly))))
@@ -489,12 +493,13 @@ def sunpos(jd, rettype='tuple'):
         return {
             'geomean_longitude':    L0,  # Geometric mean longitude of the Sun
             'anomaly':              M,  # Mean anomaly of the Sun
-            'earth_eccentricity':   e, #Eccentricity of the Earth's orbit
+            'earth_eccentricity':   e,  # Eccentricity of the Earth's orbit
             'centre':               C,  # Sun's equation of the Centre
             'long':                 sunLong,  # Sun's true longitude
-            'anomaly':              sunAnomaly,  # Sun's true anomaly
+            'sunAnomaly':              sunAnomaly,  # Sun's true anomaly
             'radius':               sunR,  # Sun's radius vector in AU
-            'apparent_long':        Lambda, # Sun's apparent longitude at true equinox of the date
+            # Sun's apparent longitude at true equinox of the date
+            'apparent_long':        Lambda,
             'right_ascension':      Alpha,  # Sun's true right ascension
             'true_declination':     Delta,  # Sun's true declination
             'apparent_ascension':   AlphaApp,  # Sun's apparent right ascension
@@ -503,15 +508,15 @@ def sunpos(jd, rettype='tuple'):
 
     else:
 
-        return (  
-            L0, #[0] Geometric mean longitude of the Sun
+        return (
+            L0,  # [0] Geometric mean longitude of the Sun
             M,  # [1] Mean anomaly of the Sun
-            e, #[2] Eccentricity of the Earth's orbit
+            e,  # [2] Eccentricity of the Earth's orbit
             C,  # [3] Sun's equation of the Centre
             sunLong,  # [4] Sun's true longitude
             sunAnomaly,  # [5] Sun's true anomaly
             sunR,  # [6] Sun's radius vector in AU
-            Lambda, #[7] Sun's apparent longitude at true equinox of the date
+            Lambda,  # [7] Sun's apparent longitude at true equinox of the date
             Alpha,  # [8] Sun's true right ascension
             Delta,  # [9] Sun's true declination
             AlphaApp,  # [10] Sun's apparent right ascension

@@ -17,8 +17,9 @@ TZOLKIN_NAMES = ["Imix'", "Ik'", "Ak'b'al", "K'an", "Chikchan",
                  "Chuwen", "Eb'", "B'en", "Ix", "Men",
                  "K'ib'", "Kab'an", "Etz'nab'", "Kawak", "Ajaw"]
 
-TZOLKIN_TRANSLATIONS = ['Water', 'Air', 'Darkness', 'Net', 'Feathered Serpent', 'Death', 'Deer',
-                        'Seed', 'Jade', 'Dog', 'Thread', 'Path', 'Maize', 'Tiger', 'Bird', 'Will',
+TZOLKIN_TRANSLATIONS = ['Water', 'Wind', 'Darkness', 'Net', 'Feathered Serpent',
+                        'Death', 'Deer', 'Seed', 'Jade', 'Dog',
+                        'Thread', 'Path', 'Maize', 'Tiger', 'Bird', 'Will',
                         'Wisdom', 'Obsidian Knife', 'Thunder', 'Sun']
 
 
