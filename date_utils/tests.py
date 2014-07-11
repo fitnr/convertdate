@@ -79,6 +79,7 @@ class CalTestCase(unittest.TestCase):
         assert mayan.TZOLKIN_NAMES[0] == "Imix'"
         assert mayan.to_tzolkin(self.c) == (12, "B'en")
         assert mayan.to_tzolkin(2456282.5) == (4, 'Ajaw')
+        assert mayan.to_tzolkin(2456850.5) == (13, 'Lamat')
 
     def test_mayan_convenience(self):
 

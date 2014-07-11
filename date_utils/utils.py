@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 import math
 
+
 def ceil(x):
     return int(math.ceil(x))
 
 
 def amod(a, b):
     '''Modulus function which returns numerator if modulus is zero'''
-    modded = (a % b)
+    modded = int(a % b)
     return b if modded is 0 else modded
 
 

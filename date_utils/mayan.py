@@ -70,7 +70,6 @@ def to_tzolkin(jd):
     lcount = trunc(jd) + 0.5 - EPOCH
     day = amod(lcount + 4, 13)
     name = amod(lcount + 20, 20)
-
     return int(day), TZOLKIN_NAMES[int(name) - 1]
 
 
@@ -82,6 +81,7 @@ def lc_to_haab(baktun, katun, tun, uinal, kin):
 def lc_to_tzolkin(baktun, katun, tun, uinal, kin):
     jd = to_jd(baktun, katun, tun, uinal, kin)
     return to_tzolkin(jd)
+
 
 def lc_to_haab_tzolkin(baktun, katun, tun, uinal, kin):
     jd = to_jd(baktun, katun, tun, uinal, kin)
