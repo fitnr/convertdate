@@ -95,3 +95,82 @@ def translate_haab(h):
 
 def translate_tzolkin(tz):
     return dict(zip(TZOLKIN_NAMES, TZOLKIN_TRANSLATIONS)).get(tz)
+
+
+def _haab_count(day, month):
+    '''Return the count of the given haab in the cycle. e.g. 0 Pop == 1, 5 Wayeb' == 365'''
+    if day < 0 or day > 19:
+        raise IndexError("Invalid day number")
+
+    try:
+        i = HAAB_MONTHS.index(month)
+    except ValueError:
+        raise ValueError("'{0}' is not a valid Haab' month".format(month))
+
+    return min(i * 20, 360) + day
+
+
+def _tzolkin_count(day, name):
+    if day < 1 or day > 13:
+        raise IndexError("Invalid day number")
+
+    days = set(x + day for x in range(0, 260, 13))
+
+    try:
+        n = 1 + TZOLKIN_NAMES.index(name)
+    except ValueError:
+        raise ValueError("'{0}' is not a valid Tzolk'in day name".format(name))
+
+    names = set(y + n for y in range(0, 260, 20))
+    return days.intersection(names).pop()
+
+
+def next_haab(haab, jd):
+    '''For a given haab day, and a julian day count, find the next occurrance of that haab after the date'''
+    if jd < EPOCH:
+        raise IndexError("Input day is before Mayan epoch.")
+
+    count1 = _haab_count(*to_haab(jd))
+    count2 = _haab_count(*haab)
+
+    # Find number of days between haab of given jd and desired haab
+    add_days = (count2 - count1) % 365
+
+    # add in the number of days and return new jd
+    return jd + add_days
+
+
+def next_tzolkin(tzolkin, jd):
+    '''For a given tzolk'in day, and a julian day count, find the next occurrance of that tzolk'in after the date'''
+    if jd < EPOCH:
+        raise IndexError("Input day is before Mayan epoch.")
+
+    count1 = _tzolkin_count(*to_tzolkin(jd))
+    count2 = _tzolkin_count(*tzolkin)
+
+    add_days = (count2 - count1) % 260
+    return jd + add_days
+
+
+def next_tzolkin_haab(tzolkin, haab, jd):
+    '''For a given haab+tzolk'in combination, and a julian day count, find the next occurrance of that haab+tzolk'in after the date'''
+    # get H & T of input jd, and their place in the 18,980 day cycle
+    haabcount = _haab_count(*to_haab(jd))
+    haab_desired_count = _haab_count(*haab)
+
+    # How many days between the input day and the desired day?
+    haab_days = (haab_desired_count - haabcount) % 365
+
+    possible_haab = set(h + haab_days for h in range(0, 18980, 365))
+
+    tzcount = _tzolkin_count(*to_tzolkin(jd))
+    tz_desired_count = _tzolkin_count(*tzolkin)
+    # How many days between the input day and the desired day?
+    tzolkin_days = (tz_desired_count - tzcount) % 260
+
+    possible_tz = set(t + tzolkin_days for t in range(0, 18980, 260))
+
+    try:
+        return possible_tz.intersection(possible_haab).pop() + jd
+    except KeyError:
+        raise IndexError("That Haab'-Tzolk'in combination isn't possible")

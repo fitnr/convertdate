@@ -90,8 +90,14 @@ class CalTestCase(unittest.TestCase):
         assert mayan.lc_to_haab(9, 16, 12, 5, 17) == (10, "Mol")
 
         assert mayan.lc_to_haab_tzolkin(9, 16, 12, 5, 17) == "6 Kab'an 10 Mol"
-        
+
         assert mayan.translate_haab("Wayeb'") == 'Nameless'
+
+    def test_mayan_predictions(self):
+        assert mayan.next_haab((16, "Sotz'"), self.c - 10) == self.c
+        assert mayan.next_haab((0, "Pop"), 2456849.5) == 2457114.5
+        assert mayan.next_tzolkin((4, 'Ajaw'), 2456182.5) == 2456282.5
+        assert mayan.next_tzolkin_haab((13, "Ajaw"), (3, "Kumk'u"), 2456849.5) == 2463662.5
 
     def test_french_republican(self):
         assert self.jd == fr.to_jd(*fr.from_jd(self.jd))
