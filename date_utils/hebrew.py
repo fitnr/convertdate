@@ -1,6 +1,9 @@
 from math import trunc
+import gregorian
 
 EPOCH = 347995.5
+HEBREW_YEAR_OFFSET = 3760
+
 
 def leap(year):
     #//  Is a given Hebrew year a leap year ?
@@ -33,9 +36,9 @@ def delay_2(year):
 
     last = delay_1(year - 1)
     present = delay_1(year)
-    next = delay_1(year + 1)
+    next_ = delay_1(year + 1)
 
-    if next - present == 356:
+    if next_ - present == 356:
         return 2
     elif present - last == 382:
         return 1
@@ -49,7 +52,6 @@ def year_days(year):
 
 
 def month_days(year, month):
-    
     '''How many days are in a given month of a given year'''
 
     #//  First of all, dispose of fixed-length 29 day months
@@ -88,6 +90,7 @@ def to_jd(year, month, day):
 
     return jd
 
+
 def from_jd(jd):
     jd = trunc(jd) + 0.5
     count = trunc(((jd - EPOCH) * 98496.0) / 35975351.0)
@@ -110,3 +113,22 @@ def from_jd(jd):
     day = int(jd - to_jd(year, month, 1)) + 1
     return (year, month, day)
 
+
+def to_jd_gregorianyear(gregorianyear, hebrew_month, hebrew_day):
+    # gregorian year is either 3760 or 3761 years less than hebrew year
+    # we'll first try 3760 if conversion to gregorian isn't the same
+    # year that was passed to this method, then it must be 3761.
+
+    for y in (gregorianyear + HEBREW_YEAR_OFFSET, gregorianyear + HEBREW_YEAR_OFFSET + 1):
+        jd = to_jd(y, hebrew_month, hebrew_day)
+        gd = gregorian.from_jd(jd)
+        if gd[0] == gregorianyear:
+            break
+        else:
+            gd = None
+
+    if not gd:  # should never occur, but just incase...
+        raise ValueError("Could not determine gregorian year")
+
+    # tuple: (y, m, d)
+    return gd

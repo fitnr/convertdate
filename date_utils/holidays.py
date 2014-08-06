@@ -55,8 +55,6 @@ Shevat = 11
 Adar = 12
 Veadar = 13
 
-HEBREW_YEAR_OFFSET = 3760
-
 HAVE_30_DAYS = (APR, JUN, SEP, NOV)
 HAVE_31_DAYS = (JAN, MAR, MAY, JUL, AUG, OCT, DEC)
 
@@ -68,7 +66,7 @@ def adjust_date(timelist):
        that they are within the correct bounds. That is, a date of Oct 32
        becomes Nov 1, etc'''
     tm = (timelist[YEAR], timelist[
-          MONTH], timelist[DAY], 0, 0, 0, 0, 0, -1)
+        MONTH], timelist[DAY], 0, 0, 0, 0, 0, -1)
     e = time.mktime(tm)
     tm = time.localtime(e)
     timelist[MONTH] = tm[MONTH]
@@ -101,7 +99,7 @@ def nth_day_of_month(n, weekday, month, year):
 
     # Get nth WEEKDAY of month. Subtract 1 because already have 1st
     date += (n - 1) * 7
-    
+
     if month in HAVE_30_DAYS and date > 30:
         raise IndexError
     if month in HAVE_31_DAYS and date > 31:
@@ -132,28 +130,6 @@ class Holidays(object):
     def set_year(self, year):
         self.time_list[YEAR] = year
 
-    def hebrew_to_gregorian(self, year, hebrew_month, hebrew_day, year_is_gregorian=1):
-        if year_is_gregorian:
-            # gregorian year is either 3760 or 3761 years less than hebrew year
-            # we'll first try 3760 if conversion to gregorian isn't the same
-            # year that was passed to this method, then it must be 3761.
-            for y in (year + HEBREW_YEAR_OFFSET, year + HEBREW_YEAR_OFFSET + 1):
-                jd = hebrew.to_jd(y, hebrew_month, hebrew_day)
-                gd = gregorian.from_jd(jd)
-                if gd[YEAR] == year:
-                    break
-                else:
-                    gd = None
-        else:
-            jd = hebrew.to_jd(year, hebrew_month, hebrew_day)
-            gd = jd.to_gregorian
-
-        if not gd:  # should never occur, but just incase...
-            raise "Could not determine gregorian year"
-
-        # tuple: (y, m, d)
-        return gd
-
     def returnwrapper(self, tl):
         if self.ymd:
             return (tl[YEAR], tl[MONTH], tl[DAY])
@@ -166,7 +142,7 @@ class Holidays(object):
 
     # the holidays...
     @property
-    def christmas(self, observed=None):
+    def christmas(self):
         '''25th of December'''
         tl = copy(self.timelist)
         tl[MONTH] = DEC
@@ -190,7 +166,7 @@ class Holidays(object):
         return self.returnwrapper(tl)
 
     @property
-    def new_years(self, observed=None):
+    def new_years(self):
         '''Jan 1st'''
         tl = copy(self.timelist)
 
@@ -272,7 +248,7 @@ class Holidays(object):
         tl[MONTH] = MAY
         # if May has 5 Mondays...
         try:
-            tl[DAY] = nth_day_of_month(5, MON,  MAY, tl[YEAR])
+            tl[DAY] = nth_day_of_month(5, MON, MAY, tl[YEAR])
         except IndexError:
             # otherwise, May has only 4 Mondays
             tl[DAY] = nth_day_of_month(4, MON, MAY, tl[YEAR])
@@ -375,9 +351,9 @@ class Holidays(object):
     # and the function set_holiday_eve() returns the prior day.
     @property
     def hanukkah(self):
-        '''need an algorithm to comute gregorian first day...'''
+        '''need an algorithm to compute gregorian first day...'''
         tl = copy(self.timelist)
-        gd = self.hebrew_to_gregorian(tl[YEAR], Kislev, 25)
+        gd = hebrew.to_jd_gregorianyear(tl[YEAR], Kislev, 25)
         tl[MONTH] = gd[MONTH]
         tl[DAY] = gd[DAY]
         return self.returnwrapper(tl)
@@ -392,7 +368,7 @@ class Holidays(object):
     @property
     def rosh_hashanah(self):
         tl = copy(self.timelist)
-        gd = self.hebrew_to_gregorian(tl[YEAR], Tishri, 1)
+        gd = hebrew.to_jd_gregorianyear(tl[YEAR], Tishri, 1)
         tl[MONTH] = gd[MONTH]
         tl[DAY] = gd[DAY]
         return self.returnwrapper(tl)
@@ -407,7 +383,7 @@ class Holidays(object):
     @property
     def yom_kippur(self):
         tl = copy(self.timelist)
-        gd = self.hebrew_to_gregorian(tl[YEAR], Tishri, 10)
+        gd = hebrew.to_jd_gregorianyear(tl[YEAR], Tishri, 10)
         tl[MONTH] = gd[MONTH]
         tl[DAY] = gd[DAY]
         return self.returnwrapper(tl)
@@ -422,7 +398,7 @@ class Holidays(object):
     @property
     def passover(self):
         tl = copy(self.timelist)
-        gd = self.hebrew_to_gregorian(tl[YEAR], Nisan, 15)
+        gd = hebrew.to_jd_gregorianyear(tl[YEAR], Nisan, 15)
         tl[MONTH] = gd[MONTH]
         tl[DAY] = gd[DAY]
         return self.returnwrapper(tl)
