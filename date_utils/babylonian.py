@@ -1,39 +1,36 @@
 # -*- coding: utf-8 -*-
-from babylonian_data import lunations, rulers
+import babylonian_data as data
+import julian
 
-MONTHS = {
-    1: u"Nisānu",
-    2: u"Āru",
-    3: u"Simanu",
-    4: u"Dumuzu",
-    5: u'Abu',
-    6: u"Ulūlu",
-    7: u"Tišritum",
-    8: u"Samna",
-    9: u"Kislimu",
-    10: u"Ṭebētum",
-    11: u"Šabaṭu",
-    12: u"Addaru",
-    13: u"Ulūlu II",
-    14: u"Addaru II",
-}
-
-INTERCALARY = u"Makaruša"
+# INTERCALARY = u"Makaruša"
 
 # todo:
 # jd_to_seleucid_era
 # jd_to_arasid era
 #
+def intercalate(julianyear):
+    '''For a Julian year, use the intercalation pattern to return a dict of the months'''
+    # Add 1 because cycle runs 1-19 in Parker & Dubberstein
+    metonic_year = 1 + ((julianyear - 14) % 19)
+    # 1 + (year mod 19) == 15 is year 1 of the metonic cycle.
+    metonic_start = julianyear - metonic_year + 1
 
+    intercalation_pattern = data.intercalations.get(metonic_start, data.standard_intercalation)
+    patternkey = intercalation_pattern.get(metonic_year)
+
+    month, index = data.INTERCALARIES.get(patternkey, ([], len(data.MONTHS)))
+    months = data.MONTHS[:index] + month + data.MONTHS[index:]
+
+    return dict(zip(range(1, len(months) + 1), months))
 
 def regnalyear(by):
     '''Determine regnal year'''
     if (by < -436):
         return
 
-    key = max([r for r in rulers if r <= by])
     regnalyear = by - key + 1
     rulername = rulers[key]
+    key = max([r for r in data.rulers if r <= by])
 
     if (rulername == 'Alexander III [the Great]'):
         regnalyear = regnalyear + 6
@@ -53,12 +50,12 @@ def arsacid_year(by):
 
 
 def get_start_jd_of_month(y, m):
-    return [key for key, val in lunations.items() if val[0] == y and val[1] == m].pop()
+    return [key for key, val in data.lunations.items() if val[0] == y and val[1] == m].pop()
 
 def month_length(by, bm):
     j = get_start_jd_of_month(by, bm)
 
-    possible_keys = [x for x in lunations if x < j + 31 and x > j]
+    possible_keys = [x for x in data.lunations if x < j + 31 and x > j]
     next_month = possible_keys.pop()
 
     return next_month - j + 1
@@ -69,12 +66,16 @@ def from_jd(cjdn):
     if (cjdn < 1492871 or cjdn > 1748872):
         raise IndexError
 
-    # the CJDNs of the start of the lunations in the babylonian lunar calendar
-    # are stored in 'babycal_dat'
-    pd = [lu for lu in lunations if lu < cjdn and lu + 31 > cjdn].pop()
-    by, bm = lunations[pd]
+    # pd is the period of the babylonian month cjdn is found in
+    pd = [lu for lu in data.lunations.keys() if lu < cjdn and lu + 31 > cjdn].pop()
+    by, bm = data.lunations[pd]
 
+    # Day of the month
     bd = cjdn - pd + 1
+
+    juliandate = julian.from_jd(cjdn)
+
+    months = intercalate(juliandate[0])
 
     # document.calendar.bmonth.selectedIndex            = bm-1
 
@@ -83,7 +84,7 @@ def from_jd(cjdn):
     # document.calendar.blunnum.value                   = bln
     # document.calendar.bmlength.value                  = bml
 
-    return (bd, MONTHS[bm], by)
+    return (bd, months[bm], by)
 
 
 def to_jd(year, month, day):
