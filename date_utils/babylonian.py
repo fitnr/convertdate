@@ -5,9 +5,8 @@ import julian
 # INTERCALARY = u"Makaruša"
 
 # todo:
-# jd_to_seleucid_era
-# jd_to_arasid era
-#
+# from_jd (seleucid, arascid, regnal year)
+
 def intercalate(julianyear):
     '''For a Julian year, use the intercalation pattern to return a dict of the months'''
     # Add 1 because cycle runs 1-19 in Parker & Dubberstein
@@ -25,32 +24,33 @@ def intercalate(julianyear):
 
 def regnalyear(by):
     '''Determine regnal year'''
-    if (by < -436):
+    if by < -436:
         return
 
-    regnalyear = by - key + 1
-    rulername = rulers[key]
     key = max([r for r in data.rulers if r <= by])
+    ryear = by - key + 1
+    rulername = data.rulers[key]
 
-    if (rulername == 'Alexander III [the Great]'):
-        regnalyear = regnalyear + 6
+    if rulername == 'Alexander III [the Great]':
+        ryear = ryear + 6
 
-    if (rulername == "Philip III Arrhidaeus"):
-        regnalyear = regnalyear + 1
+    if rulername == "Philip III Arrhidaeus":
+        ryear = ryear + 1
 
-    if (rulername == 'Alexander IV Aegus'):
-        regnalyear = regnalyear + 1
+    if rulername == 'Alexander IV Aegus':
+        ryear = ryear + 1
 
-    return (regnalyear, rulername)
+    return (ryear, rulername)
 
 
 def arsacid_year(by):
-    if (by > 64):
+    if by > 64:
         return by - 64
 
 
 def get_start_jd_of_month(y, m):
     return [key for key, val in data.lunations.items() if val[0] == y and val[1] == m].pop()
+
 
 def month_length(by, bm):
     j = get_start_jd_of_month(by, bm)
@@ -63,7 +63,7 @@ def month_length(by, bm):
 
 def from_jd(cjdn):
     '''Calculate Babylonian date from Julian Day Count'''
-    if (cjdn < 1492871 or cjdn > 1748872):
+    if cjdn < 1492871 or cjdn > 1748872:
         raise IndexError
 
     # pd is the period of the babylonian month cjdn is found in
