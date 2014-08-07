@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import babylonian_data as data
 import julian
+import ephem
 
 # INTERCALARY = u"Makaruša"
 
@@ -61,9 +62,12 @@ def month_length(by, bm):
     return next_month - j + 1
 
 
-def from_jd(cjdn):
+def from_jd(cjdn, era='Seleucid'):
     '''Calculate Babylonian date from Julian Day Count'''
-    if cjdn < 1492871 or cjdn > 1748872:
+    if cjdn > 1748872:
+        return _fromjd_proleptic(cjdn, era)
+
+    if cjdn < 1492871:
         raise IndexError
 
     # pd is the period of the babylonian month cjdn is found in
@@ -91,5 +95,11 @@ def to_jd(year, month, day):
     key = get_start_jd_of_month(year, month)
     return key + day - 1
 
+def from_gregorian(y, m, d, era):
+    return from_jd(julian.to_jd(y, m, d), era)
 
+def _fromjd_proleptic(jdc, era):
+    # calculate previous vernal equinox of jdc
+
+    pass
 
