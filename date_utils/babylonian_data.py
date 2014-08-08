@@ -38,55 +38,74 @@ INTERCALARIES = {
     'a': ([u"Addaru II"], 12),
 }
 
+SELEUCID_EPOCH = -310
+ARASCID_EPOCH = -246
+NABONASSAR_EPOCH = -748
+
+# Labashi-Marduk=year,4 of Nergal-shar-usur
+
+# Bardiya = year 8 of Cambyses
+# Nebuchadnezzar Til=year 8 of Cambyses
+
+# Nebuchadnezzar IV=year 1 of Darius I
+
+# Year 6 of Alexander I = year 5 of Darius III
+# Year 1 of Philip = year 14 of Alexander I
+# Year 1 of Alexander II = year 8 of Philip
+
+# Years 6-10 of Alexander II = years 1-5 of Seleucid Era
+
+# Year 65 Seleucid era = year 1 Arsacid era
+
 # key: year reign began
 # value: name of ruler
 rulers = {
-    -436: u'Nabonassar', # Julian: 626 BC
-    -422: u'Nabu-nadin-zeri', # Julian: 604 BC
-    -420: u'Nabu-mukin-zeri',
-    -417: u'Tiglath-Pileser III [Pulu]',
-    -415: u'Salmanassar V [Ululayu]',
-    -410: u'Marduk-apal-iddina',
-    -398: u'Sargon II',
-    -393: u'Sennacherib',
-    -391: u'Bel-ibni',
-    -388: u'Aššur-nadim-šum',
-    -382: u'Nergal-ušezib',
-    -381: u'Mušezib-Marduk',
-    -377: u'Sennacherib',
-    -369: u'Asarhaddon',
-    -356: u'Šamaš-šum-ukin',
-    -336: u'Kandalānu',
-    -314: u'Interregnum',
-    -313: u'Nabopolassar',
-    -292: u'Nebuchadnezzar II',
-    -249: u'Amēl-Marduk',
-    -247: u'Nergal-šar-usur',
-    -243: u'Nabunaid',
-    -226: u'Cyrus',
-    -217: u'Cambyses',
-    -209: u'Darius I',
-    -173: u'Xerxes',
-    -152: u'Artaxerxes I',
-    -111: u'Darius II',
-    -92: u'Artaxerxes II Memnon',
-    -46: u'Artaxerxes III Ochus',
-    -25: u'Artaxerxes IV Arses',
-    -23: u'Darius III',
-    -18: u'Alexander III [the Great]',
-    -10: u'Philip III Arrhidaeus',
-    -3: u'Alexander IV Aegus',
-    1: u'Seleucus I Nicator',
-    31: u'Antiochus I Soter',
-    51: u'Antiochus II Theos',
-    66: u'Seleucus II Callinicus',
-    87: u'Seleucus III Soter',
-    90: u'Antiochus III [the Great]',
-    125: u'Seleucus IV Philopater',
-    137: u'Antiochus IV Epiphanes',
-    148: u'Antiochus V Eupator',
-    150: u'Demetrius I Soter',
-    162: u'Alexander Balas'
+    -748: u'Nabonassar',
+    -734: u'Nabu-nadin-zeri',
+    -732: u'Nabu-mukin-zeri',
+    -729: u'Tiglath-Pileser III',
+    -727: u'Salmanassar V',
+    -722: u'Marduk-apal-iddina',
+    -710: u'Sargon II',
+    -705: u'Sennacherib',
+    -703: u'Bel-ibni',
+    -700: u'Aššur-nadim-šum',
+    -694: u'Nergal-ušezib',
+    -693: u'Mušezib-Marduk',
+    -689: u'Sennacherib',
+    -681: u'Asarhaddon',
+    -668: u'Šamaš-šum-ukin',
+    -648: u'Kandalānu',
+    -626: u'interregnum',
+    -625: u'Nabopolassar',
+    -604: u'Nebuchadnezzar II',
+    -561: u'Amēl-Marduk',
+    -559: u'Nergal-šar-usur',
+    -555: u'Nabunaid',
+    -538: u'Cyrus',
+    -529: u'Cambyses',
+    -521: u'Darius I',
+    -485: u'Xerxes',
+    -464: u'Artaxerxes I',
+    -423: u'Darius II',
+    -404: u'Artaxerxes II Memnon',
+    -358: u'Artaxerxes III Ochus',
+    -337: u'Artaxerxes IV Arses',
+    -335: u'Darius III',
+    -330: u'Alexander the Great',
+    -322: u'Philip III Arrhidaeus',
+    -315: u'Alexander IV Aegus',
+    -311: u'Seleucus I Nicator',
+    -281: u'Antiochus I Soter',
+    -261: u'Antiochus II Theos',
+    -246: u'Seleucus II Callinicus',
+    -225: u'Seleucus III Soter',
+    -222: u'Antiochus the Great',
+    -187: u'Seleucus IV Philopater',
+    -175: u'Antiochus IV Epiphanes',
+    -164: u'Antiochus V Eupator',
+    -160: u'Demetrius I Soter',
+    -149: u'Alexander Balas',
 }
 
 #

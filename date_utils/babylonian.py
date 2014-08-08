@@ -23,10 +23,17 @@ def intercalate(julianyear):
 
     return dict(zip(range(1, len(months) + 1), months))
 
+
+def _valid_regnal(year):
+    if year < -478 or year > -139:
+        return False
+    return True
+
+
 def regnalyear(by):
     '''Determine regnal year'''
-    if by < -436:
-        return
+    if not _valid_regnal:
+        return False
 
     key = max([r for r in data.rulers if r <= by])
     ryear = by - key + 1
