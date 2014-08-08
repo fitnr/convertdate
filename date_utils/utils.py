@@ -6,6 +6,10 @@ def ceil(x):
     return int(math.ceil(x))
 
 
+def floor(x):
+    return int(math.floor(x))
+
+
 def amod(a, b):
     '''Modulus function which returns numerator if modulus is zero'''
     modded = int(a % b)

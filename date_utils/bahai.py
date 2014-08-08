@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from math import trunc
-import date_utils.gregorian as gregorian
+import gregorian
 
 EPOCH = 2394646.5
 EPOCH_GREGORIAN_YEAR = 1844

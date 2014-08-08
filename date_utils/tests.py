@@ -58,6 +58,15 @@ class CalTestCase(unittest.TestCase):
     def test_gregorian_2_ma(self):
         assert gregorian.to_jd2(*self.c_greg) == 2266295.5
 
+    def test_gregorian_proleptic(self):
+        for y in range(int(gregorian.EPOCH), int(gregorian.EPOCH) - 10000, -100):
+            assert gregorian.to_jd(*gregorian.from_jd(y)) == y - 0.5
+
+        assert gregorian.from_jd(gregorian.to_jd(-1, 3, 1)) == (-1, 3, 1)
+        assert gregorian.from_jd(gregorian.to_jd(-100, 7, 1)) == (-100, 7, 1)
+        assert gregorian.from_jd(gregorian.to_jd(-500, 12, 31)) == (-500, 12, 31)
+        assert gregorian.from_jd(gregorian.to_jd(-1000, 1, 1)) == (-1000, 1, 1)
+
     def test_mayan_reflexive(self):
         assert self.jd == mayan.to_jd(*mayan.from_jd(self.jd))
 
