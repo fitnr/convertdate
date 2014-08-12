@@ -1,22 +1,39 @@
 # -*- coding: utf-8 -*-
+from __future__ import division
 import babylonian_data as data
+from utils import floor
 import julian
 import ephem
+
+DUBLIN_EPOCH = 2415020  # Julian Day Count for Dublin Count 0
+
+BABYLON = ephem.Observer()
+BABYLON.lat, BABYLON.lon, BABYLON.elevation = 32.536389, 44.420833, 35.18280792236328
+
+MOON = ephem.Moon()
+SUN = ephem.Sun()
+
+# At JDC 1000.0, it was 1000.125 in Babylon
+AST_ADJUSTMENT = 0.125
 
 # INTERCALARY = u"Makaruša"
 
 # todo:
 # from_jd (seleucid, arascid, regnal year)
 
-def intercalate(julianyear):
-    '''For a Julian year, use the intercalation pattern to return a dict of the months'''
-    # Add 1 because cycle runs 1-19 in Parker & Dubberstein
-    metonic_year = 1 + ((julianyear - 14) % 19)
-    # 1 + (year mod 19) == 15 is year 1 of the metonic cycle.
-    metonic_start = julianyear - metonic_year + 1
 
+def _metonic(julianyear):
+    '''Return the start year of the current metonic cycle and the current year (1-19) in the cycle'''
+    # Input should be the JY of the first day of the Babylonian year in question
+    # Add 1 because cycle runs 1-19 in Parker & Dubberstein
+    metonic_number = 1 + ((julianyear - 14) % 19)
+    # 1 + (year mod 19) == 15 is year 1 of the metonic cycle.
+    return metonic_number, julianyear - metonic_number + 1
+
+
+def _intercalation(metonic_number, metonic_start):
     intercalation_pattern = data.intercalations.get(metonic_start, data.standard_intercalation)
-    patternkey = intercalation_pattern.get(metonic_year)
+    patternkey = intercalation_pattern.get(metonic_number)
 
     month, index = data.INTERCALARIES.get(patternkey, ([], len(data.MONTHS)))
     months = data.MONTHS[:index] + month + data.MONTHS[index:]
@@ -24,8 +41,22 @@ def intercalate(julianyear):
     return dict(zip(range(1, len(months) + 1), months))
 
 
-def _valid_regnal(year):
-    if year < -478 or year > -139:
+def intercalate(julianyear):
+    '''For a Julian year, use the intercalation pattern to return a dict of the months'''
+    metonic_number, metonic_start = _metonic(julianyear)
+    return _intercalation(metonic_number, metonic_start)
+
+
+def _number_months(metonic_year):
+    '''Number of months in the metonic year in the standard system'''
+    if metonic_year in data.standard_intercalation:
+        return 13
+    else:
+        return 12
+
+
+def _valid_regnal(y):
+    if y < -478 or y > -139:
         return False
     return True
 
@@ -51,6 +82,15 @@ def regnalyear(by):
     return (ryear, rulername)
 
 
+def _set_epoch(era):
+    if era == 'arascid':
+        return -data.ARASCID_EPOCH
+    elif era == 'nabonassar':
+        return -data.NABONASSAR_EPOCH
+    else:
+        return -data.SELEUCID_EPOCH
+
+
 def arsacid_year(by):
     if by > 64:
         return by - 64
@@ -69,13 +109,18 @@ def month_length(by, bm):
     return next_month - j + 1
 
 
-def from_jd(cjdn, era='Seleucid'):
+def from_jd(cjdn, era='seleucid'):
     '''Calculate Babylonian date from Julian Day Count'''
-    if cjdn > 1748872:
-        return _fromjd_proleptic(cjdn, era)
-
     if cjdn < 1492871:
         raise IndexError
+
+    if era == 'regnal' and cjdn > 1670999.5:
+        era = 'seleucid'
+
+    epoch = _set_epoch(era)
+
+    if cjdn > 1748872:
+        return _fromjd_proleptic(cjdn, epoch)
 
     # pd is the period of the babylonian month cjdn is found in
     pd = [lu for lu in data.lunations.keys() if lu < cjdn and lu + 31 > cjdn].pop()
@@ -98,14 +143,51 @@ def from_jd(cjdn, era='Seleucid'):
     return (bd, months[bm], by)
 
 
-def to_jd(year, month, day):
-    key = get_start_jd_of_month(year, month)
-    return key + day - 1
+def to_jd(y, m, d):
+    key = get_start_jd_of_month(y, m)
+    return key + d - 1
+
 
 def from_gregorian(y, m, d, era):
     return from_jd(julian.to_jd(y, m, d), era)
 
-def _fromjd_proleptic(jdc, era):
+
+def _rising_babylon(dc, func, body):
+    '''Given a date, body and function, give the next rising of that body after function occurs'''
+    event = func(dc)
+    return BABYLON.next_rising(body, start=event)
+
+
+def _setting_babylon(dc, func, body):
+    '''Given a date, body and function, give the next setting of that body after function occurs'''
+    event = func(dc)
+    return BABYLON.next_setting(body, start=event)
+
+
+def _prev_new_rising_babylon(dublindc):
+    '''Given a Dublin DC, give the previous nm rising in Babylon'''
+    return _rising_babylon(dublindc, ephem.previous_new_moon, MOON)
+
+
+def _next_new_rising_babylon(dublindc):
+    '''Given a Dublin DC, give the previous nm rising in Babylon'''
+    return _rising_babylon(dublindc, ephem.next_new_moon, MOON)
+
+
+def _body_up(dc, observer, body):
+    '''Checks if body is visible in the sky right now at observer'''
+    observer.date = dc
+    if observer.next_setting(body) < observer.next_rising(body):
+        return True
+    else:
+        return False
+
+
+def _babylon_daytime(dc):
+    return _body_up(dc, BABYLON, SUN)
+
+
+def _fromjd_proleptic(jdc, epoch):
     # calculate previous vernal equinox of jdc
 
     pass
