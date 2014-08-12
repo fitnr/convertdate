@@ -108,6 +108,13 @@ rulers = {
     -149: u'Alexander Balas',
 }
 
+# First day of the Babylonian year in -366
+JD_START_OF_METONIC = 1587851.5
+
+standard_intercalation = {
+    3: 'A', 5: 'A', 8: 'A', 11: 'A', 14: 'A', 17: 'U', 19: 'A'
+}
+
 #
 # year: {
 #    periods [ intercalations]
@@ -138,16 +145,8 @@ intercalations = {
     -404: {3: 'a', 5: 'a', 8: 'a', 11: 'a', 14: 'a', 17: 'u', 19: 'A'},
     -385: {2: 'A', 6: 'A', 8: 'A', 11: 'A', 14: 'A', 17: 'U', 19: 'A'},
 
-    -366: {3: 'A', 5: 'A', 8: 'A', 11: 'A', 14: 'A', 17: 'U', 19: 'A'},
-    -347: {3: 'A', 5: 'A', 8: 'A', 11: 'A', 14: 'A', 17: 'U', 19: 'A'},
+    -366: standard_intercalation
 
-    # 19 year cycle is used
-
-    -5: {3: 'A', 5: 'A', 8: 'A', 11: 'A', 14: 'A', 17: 'U', 19: 'A'},
-    14: {3: 'A', 5: 'A', 8: 'A', 11: 'A', 14: 'A', 17: 'U', 19: 'A'},
-    33: {3: 'A', 5: 'A', 8: 'A', 11: 'A', 14: 'A'}
 }
 
-standard_intercalation = {
-    3: 'A', 5: 'A', 8: 'A', 11: 'A', 14: 'A', 17: 'U', 19: 'A'
-}
+# standard 19 year cycle is used after -366
