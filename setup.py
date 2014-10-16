@@ -6,7 +6,7 @@ setup(
     name="python_date_utils",
     version="2.0",
     description="Python Date Utils package",
-    long_description="Converts between Gregorian dates and other calender systems. These calendars are included: Baha'i, French Republican, Hebrew, Indian Civil, Islamic, Julian, Mayana and Persian."
+    long_description="Converts between Gregorian dates and other calender systems. These calendars are included: Baha'i, French Republican, Hebrew, Indian Civil, Islamic, Julian, Mayana and Persian.",
     author="Neil Freeman and Phil Schwartz",
     license='MIT',
     author_email="contact@fakeisthenewreal.org",
