@@ -1,21 +1,21 @@
+"python -m unittest convertdate.tests"
+
 import unittest
 import time
 
-import utils
-import bahai
-import french_republican as fr
-import gregorian
-import hebrew
-import islamic
-import indian_civil
-import iso
-import julian
-import mayan
-import persian
+from convertdate import utils
+from convertdate import bahai
+from convertdate import french_republican as fr
+from convertdate import gregorian
+from convertdate import hebrew
+from convertdate import islamic
+from convertdate import indian_civil
+from convertdate import iso
+from convertdate import julian
+from convertdate import mayan
+from convertdate import persian
 
-from holidays import Holidays
-
-"python -m unittest date_utils.tests"
+from convertdate.holidays import Holidays
 
 
 class CalTestCase(unittest.TestCase):

@@ -1,6 +1,6 @@
 from math import trunc
-from utils import ceil
-
+from .utils import ceil
+from . import gregorian
 
 EPOCH = 1948320.5
 WEEKDAYS = ("Yekshanbeh", "Doshanbeh",
@@ -66,3 +66,10 @@ def from_jd(jd):
     day = int(jd - to_jd(year, month, 1)) + 1
 
     return (year, month, day)
+
+
+def from_gregorian(year, month, day):
+    return from_jd(gregorian.to_jd(year, month, day))
+
+def to_gregorian(year, month, day):
+    return gregorian.from_jd(to_jd(year, month, day))

@@ -1,5 +1,5 @@
 from math import trunc
-import gregorian
+from . import gregorian
 
 EPOCH = 347995.5
 HEBREW_YEAR_OFFSET = 3760
@@ -132,3 +132,9 @@ def to_jd_gregorianyear(gregorianyear, hebrew_month, hebrew_day):
 
     # tuple: (y, m, d)
     return gd
+
+def from_gregorian(year, month, day):
+    return from_jd(gregorian.to_jd(year, month, day))
+
+def to_gregorian(year, month, day):
+    return gregorian.from_jd(to_jd(year, month, day))

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from math import trunc
-from utils import amod
-import gregorian
+from .utils import amod
+from . import gregorian
 
 EPOCH = 584282.5
 HAAB_MONTHS = ["Pop", "Wo'", "Zip", "Sotz'", "Sek", "Xul",

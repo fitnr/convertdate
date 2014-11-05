@@ -1,6 +1,6 @@
 from math import trunc
-from utils import jwday, n_weeks
-import gregorian
+from .utils import jwday, n_weeks
+from . import gregorian
 
 
 def to_jd(year, week, day):
@@ -36,6 +36,7 @@ def from_jd(jd):
 
 def from_jd_to_iso_day(jd):
     '''Return tuple of ISO (year, day_of_year) for Julian day'''
-    year = gregorian.to_jd(jd)[0]
+    year = gregorian.from_jd(jd)[0]
     day = trunc(jd - gregorian.to_jd(year, 1, 1)) + 1
     return (year, day)
+

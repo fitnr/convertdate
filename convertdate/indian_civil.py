@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from math import trunc
-import gregorian
+from . import gregorian
 
 INDIAN_CIVIL_WEEKDAYS = ("ravivara", "somavara", "mangalavara", "budhavara", "brahaspativara", "sukravara", "sanivara")
 
@@ -76,3 +76,8 @@ def from_jd(jd):
 
     return (year, month, int(day))
 
+def from_gregorian(year, month, day):
+    return from_jd(gregorian.to_jd(year, month, day))
+
+def to_gregorian(year, month, day):
+    return gregorian.from_jd(to_jd(year, month, day))

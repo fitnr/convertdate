@@ -1,14 +1,8 @@
 # -*- coding: utf-8 -*-
-#  holidays.py: -*- Python -*-  DESCRIPTIVE TEXT.
-#
-#  Author: Phil Schwartz (phil_schwartz@users.sourceforge.net)
-#  Date: Thu Jan  9 20:00:52 2003.
-
 import time
 from copy import copy
 import calendar
-import gregorian
-import hebrew
+from . import hebrew
 
 
 # time tuple/list index
@@ -360,7 +354,7 @@ class Holidays(object):
 
     @property
     def hanukkah_eve(self):
-        tl = self.hanukkah()
+        tl = self.hanukkah
         tl[DAY] -= 1
         tl = adjust_date(tl)
         return self.returnwrapper(tl)
@@ -375,7 +369,7 @@ class Holidays(object):
 
     @property
     def rosh_hashanah_eve(self):
-        tl = self.rosh_hashanah()
+        tl = self.rosh_hashanah
         tl[DAY] -= 1
         tl = adjust_date(tl)
         return self.returnwrapper(tl)
@@ -390,7 +384,7 @@ class Holidays(object):
 
     @property
     def yom_kippur_eve(self):
-        tl = self.rosh_hashanah()
+        tl = self.rosh_hashanah
         tl[DAY] += 8
         tl = adjust_date(tl)
         return self.returnwrapper(tl)
@@ -405,7 +399,7 @@ class Holidays(object):
 
     @property
     def passover_eve(self):
-        tl = self.passover()
+        tl = self.passover
         tl[DAY] -= 1
         tl = adjust_date(tl)
         return self.returnwrapper(tl)

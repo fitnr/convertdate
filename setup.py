@@ -1,17 +1,15 @@
-#!/usr/bin/env python
-
-from distutils.core import setup
+from setuptools import setup
 
 setup(
-    name="python-date-utils",
+    name="convertdate",
     version="2.0",
-    description="Python Date Utils package",
+    description="Python Date Conversion package",
     long_description="Converts between Gregorian dates and other calender systems. These calendars are included: Baha'i, French Republican, Hebrew, Indian Civil, Islamic, Julian, Mayana and Persian.",
     author="Neil Freeman and Phil Schwartz",
     license='MIT',
     author_email="contact@fakeisthenewreal.org",
-    url="https://github.com/fitnr/python-date-utils",
-    packages=["date_utils"],
+    url="https://github.com/fitnr/convertdate",
+    packages=["convertdate"],
     classifiers=[
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.7',
@@ -21,5 +19,4 @@ setup(
         'License :: OSI Approved :: MIT License'
 
     ],
-    install_requires=['ephem>=3.7.5']
 )

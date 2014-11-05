@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from math import trunc
-import astro
-import gregorian
+from . import astro
+from . import gregorian
 
 EPOCH = 2375839.5
 
@@ -76,7 +76,7 @@ def paris_equinoxe_jd(year):
     return trunc(ep - 0.5) + 0.5
 
 
-def to_jd(an, mois, decade, jour):
+def to_jd(an, mois, jour):
     '''Obtain Julian day from a given French Revolutionary calendar date.'''
 
     guess = EPOCH + (astro.TropicalYear * ((an - 1) - 1))
@@ -88,7 +88,7 @@ def to_jd(an, mois, decade, jour):
 
     equinoxe = adr[1]
 
-    jd = equinoxe + (30 * (mois - 1)) + (10 * (decade - 1)) + (jour - 1)
+    jd = equinoxe + (30 * (mois - 1)) + (jour - 1)
     return jd
 
 
@@ -113,6 +113,12 @@ def from_jd(jd):
 
     return (an, mois, decade, jour)
 
+
+def from_gregorian(year, month, day):
+    return from_jd(gregorian.to_jd(year, month, day))
+
+def to_gregorian(an, mois, jour):
+    return gregorian.from_jd(to_jd(an, mois, jour))
 
 def format(an, mois, jour):
     return "{0} {1} {2}".format(jour, MOIS[mois - 1], an)

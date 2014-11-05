@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from math import trunc
-import gregorian
+from . import gregorian
 
 EPOCH = 2394646.5
 EPOCH_GREGORIAN_YEAR = 1844
@@ -50,3 +50,9 @@ def from_jd(jd):
     day = int((jd + 1) - to_jd(major, cycle, year, month, 1))
 
     return (major, cycle, year, month, day)
+
+def from_gregorian(year, month, day):
+    return from_jd(gregorian.to_jd(year, month, day))
+
+def to_gregorian(year, month, day):
+    return gregorian.from_jd(to_jd(year, month, day))

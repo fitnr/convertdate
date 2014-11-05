@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from math import trunc
+from . import gregorian
 
 J0000 = 1721424.5  # Julian date of Gregorian epoch: 0000-01-01
 J1970 = 2440587.5  # Julian date at Unix epoch: 1970-01-01
@@ -62,3 +63,9 @@ def to_jd(year, month, day):
         month += 12
 
     return (trunc((365.25 * (year + 4716))) + trunc((30.6001 * (month + 1))) + day) - 1524.5
+
+def from_gregorian(year, month, day):
+    return from_jd(gregorian.to_jd(year, month, day))
+
+def to_gregorian(year, month, day):
+    return gregorian.from_jd(to_jd(year, month, day))
