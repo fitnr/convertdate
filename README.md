@@ -21,16 +21,23 @@ The `holidays` module also provides some useful holiday-calculation, with a focu
 Installing
 -------
 
-`python setup.py install`
+`pip install convertdate`
 
+Or download the package and run `python setup.py install`.
 
 Using
----
-````python
+-----
 
+````python
 from convertdate import french_republican
+from convertdate import hebrew
 
 french_republican.from_gregorian(2014, 10, 31)
-#
+# (223, 2, 1, 9)
 
+hebrew.from_gregorian(2014, 10, 31)
+# (5775, 8, 7)
+# convertdate assumes you mean the middle of the day.
+# Keep in mind that for some systems, the day begins at sundown
 ````
+
