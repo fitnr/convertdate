@@ -105,13 +105,12 @@ def from_jd(jd):
     equinoxe = adr[1]
     mois = trunc((jd - equinoxe) / 30) + 1
 
-    jour = (jd - equinoxe) % 30
+    jour = int((jd - equinoxe) % 30) + 1
 
-    decade = trunc(jour / 10) + 1
+    return (an, mois, jour)
 
-    jour = int(jour % 10) + 1
-
-    return (an, mois, decade, jour)
+def decade(jour):
+    return trunc(jour / 10) + 1
 
 
 def from_gregorian(year, month, day):

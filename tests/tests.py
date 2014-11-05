@@ -111,10 +111,11 @@ class CalTestCase(unittest.TestCase):
     def test_french_republican(self):
         assert self.jd == fr.to_jd(*fr.from_jd(self.jd))
 
-        assert fr.from_jd(gregorian.to_jd(2014, 6, 14)) == (222, 9, 3, 6)
+    def test_french_republican2(self):
+        assert fr.from_gregorian(2014, 6, 14) == (222, 9, 26)
 
         # 9 Thermidor II
-        assert gregorian.to_jd(1794, 7, 27) == fr.to_jd(2, 11, 1, 9)
+        assert gregorian.to_jd(1794, 7, 27) == fr.to_jd(2, 11, 9)
 
     def test_hebrew(self):
         assert self.jd == hebrew.to_jd(*hebrew.from_jd(self.jd))
