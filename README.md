@@ -1,7 +1,7 @@
 convertdate
 ===========
 
-The convertdate package was originally developed as '[Python Date Utils](http://sourceforge.net/projects/pythondateutils)' by Phil Schwartz. 
+The convertdate package was originally developed as "[Python Date Utils](http://sourceforge.net/projects/pythondateutils)" by Phil Schwartz. It had been significantly updated and expanded.
 
 Available calendars:
 
