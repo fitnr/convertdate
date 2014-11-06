@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
-import babylonian_data as data
-from utils import floor
-import julian
+from .data import babylonian_data as data
+from . import julian
 import ephem
 
 DUBLIN_EPOCH = 2415020  # Julian Day Count for Dublin Count 0
@@ -14,6 +13,7 @@ MOON = ephem.Moon()
 SUN = ephem.Sun()
 
 # At JDC 1000.0, it was 1000.125 in Babylon
+# AST = Babylon's time zone
 AST_ADJUSTMENT = 0.125
 
 # todo:
@@ -116,7 +116,6 @@ def _month_name(monthindex):
     return data.STANDARD_MONTH_LIST[monthindex - 1]
 
 
-
 def from_jd(cjdn, era='seleucid'):
     '''Calculate Babylonian date from Julian Day Count'''
     if cjdn < 1492871:
@@ -163,7 +162,10 @@ def from_gregorian(y, m, d, era):
 def _rising_babylon(dc, func, body):
     '''Given a date, body and function, give the next rising of that body after function occurs'''
     event = func(dc)
-    return BABYLON.next_rising(body, start=event)
+    try:
+        return BABYLON.next_rising(body, start=event)
+    except ephem.AlwaysUpError:
+        return BABYLON.previous_rising(body, start=event)
 
 
 def _setting_babylon(dc, func, body):
@@ -196,15 +198,31 @@ def _babylon_daytime(dc):
 
 
 def _fromjd_proleptic(jdc, epoch):
-    # calculate previous vernal equinox of jdc
+    '''Given a Julian Day Count, calculate the Babylonian date proleptically, with choice of eras'''
+    # Calcuate the dublin day count, used in ephem
+    # We're going to return the date for noon
+    jdc = int(jdc) + 0.5
+    jdc_dublin = jdc - DUBLIN_EPOCH
 
-    pass
+    # Get start date of current metonic cycle
+    julian_date = julian.from_jd(jdc)
+    metonic_start = _metonic_start(julian_date[0])
+    prev_equinox = ephem.previous_vernal_equinox('/'.join([str(metonic_start), '7', '1']))
+    new_moon = _next_new_rising_babylon(prev_equinox)
 
+    mooncount = 1
+
+    # count forward until we're in the current month
+    while new_moon < jdc_dublin:
+        mooncount += 1
+        previous_moon = new_moon
+        new_moon = ephem.next_new_moon(new_moon)
+
+    month_name = _month_name(mooncount - 1)
 
     nighttime = BABYLON.previous_setting(SUN, start=previous_moon)
 
     day1 = _next_new_rising_babylon(nighttime)
-    print 'day1', day1
 
     day_count = jdc_dublin - day1
 
