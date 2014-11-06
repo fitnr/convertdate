@@ -2,6 +2,8 @@
 from __future__ import division
 from .data import babylonian_data as data
 from . import dublin, julian
+from pkg_resources import resource_stream
+from csv import DictReader
 import ephem
 
 
@@ -18,8 +20,69 @@ AST_ADJUSTMENT = 0.125
 # todo:
 # from_jd (seleucid, arascid, regnal year)
 
+PARKER_DUBBERSTEIN = dict()
 
-def _metonic_number(julianyear):
+# Example row:
+# -604: {
+#   'ruler': 'NABOPOLASSAR',
+#   'year': -604,
+#   'regnalyear': '21',
+#   'months': {
+#       1: 1500913.5,
+#       2: 1500942.5,
+#       3: 1500972.5,
+#       4: 1501001.5,
+#       5: 1501031.5,
+#       6: 1501061.5,
+#       7: 1501090.5,
+#       8: 1501120.5,
+#       9: 1501149.5,
+#       10: 1500814.5,
+#       11: 1500843.5,
+#       12: 1500873.5,
+#   },
+# }
+
+
+def observer(date):
+    BABYLON = ephem.Observer()
+    # OMFG I can't believe ephem uses d:mm:ss, wtf
+    BABYLON.lat = '32:32:11'
+    BABYLON.lon = '44:25:15'
+    BABYLON.elevation = 32.536389
+
+    if date:
+        BABYLON.date = date
+
+    return BABYLON
+
+
+def load_parker_dubberstein():
+    '''Read the P-D "Table for the Restatement of Babylonian
+    Dates in Terms of the Julian Calendar" into a dict'''
+
+    global PARKER_DUBBERSTEIN
+
+    # header row:
+    # ruler,regnalyear,astroyear,1,2,3,4,5,6,7,8,9,10,11,12,13,14
+    with resource_stream('convertdate', 'data/parker-dubberstein.csv') as f:
+        reader = DictReader(f)
+        for row in reader:
+            new = dict()
+            year = int(row['jyear'])
+            new['ruler'] = row['ruler']
+            new['regnalyear'] = row['regnalyear']
+            new['months'] = {}
+
+            for monthid in [str(x) for x in range(1, 15)]:
+                if row.get(monthid):
+                    month, day = row.get(monthid).split('/')
+                    new['months'][int(monthid)] = julian.to_jd(year, int(month), int(day))
+
+            PARKER_DUBBERSTEIN[year] = new
+
+
+def metonic_number(julianyear):
     '''The start year of the current metonic cycle and the current year (1-19) in the cycle'''
     # Input should be the JY of the first day of the Babylonian year in question
     # Add 1 because cycle runs 1-19 in Parker & Dubberstein

@@ -59,8 +59,11 @@ NABONASSAR_EPOCH = -748
 # key: year reign began
 # value: name of ruler
 rulers = {
+    # IX
     -748: u'Nabonassar',
     -734: u'Nabu-nadin-zeri',
+
+    # X
     -732: u'Nabu-mukin-zeri',
     -729: u'Tiglath-Pileser III',
     -727: u'Salmanassar V',
@@ -71,17 +74,22 @@ rulers = {
     -700: u'Aššur-nadim-šum',
     -694: u'Nergal-ušezib',
     -693: u'Mušezib-Marduk',
-    -689: u'Sennacherib',
+    # Sack of babylon
+    -689: u'Sennacherib (II)',
     -681: u'Asarhaddon',
     -668: u'Šamaš-šum-ukin',
     -648: u'Kandalānu',
     -626: u'interregnum',
+
+    # XI
     -625: u'Nabopolassar',
     -604: u'Nebuchadnezzar II',
     -561: u'Amēl-Marduk',
     -559: u'Nergal-šar-usur',
     -555: u'Nabunaid',
     -538: u'Cyrus',
+
+    # Achaemaenid
     -529: u'Cambyses',
     -521: u'Darius I',
     -485: u'Xerxes',
@@ -91,6 +99,8 @@ rulers = {
     -358: u'Artaxerxes III Ochus',
     -337: u'Artaxerxes IV Arses',
     -335: u'Darius III',
+
+    # Seleucid
     -330: u'Alexander the Great',
     -322: u'Philip III Arrhidaeus',
     -315: u'Alexander IV Aegus',
@@ -105,8 +115,80 @@ rulers = {
     -164: u'Antiochus V Eupator',
     -160: u'Demetrius I Soter',
     -149: u'Alexander Balas',
+    # : u'Demetrius II Nicator',
+    # : u'Antiochus VI Dionysus',
+    # : u'Diodotus Tryphon',
+    # : u'Antiochus VII Sidetes',
+    # : u'Demetrius II Nicator (II',
+    # : u'Alexander II Zabinas',
+    # : u'Seleucus V Philometor',
+    # : u'Cleopatra Thea',
+    # : u'Antiochus VIII Grypus',
+    # : u'Antiochus IX Cyzicenus',
+    # bc95: u'Antiochus X Eusebes Philopator',
+    # bc95: u'Demetrius III Eucaerus',
+    # bc95: u'Disputed: Demetrius III Eucaerus, Antiochus X Eusebes Philopator ',
+    # bc92: u'',
+    # bc92: u'Philip I Philadelphus',
+    # bc87: u'Antiochus XII Dionysus',
+    # bc83: u'Tigranes of Armenia',
+    # bc 69: u'Antiochus XIII Asiaticus',
+    # bc 65: u'Philip II Philoromaeus'   
 }
 
+
+rulers_alt_names = {
+    'nabu-nasir': 'Nabonassar',
+    'nabu-nadin-zeri': 'Nabu-nadin-zeri',
+    'nabu-mukin-zeri': 'Nabu-mukin-zeri',
+    'tiglathpileser': 'Tiglath-Pileser III',
+    'salmanassar v': 'Salmanassar V',
+    'merodach-baladan': 'Marduk-apal-iddina', 'marduk-apal-iddina ii': 'Marduk-apal-iddina',
+    # 'sargon ii': 'Sargon II',
+    'sin-ahhe-eriba': 'Sennacherib',
+    # 'bel-ibni': 'Bel-ibni',
+    'ashur-nadin-shumi  ': 'Aššur-nadim-šum',
+    'nergal-ushezib': 'Nergal-ušezib',
+    'mushezib-marduk': 'Mušezib-Marduk',
+    # 'sennacherib': 'Sennacherib',
+    'ashur-ahha-iddina': 'Asarhaddon',
+    'shamash-shum-ukin': 'Šamaš-šum-ukin',
+    'kandalanu': 'Kandalānu',
+    'interregnum': 'interregnum',
+    'nabopolassar': 'Nabopolassar',
+    'nebuchadnezzar ii': 'Nebuchadnezzar II',
+    'amel-marduk': 'Amēl-Marduk', 'evil-merodach': 'Amēl-Marduk',
+    'nergal-šar-usur': 'Nergal-šar-usur',
+    'nabonidus': 'Nabunaid',
+    # 'cyrus': 'Cyrus',
+    'cambyses ii': 'Cambyses',
+    # 'darius i': 'Darius I',
+    # 'xerxes': 'Xerxes',
+    'artaxerxes i': 'Artaxerxes I',
+    'darius ii': 'Darius II',
+    'artaxerxes ii memnon': 'Artaxerxes II Memnon',
+    'artaxerxes iii ochus': 'Artaxerxes III Ochus',
+    'artaxerxes iv arses': 'Artaxerxes IV Arses',
+    'darius iii': 'Darius III',
+    'alexander iii the great': 'Alexander the Great',
+    'philip iii arrhidaeus': 'Philip III Arrhidaeus',
+    'alexander iv': 'Alexander IV Aegus',
+    'seleucus i': 'Seleucus I Nicator',
+    'antiochus i': 'Antiochus I Soter',
+    'antiochus ii': 'Antiochus II Theos',
+    'seleucus ii': 'Seleucus II Callinicus',
+    'seleucus iiir': 'Seleucus III Soter',
+    'antiochus the great': 'Antiochus the Great',
+    'seleucus iv': 'Seleucus IV Philopater',
+    'antiochus iv': 'Antiochus IV Epiphanes',
+    'antiochus v': 'Antiochus V Eupator',
+    'demetrius i': 'Demetrius I Soter',
+    'alexander balas': 'Alexander Balas',
+    'antiochus vi epiphanes': 'Antiochus VI Dionysus',
+    'antiochus vii euergetes': 'Antiochus VII Sidetes',
+    'demetrius iii philopator': 'Demetrius III Eucaerus',
+    'seleucus vii philometor': 'Seleucus VII Kybiosaktes',
+}
 
 # First day of the Babylonian year in -366
 JD_START_OF_METONIC = 1587851.5
@@ -152,6 +234,9 @@ intercalations = {
 
 
 def intercalation(metonic_number, metonic_start=0):
+    '''A list of months for a given year (number) in a a particular metonic cycle (start).
+    Defaults to the standard intercalation'''
+
     if metonic_start < -746:
         raise IndexError("Input year out of range. The Babylonian calendar doesn't go that far back")
 
