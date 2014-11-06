@@ -16,35 +16,27 @@ SUN = ephem.Sun()
 # At JDC 1000.0, it was 1000.125 in Babylon
 AST_ADJUSTMENT = 0.125
 
-# INTERCALARY = u"Makaruša"
-
 # todo:
 # from_jd (seleucid, arascid, regnal year)
 
 
-def _metonic(julianyear):
-    '''Return the start year of the current metonic cycle and the current year (1-19) in the cycle'''
+def _metonic_number(julianyear):
+    '''The start year of the current metonic cycle and the current year (1-19) in the cycle'''
     # Input should be the JY of the first day of the Babylonian year in question
     # Add 1 because cycle runs 1-19 in Parker & Dubberstein
-    metonic_number = 1 + ((julianyear - 14) % 19)
-    # 1 + (year mod 19) == 15 is year 1 of the metonic cycle.
-    return metonic_number, julianyear - metonic_number + 1
+    return 1 + ((julianyear - 14) % 19)
 
 
-def _intercalation(metonic_number, metonic_start):
-    intercalation_pattern = data.intercalations.get(metonic_start, data.standard_intercalation)
-    patternkey = intercalation_pattern.get(metonic_number)
-
-    month, index = data.INTERCALARIES.get(patternkey, ([], len(data.MONTHS)))
-    months = data.MONTHS[:index] + month + data.MONTHS[index:]
-
-    return dict(zip(range(1, len(months) + 1), months))
+def _metonic_start(julianyear):
+    '''The julian year that the metonic cycle of input began'''
+    return julianyear - _metonic_number(julianyear) + 1
 
 
 def intercalate(julianyear):
     '''For a Julian year, use the intercalation pattern to return a dict of the months'''
-    metonic_number, metonic_start = _metonic(julianyear)
-    return _intercalation(metonic_number, metonic_start)
+    metonic_number = _metonic_number(julianyear)
+    metonic_start = _metonic_start(julianyear)
+    return data.intercalation(metonic_number, metonic_start)
 
 
 def _number_months(metonic_year):
