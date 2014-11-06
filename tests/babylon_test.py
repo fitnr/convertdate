@@ -110,16 +110,18 @@ yearstarts, lateseleucid = define_counts()
 
 for day in range(1743763, 1743762 + 35):
     thing(day + 0.5)
+    def test_load_parker_dubberstein(self):
+        bab.load_parker_dubberstein()
+        parkerdub = bab.PARKER_DUBBERSTEIN
 
-# import csv
+        # print parkerdub[-604]['months']
 
-# with open('data/parker-dubberstein.csv', 'r') as f:
-#     reader = csv.DictReader(f)
-#     years = []
-#     for row in reader:
-#         year = int(row['BC'])
-#         month, day = row['1'].split('/')
-#         firstday = julian.to_jd(year, int(month), int(day))
+    def test_metonic_cycle(self):
+        nextve = ephem.next_vernal_equinox(dublin.from_gregorian(1700, 3, 19))
+        metonic_months = count_pattern(nextve)
+
+        assert len(metonic_months) == 19
+        assert sum(metonic_months) == 235
 
 #         years.append(firstday)
 
