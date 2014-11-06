@@ -2,7 +2,7 @@
 from __future__ import division
 from itertools import chain
 from .data import babylonian_data as data
-from . import dublin, julian
+from . import dublin, julian, gregorian
 from pkg_resources import resource_stream
 from csv import DictReader
 import ephem
@@ -257,8 +257,12 @@ def to_jd(y, m, d):
     return key + d - 1
 
 
-def from_gregorian(y, m, d, era):
+def from_julian(y, m, d, era=None):
     return from_jd(julian.to_jd(y, m, d), era)
+
+
+def from_gregorian(y, m, d, era=None):
+    return from_jd(gregorian.to_jd(y, m, d), era)
 
 
 def next_visible_nm(dc):
