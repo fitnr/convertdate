@@ -17,7 +17,11 @@ setup(
 
     url="https://github.com/fitnr/convertdate",
 
-    packages=["convertdate"],
+    packages=["convertdate", 'convertdate.data'],
+
+    package_data={
+        'convertdate': ['data/*.csv'],
+    },
 
     classifiers=[
         'Programming Language :: Python',

@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
 from .data import babylonian_data as data
-from . import julian
+from . import dublin, julian
 import ephem
 
-DUBLIN_EPOCH = 2415020  # Julian Day Count for Dublin Count 0
 
 BABYLON = ephem.Observer()
 BABYLON.lat, BABYLON.lon, BABYLON.elevation = 32.536389, 44.420833, 35.18280792236328
@@ -202,8 +201,8 @@ def _fromjd_proleptic(jdc, epoch):
     # Calcuate the dublin day count, used in ephem
     # We're going to return the date for noon
     jdc = int(jdc) + 0.5
-    jdc_dublin = jdc - DUBLIN_EPOCH
 
+    dublincount = dublin.from_jd(jdc)
     # Get start date of current metonic cycle
     julian_date = julian.from_jd(jdc)
     metonic_start = _metonic_start(julian_date[0])
