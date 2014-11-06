@@ -160,20 +160,17 @@ def regnalyear(julianyear):
     if not _valid_regnal(julianyear):
         return False
 
-    key = max([r for r in data.rulers if r <= julianyear])
+    if julianyear in data.rulers.keys():
+        rulername = data.rulers[julianyear]
+        ryear = 0
 
-    ryear = julianyear - key + 1
-
-    rulername = data.rulers[key]
+    else:
+        key = max([r for r in data.rulers if r <= julianyear])
+        ryear = julianyear - key
+        rulername = data.rulers[key]
 
     if rulername == 'Alexander the Great':
-        ryear = ryear + 6
-
-    if rulername == "Philip III Arrhidaeus":
-        ryear = ryear + 1
-
-    if rulername == 'Alexander IV Aegus':
-        ryear = ryear + 1
+        ryear = ryear + 5
 
     return (ryear, rulername)
 
@@ -186,10 +183,6 @@ def _set_epoch(era):
     else:
         return -data.SELEUCID_EPOCH
 
-
-def arsacid_year(by):
-    if by > 64:
-        return by - 64
 
 
 def get_start_jd_of_month(y, m):
@@ -220,15 +213,14 @@ def _month_name(monthindex):
 
 def from_jd(cjdn, era='seleucid'):
     '''Calculate Babylonian date from Julian Day Count'''
-    if cjdn < 1492871:
-        raise IndexError
+    jyear, jmonth, jday = julian.from_jd(cjdn)
 
-    if era == 'regnal' and cjdn > 1670999.5:
+    if era == 'regnal' and not _valid_regnal(jyear):
         era = 'seleucid'
 
     epoch = _set_epoch(era)
 
-    if cjdn > 1748872:
+    if jyear >= -146:
         return _fromjd_proleptic(cjdn, epoch)
 
     # pd is the period of the babylonian month cjdn is found in
