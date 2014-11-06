@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from itertools import chain
 # JDC of the start of each lunation
 
 # An adaptation of http://www.staff.science.uu.nl/~gent0113/babylon/downloads/babylonian_chronology_pd1956.dat
@@ -231,27 +230,3 @@ intercalations = {
 
 }
 # standard 19 year cycle is used after -366
-
-
-def intercalation(metonic_number, metonic_start=0):
-    '''A list of months for a given year (number) in a a particular metonic cycle (start).
-    Defaults to the standard intercalation'''
-
-    if metonic_start < -747:
-        raise IndexError("Input year out of range. The Babylonian calendar doesn't go that far back")
-
-    intercalation_pattern = intercalations.get(metonic_start, standard_intercalation)
-    patternkey = intercalation_pattern.get(metonic_number)
-
-    month, index = INTERCALARIES.get(patternkey, (None, None))
-
-    if month:
-        months = MONTHS[:index] + [month] + MONTHS[index:]
-    else:
-        months = MONTHS
-
-    return dict(zip(range(1, len(months) + 1), months))
-
-
-def standard_month_list():
-    return list(chain(*[intercalation(y).values() for y in range(1, 20)]))

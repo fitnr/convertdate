@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
+from itertools import chain
 from .data import babylonian_data as data
 from . import dublin, julian
 from pkg_resources import resource_stream
@@ -92,12 +93,12 @@ def metonic_number(julianyear):
     return 1 + ((julianyear - 13) % 19)
 
 
-def _metonic_start(julianyear):
+def metonic_start(julianyear):
     '''The julian year that the metonic cycle of input began'''
     if julianyear == 0:
         raise IndexError("There was no year zero")
 
-    m = _metonic_number(julianyear)
+    m = metonic_number(julianyear)
 
     if julianyear > 0:
         julianyear = julianyear - 1
@@ -107,9 +108,37 @@ def _metonic_start(julianyear):
 
 def intercalate(julianyear):
     '''For a Julian year, use the intercalation pattern to return a dict of the months'''
-    metonic_number = _metonic_number(julianyear)
-    metonic_start = _metonic_start(julianyear)
-    return data.intercalation(metonic_number, metonic_start)
+    number = metonic_number(julianyear)
+    start = metonic_start(julianyear)
+    return intercalation(number, start)
+
+
+def intercalation(mnumber, mstart=0):
+    '''A list of months for a given year (number) in a a particular metonic cycle (start).
+    Defaults to the standard intercalation'''
+
+    if mstart < -747:
+        raise IndexError("Input year out of range. The Babylonian calendar doesn't go that far back")
+
+    pattern = data.intercalations.get(mstart, data.standard_intercalation)
+    patternkey = pattern.get(mnumber)
+
+    return intercalation_pattern(patternkey)
+
+
+def intercalation_pattern(key):
+    month, index = data.INTERCALARIES.get(key, (None, None))
+
+    if month:
+        months = data.MONTHS[:index] + [month] + data.MONTHS[index:]
+    else:
+        months = data.MONTHS
+
+    return dict(zip(range(1, len(months) + 1), months))
+
+
+def standard_metonic_month_list():
+    return list(chain(*[intercalation(y).values() for y in range(1, 20)]))
 
 
 def _number_months(metonic_year):
@@ -186,7 +215,7 @@ def _month_name(monthindex):
         monthindex = 235
 
     # Use to 0 index
-    return data.standard_month_list().pop(monthindex - 1)
+    return standard_metonic_month_list().pop(monthindex - 1)
 
 
 def from_jd(cjdn, era='seleucid'):
@@ -256,8 +285,8 @@ def _fromjd_proleptic(jdc, epoch):
     # If the next VE is in the current year, the year will be the previous one... probably
     # Get start date of current metonic cycle
     julian_date = julian.from_jd(jdc)
-    metonic_start = _metonic_start(julian_date[0])
-    metonic_equinox = ephem.previous_vernal_equinox('/'.join([str(metonic_start), '7', '1']))
+    mstart = metonic_start(julian_date[0])
+    metonic_equinox = ephem.previous_vernal_equinox('/'.join([str(mstart), '7', '1']))
 
     # Only the VE in the metonic base year matters
     # Loop through the new moons since the metonic base
