@@ -200,3 +200,15 @@ def _fromjd_proleptic(jdc, epoch):
 
     pass
 
+
+    nighttime = BABYLON.previous_setting(SUN, start=previous_moon)
+
+    day1 = _next_new_rising_babylon(nighttime)
+    print 'day1', day1
+
+    day_count = jdc_dublin - day1
+
+    days = int(day_count)
+
+    return days, month_name, epoch + julian_date[0]
+
