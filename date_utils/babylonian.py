@@ -47,22 +47,24 @@ def _number_months(metonic_year):
         return 12
 
 
-def _valid_regnal(y):
-    if y < -478 or y > -139:
+def _valid_regnal(julianyear):
+    if julianyear < -748 or julianyear > -149:
         return False
     return True
 
 
-def regnalyear(by):
+def regnalyear(julianyear):
     '''Determine regnal year'''
-    if not _valid_regnal:
+    if not _valid_regnal(julianyear):
         return False
 
-    key = max([r for r in data.rulers if r <= by])
-    ryear = by - key + 1
+    key = max([r for r in data.rulers if r <= julianyear])
+
+    ryear = julianyear - key + 1
+
     rulername = data.rulers[key]
 
-    if rulername == 'Alexander III [the Great]':
+    if rulername == 'Alexander the Great':
         ryear = ryear + 6
 
     if rulername == "Philip III Arrhidaeus":
