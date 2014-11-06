@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from copy import copy
 import unittest
 from convertdate import dublin
 from convertdate import julian
@@ -39,6 +40,7 @@ class test_babylon_cal(unittest.TestCase):
         assert len(bab.intercalate(-535)) == 12
 
         leapyear_U = bab.intercalate(-596)
+
         assert bab.intercalation_pattern('U') == {
             1: u'Nis\u0101nu', 2: u'\u0100ru', 3: u'Simanu', 4: u'Dumuzu', 5: u'Abu', 6: u'Ul\u016blu',
             7: u'Ul\u016blu II', 8: u'Ti\u0161ritum', 9: u'Samna', 10: u'Kislimu', 11: u'\u1e6ceb\u0113tum',
@@ -60,89 +62,51 @@ class test_babylon_cal(unittest.TestCase):
         assert bab.regnalyear(-330) == (6, u'Alexander the Great')
         assert bab.regnalyear(-625) == (1, u'Nabopolassar')
 
-        # assert (rising.year, rising.month, rising.day) == (2014, 11, 23)
+    def test_babylon_from_jd(self):
+        # print bab.from_jd(1492870.500000, 'regnal')
+        assert julian.from_jd(1492870.500000) == (-626, 4, 5)
+        self.assertEqual(bab.from_jd(1492870.500000, 'regnal'), ((0, u'Nabopolassar'), u"Nisānu", 1))
 
-    # def test_babylon_from_jd(self):
+        self.assertEqual(bab.from_jd(1492870.500000, 'regnal'), ((0, u'Nabopolassar'), u"Nisānu", 1))
+
+        # print bab.from_julian(-370, 3, 25, 'regnal')
+
+        assert bab.from_julian(-330, 7, 30, 'regnal') == ((6, u'Alexander the Great'), u'Abu', 1)
+
+    def test_babylon_from_jd_proleptic(self):
     #     assert bab.from_jd(1736116) == (3, "Addaru", 351)
     #     assert bab.from_jd(1736138) == (25, "Addaru", 351)
     #     assert bab.from_jd(1626563) == (8, "Addaru", 52)
     #     assert bab.from_jd(1494179) == (4, "Samna", None)
+        pass
 
-def define_counts():
-    y = [
-        julian.to_jd(-130 - 1, 4, 16),
-        julian.to_jd(-131 - 1, 4, 4),
-        julian.to_jd(-132 - 1, 3, 25),
-        julian.to_jd(-133 - 1, 4, 13),
-        julian.to_jd(-134 - 1, 4, 3),
-        julian.to_jd(-135 - 1, 4, 21),
-        julian.to_jd(-136 - 1, 4, 10),
-        julian.to_jd(-137 - 1, 3, 30),
-        julian.to_jd(-138 - 1, 4, 18),
-        julian.to_jd(-139 - 1, 4, 6),
-        julian.to_jd(-140 - 1, 3, 26),
-        julian.to_jd(-141 - 1, 4, 14),
-        julian.to_jd(-142 - 1, 4, 4),
-        julian.to_jd(-143 - 1, 4, 22),
-        julian.to_jd(-144 - 1, 4, 11),
-        julian.to_jd(-145 - 1, 4, 1),
-        julian.to_jd(-146 - 1, 4, 20),
-        julian.to_jd(-147 - 1, 4, 8),
-        julian.to_jd(-148 - 1, 3, 28)
-    ]
+    def test_load_parker_dubberstein(self):
+        bab.load_parker_dubberstein()
+        parkerdub = bab.PARKER_DUBBERSTEIN
 
-    s = [
-        julian.to_jd(20 + 25, 4, 18),
-        julian.to_jd(20 + 26, 4, 8),
-        julian.to_jd(20 + 27, 3, 28),
-        julian.to_jd(20 + 28, 4, 15),
-        julian.to_jd(20 + 29, 4, 5),
-        julian.to_jd(20 + 30, 3, 25),
-        julian.to_jd(20 + 31, 4, 12),
-        julian.to_jd(20 + 32, 4, 1),
-        julian.to_jd(20 + 33, 4, 19),
-        julian.to_jd(20 + 34, 4, 9),
-        julian.to_jd(20 + 35, 3, 30),
-        julian.to_jd(20 + 36, 4, 17),
-        julian.to_jd(20 + 37, 4, 6),
-        julian.to_jd(20 + 38, 3, 26),
-        julian.to_jd(20 + 39, 4, 14),
-        julian.to_jd(20 + 40, 4, 2),
-        julian.to_jd(20 + 41, 4, 21),
-        julian.to_jd(20 + 42, 4, 10),
-        julian.to_jd(20 + 43, 3, 31),
-        julian.to_jd(20 + 44, 4, 18),
-    ]
-    return y, s
+        assert parkerdub[-604].get('months')
 
+    def test_metonic_cycle(self):
+        dc = dublin.from_gregorian(1900, 3, 19)
+        nve = ephem.next_vernal_equinox(dc)
+        metonic_months = count_pattern(nve)
 
-def thing(dat):
-    pve = ephem.previous_vernal_equinox(dat - DUBLIN_EPOCH) + DUBLIN_EPOCH
-    pnm = ephem.previous_new_moon(dat - DUBLIN_EPOCH) + DUBLIN_EPOCH
-    jul = julian.from_jd(dat)
-    print _metonic_number(jul[0]), jul, 'days since pve:', int(dat - pve), 'days since pnm:', utils.floor(dat - pnm), _fromjd_proleptic(dat, -data.NABONASSAR_EPOCH)
-
-print 'first day of year ... previous vernal equinox'
-
-yearstarts, lateseleucid = define_counts()
-# for date in yearstarts:
-#     thing(date)
-
-# for date in lateseleucid:
-#     thing(date)
-
-for day in range(1743763, 1743762 + 35):
-    thing(day + 0.5)
-
-#         years.append(firstday)
-
-# years.sort()
-
-# for firstday in years:
-#     thing(firstday)
         assert len(metonic_months) == 19
         assert sum(metonic_months) == 235
 
+def thing(dat):
+    pve = ephem.previous_vernal_equinox(dublin.from_jd(dat))
+    pnm = ephem.previous_new_moon(dublin.from_jd(dat))
+    juliandate = julian.from_jd(dat)
+    days_since_pve = int(dat - dublin.to_jd(pve))
+    if days_since_pve > 30:
+        print bab.metonic_number(juliandate[0]),
+        print juliandate,
+        print days_since_pve,
+        print utils.floor(dat - dublin.to_jd(pnm)),
+        print bab._fromjd_proleptic(dat, -data.NABONASSAR_EPOCH)
+
+# print 'metonic number, juliandate, days since PVE, days to NNM, babdate'
 
 def count_months_before_ve(ephemdate):
     moondate = ephemdate
@@ -161,12 +125,6 @@ def count_months_before_ve(ephemdate):
     count = count - 1
 
     return count, firstdaynextyear
-
-# (45, 4, 8) is first day of SE 356
-# Has a metonic #: 13
-print 'count of months'
-end_of_era = ephem.date('/'.join(repr(x) for x in (45, 4, 8)) + ' 12:00:00')
-
 
 def count_pattern(startingve):
     # days until ve.
