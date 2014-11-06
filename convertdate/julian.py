@@ -70,8 +70,10 @@ def to_jd(year, month, day):
 
     return (trunc((365.25 * (year + 4716))) + trunc((30.6001 * (month + 1))) + day) - 1524.5
 
+
 def from_gregorian(year, month, day):
     return from_jd(gregorian_to_jd(year, month, day))
+
 
 def to_gregorian(year, month, day):
     return gregorian_from_jd(to_jd(year, month, day))

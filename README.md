@@ -15,6 +15,8 @@ Available calendars:
 * Mayan
 * Persian
 * Mayan
+* Dublin day count
+* Julian day count
 
 The `holidays` module also provides some useful holiday-calculation, with a focus on American and Jewish holidays.
 

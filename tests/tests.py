@@ -2,16 +2,19 @@
 
 import unittest
 import time
-
+import pytz
+from datetime import datetime
 from convertdate import utils
 from convertdate import bahai
 from convertdate import french_republican as fr
+from convertdate import dublin
 from convertdate import gregorian
 from convertdate import hebrew
 from convertdate import islamic
 from convertdate import indian_civil
 from convertdate import iso
 from convertdate import julian
+from convertdate import julianday
 from convertdate import mayan
 from convertdate import persian
 
@@ -166,10 +169,25 @@ class CalTestCase(unittest.TestCase):
     def test_iso(self):
         assert self.jd == iso.to_jd(*iso.from_jd(self.jd))
 
-    def test_julian(self):
+    def test_from_julian(self):
         assert self.jd == julian.to_jd(*julian.from_jd(self.jd))
         assert julian.from_jd(self.c) == (1492, 10, 12)
         assert julian.from_jd(2400000.5) == (1858, 11, 5)
+        assert julian.from_jd(2399830.5) == (1858, 5, 19)
+
+    def test_from_gregorian_20thc(self):
+        assert gregorian.from_jd(2418934.0) == (1910, 9, 19)
+        assert gregorian.from_jd(2433360.0) == (1950, 3, 19)
+        assert gregorian.from_jd(2437970.0) == (1962, 11, 1)
+        assert gregorian.from_jd(2447970.0) == (1990, 3, 19)
+        assert gregorian.from_jd(2456967.5) == (2014, 11, 6)
+
+    def test_to_gregorian(self):
+        assert gregorian.to_jd(2014, 11, 5) == 2456966.5
+
+    def test_to_julian(self):
+        assert julian.to_jd(1858, 11, 5) == 2400000.5
+        assert julian.to_jd(1492, 10, 12) == self.c
 
     def test_bahai(self):
         assert self.jd == bahai.to_jd(*bahai.from_jd(self.jd))
@@ -261,6 +279,30 @@ class CalTestCase(unittest.TestCase):
         self.assertRaises(IndexError, holidays.nth_day_of_month, 1, 7, 4, 2014)
         assert holidays.nth_day_of_month(4, 3, 11, 2014) == (2014, 11, 27)
         assert holidays.nth_day_of_month(0, 3, 11, 2014) == (2014, 11, 27)
+
+    def test_dublin_dc(self):
+        assert dublin.from_gregorian(1900, 1, 1) == 0.5
+        assert dublin.to_gregorian(1) == (1900, 1, 1)
+        assert dublin.to_jd(0) == 2415020.0
+
+        assert dublin.to_jd(dublin.from_jd(self.c)) == gregorian.to_jd(*dublin.to_gregorian(dublin.from_gregorian(*self.c_greg)))
+
+        assert dublin.to_gregorian(dublin.from_jd(1737936)) == gregorian.from_jd(1737936)
+        assert dublin.to_julian(dublin.from_jd(1737936)) == julian.from_jd(1737936)
+
+    def test_julian_day(self):
+        assert julianday.from_gregorian(*self.c_greg) == self.c
+        assert julianday.to_datetime(self.c) == datetime(1492, 10, 21, tzinfo=pytz.utc)
+        assert julianday.to_datetime(self.x) == datetime(2016, 2, 29, tzinfo=pytz.utc)
+
+        assert julianday.to_datetime(self.c + 0.25) == datetime(1492, 10, 21, 6, tzinfo=pytz.utc)
+        assert julianday.to_datetime(self.x + 0.525) == datetime(2016, 2, 29, 12, 36, tzinfo=pytz.utc)
+
+        dt = datetime(2014, 11, 8, 3, 37, tzinfo=pytz.utc)
+        assert julianday.from_datetime(dt) == 2456969.65069
+
+        assert julianday.to_datetime(self.x + 0.525) == datetime(2016, 2, 29, 12, 36, tzinfo=pytz.utc)
+
 
 if __name__ == '__main__':
     unittest.main()
