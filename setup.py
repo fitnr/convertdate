@@ -31,4 +31,7 @@ setup(
         'License :: OSI Approved :: MIT License'
 
     ],
+    install_requires=[
+        'ephem>=3.7.5.3'
+    ]
 )
