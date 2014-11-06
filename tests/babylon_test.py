@@ -12,26 +12,28 @@ import ephem
 class test_babylon_cal(unittest.TestCase):
 
     def test_metonic(self):
-        assert bab._metonic_number(-747) == 1
-        assert bab._metonic_number(-440) == 4
+        assert bab.metonic_number(-747) == 1
+        assert bab.metonic_number(-440) == 4
 
-        assert bab._metonic_start(-500) == -500
-        assert bab._metonic_start(-380) == -386
+        assert bab.metonic_start(-500) == -500
+        assert bab.metonic_start(-380) == -386
 
-        assert bab._metonic_start(-576) == -576
+        assert bab.metonic_start(-576) == -576
 
-        assert bab._metonic_start(1) == -6
+        assert bab.metonic_start(1) == -6
 
-        assert bab._metonic_number(1) == 7
+        assert bab.metonic_number(1) == 7
+
+        assert bab.metonic_start(-596) == -614
+        assert bab.metonic_number(-596) == 19
 
     def test_intercal_patterns(self):
-        assert data.intercalation(1) == dict(zip(range(1, 13), data.MONTHS))
+        assert bab.intercalation(1) == dict(zip(range(1, 13), data.MONTHS))
 
-        leapyear_A = bab.intercalate(-383)
+        leapyear_A = bab.intercalate(-385)
         assert len(leapyear_A) == 13
         assert leapyear_A[13] == u"Addaru II"
 
-        print bab.intercalate(-576)
         assert len(bab.intercalate(-576)) == 12
         assert len(bab.intercalate(-595)) == 12
         assert len(bab.intercalate(-535)) == 12
@@ -44,6 +46,15 @@ class test_babylon_cal(unittest.TestCase):
 
         assert len(leapyear_U) == 13
         assert leapyear_U[7] == u"Ulūlu II"
+
+        assert data.intercalations[bab.metonic_start(-596)][bab.metonic_number(-596)] == 'U'
+
+        assert data.intercalations[bab.metonic_start(-596)][bab.metonic_number(-596)] == 'U'
+
+        assert len(leapyear_U) == 13
+
+        assert leapyear_U[7] == u"Ulūlu II"
+
 
     def test_bab_ry(self):
         assert bab.regnalyear(-330) == (6, u'Alexander the Great')
