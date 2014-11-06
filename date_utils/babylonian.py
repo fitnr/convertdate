@@ -103,6 +103,20 @@ def month_length(by, bm):
     return next_month - j + 1
 
 
+def _month_name(monthindex):
+    '''Given the number of the month in the metonic cycle of 235, return the name of the month'''
+
+    # Get a number between 0 and 235
+    monthindex = monthindex % 235
+
+    if monthindex == 0:
+        monthindex = 235
+
+    # Use to 0 index
+    return data.STANDARD_MONTH_LIST[monthindex - 1]
+
+
+
 def from_jd(cjdn, era='seleucid'):
     '''Calculate Babylonian date from Julian Day Count'''
     if cjdn < 1492871:
