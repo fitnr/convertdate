@@ -1,8 +1,49 @@
+import unittest
 from convertdate import dublin
 from convertdate import julian
 from convertdate import utils
-from convertdate.babylon import *
+from convertdate import babylonian as bab
+from convertdate.data import babylonian_data as data
 import ephem
+
+
+
+class test_babylon_cal(unittest.TestCase):
+
+    def test_metonic(self):
+        assert bab._metonic_number(-746) == 1
+        assert bab._metonic_number(-440) == 3
+
+        assert bab._metonic_start(-500) == -518
+        assert bab._metonic_start(-380) == -385
+
+    def text_intercal_patterns(self):
+        assert data.intercalation(1) == data.STANDARD_MONTH_LIST
+
+        leapyear_A = bab.intercalate(-383)
+
+        assert len(leapyear_A) == 13
+        assert leapyear_A[12] == u"Addaru II"
+
+    def test_bab_ry(self):
+        assert bab.regnalyear(-330) == (7, u'Alexander the Great')
+        assert bab.regnalyear(-625) == (1, u'Nabopolassar')
+
+    def test_moon_rising_babylon(self):
+        nov1 = dublin.from_gregorian(2014, 11, 1)
+
+        print 'next new moon', bab._next_new_rising(nov1)
+        print 'next sunset after that', bab._next_new_sunset(nov1)
+
+        # print bab.BABYLON.next_setting(bab.SUN)
+
+        # assert (rising.year, rising.month, rising.day) == (2014, 11, 23)
+
+    # def test_babylon_from_jd(self):
+    #     assert bab.from_jd(1736116) == (3, "Addaru", 351)
+    #     assert bab.from_jd(1736138) == (25, "Addaru", 351)
+    #     assert bab.from_jd(1626563) == (8, "Addaru", 52)
+    #     assert bab.from_jd(1494179) == (4, "Samna", None)
 
 def define_counts():
     y = [
@@ -181,3 +222,6 @@ print from_jd(1736016)
 print '------'
 print julian.from_jd(1579075)
 print from_jd(1579075)
+
+if __name__ == '__main__':
+    unittest.main()
