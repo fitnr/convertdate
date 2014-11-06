@@ -37,9 +37,9 @@ INTERCALARIES = {
 
 '''Regnal stuff'''
 
-SELEUCID_EPOCH = -310
-ARASCID_EPOCH = -246
-NABONASSAR_EPOCH = -748
+SELEUCID_EPOCH = -311
+ARASCID_EPOCH = -247
+NABONASSAR_EPOCH = -749
 
 # Labashi-Marduk=year,4 of Nergal-shar-usur
 
@@ -60,61 +60,61 @@ NABONASSAR_EPOCH = -748
 # value: name of ruler
 rulers = {
     # IX
-    -748: u'Nabonassar',
-    -734: u'Nabu-nadin-zeri',
+    -749: u'Nabonassar',
+    -735: u'Nabu-nadin-zeri',
 
     # X
-    -732: u'Nabu-mukin-zeri',
-    -729: u'Tiglath-Pileser III',
-    -727: u'Salmanassar V',
-    -722: u'Marduk-apal-iddina',
-    -710: u'Sargon II',
-    -705: u'Sennacherib',
-    -703: u'Bel-ibni',
-    -700: u'Aššur-nadim-šum',
-    -694: u'Nergal-ušezib',
-    -693: u'Mušezib-Marduk',
+    -733: u'Nabu-mukin-zeri',
+    -730: u'Tiglath-Pileser III',
+    -728: u'Salmanassar V',
+    -723: u'Marduk-apal-iddina',
+    -711: u'Sargon II',
+    -706: u'Sennacherib',
+    -704: u'Bel-ibni',
+    -701: u'Aššur-nadim-šum',
+    -695: u'Nergal-ušezib',
+    -694: u'Mušezib-Marduk',
     # Sack of babylon
-    -689: u'Sennacherib (II)',
-    -681: u'Asarhaddon',
-    -668: u'Šamaš-šum-ukin',
-    -648: u'Kandalānu',
-    -626: u'interregnum',
+    -690: u'Sennacherib (II)',
+    -682: u'Asarhaddon',
+    -669: u'Šamaš-šum-ukin',
+    -649: u'Kandalānu',
+    -627: u'interregnum',
 
     # XI
-    -625: u'Nabopolassar',
-    -604: u'Nebuchadnezzar II',
-    -561: u'Amēl-Marduk',
-    -559: u'Nergal-šar-usur',
-    -555: u'Nabunaid',
-    -538: u'Cyrus',
+    -626: u'Nabopolassar',
+    -605: u'Nebuchadnezzar II',
+    -562: u'Amēl-Marduk',
+    -560: u'Nergal-šar-usur',
+    -556: u'Nabunaid',
+    -539: u'Cyrus',
 
     # Achaemaenid
-    -529: u'Cambyses',
-    -521: u'Darius I',
-    -485: u'Xerxes',
-    -464: u'Artaxerxes I',
-    -423: u'Darius II',
-    -404: u'Artaxerxes II Memnon',
-    -358: u'Artaxerxes III Ochus',
-    -337: u'Artaxerxes IV Arses',
-    -335: u'Darius III',
+    -530: u'Cambyses',
+    -522: u'Darius I',
+    -486: u'Xerxes',
+    -465: u'Artaxerxes I',
+    -424: u'Darius II',
+    -405: u'Artaxerxes II Memnon',
+    -359: u'Artaxerxes III Ochus',
+    -338: u'Artaxerxes IV Arses',
+    -336: u'Darius III',
 
     # Seleucid
-    -330: u'Alexander the Great',
-    -322: u'Philip III Arrhidaeus',
-    -315: u'Alexander IV Aegus',
-    -311: u'Seleucus I Nicator',
-    -281: u'Antiochus I Soter',
-    -261: u'Antiochus II Theos',
-    -246: u'Seleucus II Callinicus',
-    -225: u'Seleucus III Soter',
-    -222: u'Antiochus the Great',
-    -187: u'Seleucus IV Philopater',
-    -175: u'Antiochus IV Epiphanes',
-    -164: u'Antiochus V Eupator',
-    -160: u'Demetrius I Soter',
-    -149: u'Alexander Balas',
+    -331: u'Alexander the Great',
+    -323: u'Philip III Arrhidaeus',
+    -316: u'Alexander IV Aegus',
+    -312: u'Seleucus I Nicator',
+    -282: u'Antiochus I Soter',
+    -262: u'Antiochus II Theos',
+    -247: u'Seleucus II Callinicus',
+    -226: u'Seleucus III Soter',
+    -223: u'Antiochus the Great',
+    -188: u'Seleucus IV Philopater',
+    -176: u'Antiochus IV Epiphanes',
+    -165: u'Antiochus V Eupator',
+    -161: u'Demetrius I Soter',
+    -150: u'Alexander Balas',
     # : u'Demetrius II Nicator',
     # : u'Antiochus VI Dionysus',
     # : u'Diodotus Tryphon',
@@ -133,7 +133,7 @@ rulers = {
     # bc87: u'Antiochus XII Dionysus',
     # bc83: u'Tigranes of Armenia',
     # bc 69: u'Antiochus XIII Asiaticus',
-    # bc 65: u'Philip II Philoromaeus'   
+    # bc 65: u'Philip II Philoromaeus'
 }
 
 
@@ -203,31 +203,31 @@ standard_intercalation = {
 # years are astronomical (-1 = 2 BC)
 #
 intercalations = {
-    -746: {3: 'U'},
-    -727: {},  # No intercalary months
-    -708: {},  # No intercalary months
-    -689: {13: 'A'},
-    -670: {},  # No intercalary months
+    -747: {3: 'U'},
+    -728: {},  # No intercalary months
+    -709: {},  # No intercalary months
+    -690: {13: 'A'},
+    -671: {},  # No intercalary months
 
-    -651: {10: 'U'},
-    -632: {9: 'a', 12: 'u', 15: 'U', 18: 'U'},
-    -613: {1: 'u', 4: 'U', 6: 'u', 9: 'A', 12: 'U', 14: 'A', 17: 'U', 19: 'U'},
-    -594: {3: 'u', 5: 'a', 8: 'A', 12: 'u', 14: 'A', 17: 'A', 19: 'A'},
-    -575: {3: 'U', 5: 'A', 8: 'A', 13: 'U', 14: 'A', 17: 'A'},
+    -652: {10: 'U'},
+    -633: {9: 'a', 12: 'u', 15: 'U', 18: 'U'},
+    -614: {1: 'u', 4: 'U', 6: 'u', 9: 'A', 12: 'U', 14: 'A', 17: 'U', 19: 'U'},
+    -595: {3: 'u', 5: 'a', 8: 'A', 12: 'u', 14: 'A', 17: 'A', 19: 'A'},
+    -576: {3: 'U', 5: 'A', 8: 'A', 13: 'U', 14: 'A', 17: 'A'},
 
-    -556: {1: 'A', 3: 'A', 5: 'A', 8: 'A', 12: 'U', 14: 'A', 16: 'A'},
-    -537: {2: 'U', 3: 'A', 6: 'A', 9: 'U', 12: 'U', 14: 'A', 16: 'A'},
-    -518: {1: 'U', 3: 'A', 6: 'A', 9: 'U', 11: 'A', 14: 'A', 17: 'U'},
-    -499: {1: 'A', 3: 'A', 6: 'A', 8: 'a', 9: 'A', 14: 'A', 17: 'U'},
-    -480: {1: 'A', 3: 'a', 6: 'a', 8: 'A', 11: 'a', 14: 'a', 17: 'u', 19: 'a'},
+    -557: {1: 'A', 3: 'A', 5: 'A', 8: 'A', 12: 'U', 14: 'A', 16: 'A'},
+    -538: {2: 'U', 3: 'A', 6: 'A', 9: 'U', 12: 'U', 14: 'A', 16: 'A'},
+    -519: {1: 'U', 3: 'A', 6: 'A', 9: 'U', 11: 'A', 14: 'A', 17: 'U'},
+    -500: {1: 'A', 3: 'A', 6: 'A', 8: 'a', 9: 'A', 14: 'A', 17: 'U'},
+    -481: {1: 'A', 3: 'a', 6: 'a', 8: 'A', 11: 'a', 14: 'a', 17: 'u', 19: 'a'},
 
-    -461: {3: 'a', 6: 'a', 8: 'A', 11: 'a', 14: 'a', 17: 'u', 19: 'a'},
-    -442: {3: 'a', 6: 'a', 8: 'a', 11: 'A', 14: 'a', 17: 'u', 19: 'A'},
-    -423: {3: 'A', 6: 'A', 8: 'a', 11: 'A', 14: 'a', 17: 'u', 19: 'a'},
-    -404: {3: 'a', 5: 'a', 8: 'a', 11: 'a', 14: 'a', 17: 'u', 19: 'A'},
-    -385: {2: 'A', 6: 'A', 8: 'A', 11: 'A', 14: 'A', 17: 'U', 19: 'A'},
+    -462: {3: 'a', 6: 'a', 8: 'A', 11: 'a', 14: 'a', 17: 'u', 19: 'a'},
+    -443: {3: 'a', 6: 'a', 8: 'a', 11: 'A', 14: 'a', 17: 'u', 19: 'A'},
+    -424: {3: 'A', 6: 'A', 8: 'a', 11: 'A', 14: 'a', 17: 'u', 19: 'a'},
+    -405: {3: 'a', 5: 'a', 8: 'a', 11: 'a', 14: 'a', 17: 'u', 19: 'A'},
+    -386: {2: 'A', 6: 'A', 8: 'A', 11: 'A', 14: 'A', 17: 'U', 19: 'A'},
 
-    -366: standard_intercalation
+    -367: standard_intercalation
 
 }
 # standard 19 year cycle is used after -366
@@ -237,16 +237,21 @@ def intercalation(metonic_number, metonic_start=0):
     '''A list of months for a given year (number) in a a particular metonic cycle (start).
     Defaults to the standard intercalation'''
 
-    if metonic_start < -746:
+    if metonic_start < -747:
         raise IndexError("Input year out of range. The Babylonian calendar doesn't go that far back")
 
     intercalation_pattern = intercalations.get(metonic_start, standard_intercalation)
     patternkey = intercalation_pattern.get(metonic_number)
 
-    month, index = INTERCALARIES.get(patternkey, ([], len(MONTHS)))
-    months = MONTHS[:index] + [month] + MONTHS[index:]
+    month, index = INTERCALARIES.get(patternkey, (None, None))
+
+    if month:
+        months = MONTHS[:index] + [month] + MONTHS[index:]
+    else:
+        months = MONTHS
 
     return dict(zip(range(1, len(months) + 1), months))
 
 
-STANDARD_MONTH_LIST = list(chain(*[intercalation(y).values() for y in range(1, 20)]))
+def standard_month_list():
+    return list(chain(*[intercalation(y).values() for y in range(1, 20)]))

@@ -83,12 +83,26 @@ def metonic_number(julianyear):
     '''The start year of the current metonic cycle and the current year (1-19) in the cycle'''
     # Input should be the JY of the first day of the Babylonian year in question
     # Add 1 because cycle runs 1-19 in Parker & Dubberstein
-    return 1 + ((julianyear - 14) % 19)
+    if julianyear == 0:
+        raise IndexError("There was no year zero")
+
+    if julianyear > 0:
+        julianyear = julianyear - 1
+
+    return 1 + ((julianyear - 13) % 19)
 
 
 def _metonic_start(julianyear):
     '''The julian year that the metonic cycle of input began'''
-    return julianyear - _metonic_number(julianyear) + 1
+    if julianyear == 0:
+        raise IndexError("There was no year zero")
+
+    m = _metonic_number(julianyear)
+
+    if julianyear > 0:
+        julianyear = julianyear - 1
+
+    return julianyear - m + 1
 
 
 def intercalate(julianyear):
@@ -107,13 +121,13 @@ def _number_months(metonic_year):
 
 
 def _valid_regnal(julianyear):
-    if julianyear < -748 or julianyear > -149:
+    if julianyear < -749 or julianyear > -146:
         return False
     return True
 
 
 def regnalyear(julianyear):
-    '''Determine regnal year'''
+    '''Determine regnal year based on a Julian year, -200 == 200 BC'''
     if not _valid_regnal(julianyear):
         return False
 
@@ -172,7 +186,7 @@ def _month_name(monthindex):
         monthindex = 235
 
     # Use to 0 index
-    return data.STANDARD_MONTH_LIST[monthindex - 1]
+    return data.standard_month_list().pop(monthindex - 1)
 
 
 def from_jd(cjdn, era='seleucid'):
