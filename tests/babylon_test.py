@@ -11,31 +11,66 @@ import ephem
 class test_babylon_cal(unittest.TestCase):
 
     def test_metonic(self):
-        assert bab._metonic_number(-746) == 1
-        assert bab._metonic_number(-440) == 3
+        assert bab.metonic_number(-747) == 1
+        assert bab.metonic_number(-440) == 4
 
-        assert bab._metonic_start(-500) == -518
-        assert bab._metonic_start(-380) == -385
+        assert bab.metonic_start(-500) == -500
+        assert bab.metonic_start(-380) == -386
 
-    def text_intercal_patterns(self):
-        assert data.intercalation(1) == data.STANDARD_MONTH_LIST
+        assert bab.metonic_start(-576) == -576
 
         leapyear_A = bab.intercalate(-383)
 
+        assert bab.metonic_number(1) == 7
+
+        assert bab.metonic_start(-596) == -614
+        assert bab.metonic_number(-596) == 19
+
+    def test_intercal_patterns(self):
+        assert bab.intercalation(1) == dict(zip(range(1, 13), data.MONTHS))
+
+        leapyear_A = bab.intercalate(-385)
         assert len(leapyear_A) == 13
         assert leapyear_A[12] == u"Addaru II"
 
+        assert len(bab.intercalate(-576)) == 12
+        assert len(bab.intercalate(-595)) == 12
+        assert len(bab.intercalate(-535)) == 12
+
+        leapyear_U = bab.intercalate(-596)
+        assert bab.intercalation_pattern('U') == {
+            1: u'Nis\u0101nu', 2: u'\u0100ru', 3: u'Simanu', 4: u'Dumuzu', 5: u'Abu', 6: u'Ul\u016blu',
+            7: u'Ul\u016blu II', 8: u'Ti\u0161ritum', 9: u'Samna', 10: u'Kislimu', 11: u'\u1e6ceb\u0113tum',
+            12: u'\u0160aba\u1e6du', 13: u'Addaru'}
+
+        assert len(leapyear_U) == 13
+        assert leapyear_U[7] == u"Ulūlu II"
+
+        assert data.intercalations[bab.metonic_start(-596)][bab.metonic_number(-596)] == 'U'
+
+        assert data.intercalations[bab.metonic_start(-596)][bab.metonic_number(-596)] == 'U'
+
+        assert len(leapyear_U) == 13
+
+        assert leapyear_U[7] == u"Ulūlu II"
+
+    def test_load_parker_dubberstein(self):
+        bab.load_parker_dubberstein()
+        parkerdub = bab.PARKER_DUBBERSTEIN
+
+        # print parkerdub[-604]['months']
+
+    def test_metonic_cycle(self):
+        nextve = ephem.next_vernal_equinox(dublin.from_gregorian(1700, 3, 19))
+        metonic_months = count_pattern(nextve)
+
+        assert len(metonic_months) == 19
+        assert sum(metonic_months) == 235
+
+
     def test_bab_ry(self):
-        assert bab.regnalyear(-330) == (7, u'Alexander the Great')
+        assert bab.regnalyear(-330) == (6, u'Alexander the Great')
         assert bab.regnalyear(-625) == (1, u'Nabopolassar')
-
-    def test_moon_rising_babylon(self):
-        nov1 = dublin.from_gregorian(2014, 11, 1)
-
-        print 'next new moon', bab._next_new_rising(nov1)
-        print 'next sunset after that', bab._next_new_sunset(nov1)
-
-        # print bab.BABYLON.next_setting(bab.SUN)
 
         # assert (rising.year, rising.month, rising.day) == (2014, 11, 23)
 
@@ -110,18 +145,6 @@ yearstarts, lateseleucid = define_counts()
 
 for day in range(1743763, 1743762 + 35):
     thing(day + 0.5)
-    def test_load_parker_dubberstein(self):
-        bab.load_parker_dubberstein()
-        parkerdub = bab.PARKER_DUBBERSTEIN
-
-        # print parkerdub[-604]['months']
-
-    def test_metonic_cycle(self):
-        nextve = ephem.next_vernal_equinox(dublin.from_gregorian(1700, 3, 19))
-        metonic_months = count_pattern(nextve)
-
-        assert len(metonic_months) == 19
-        assert sum(metonic_months) == 235
 
 #         years.append(firstday)
 
@@ -155,32 +178,6 @@ print 'count of months'
 end_of_era = ephem.date('/'.join(repr(x) for x in (45, 4, 8)) + ' 12:00:00')
 
 
-def metonic_pattern(nextyear):
-    metonic_pocket = {}
-
-    for x in range(0, 995):
-
-        year = ephem.localtime(nextyear).year
-        m, nextyear = count_months_before_ve(nextyear)
-
-        mstart = _metonic_start(year)
-
-        if mstart not in metonic_pocket:
-            metonic_pocket[mstart] = 0
-
-        metonic_pocket[mstart] += m
-
-    return metonic_pocket
-
-# metonic_pocket = metonic_pattern(end_of_era)
-# for line in metonic_pocket:
-#     if metonic_pocket[line] != 235:
-#         print line, metonic_pocket[line]
-
-# count 19 years AND count 235 months. Compare how many days apart you are..
-from copy import copy
-
-
 def count_pattern(startingve):
     # days until ve.
     ve = copy(startingve)
@@ -196,34 +193,12 @@ def count_pattern(startingve):
             nnm = ephem.next_new_moon(nnm)
             metonic[ve].append(ephem.date(nnm))
 
-    for m, l in metonic.items():
-        print '{0}/{1}: {2}'.format(
-            ephem.localtime(m).year,
-            ephem.localtime(m).month,
-            len(l)
-        )
+    metonic_months = []
 
-    print 'months', sum(len(l) for l in metonic.values())
+    for months in metonic.values():
+        metonic_months.append(len(months))
 
-# start = ephem.next_vernal_equinox(end_of_era)
-print '///////'
-# count_pattern(start)
-
-print '------'
-print 'regnal:', regnalyear(-317)
-print '------'
-print 'proleptic'
-print _fromjd_proleptic(2456877.5 - 13, -data.NABONASSAR_EPOCH)
-print _fromjd_proleptic(2456876.99, -data.NABONASSAR_EPOCH)
-print 'vernal equinox\n', from_jd(2456371.5 + 1, -data.NABONASSAR_EPOCH)
-
-print '------'
-
-print julian.from_jd(1736016)
-print from_jd(1736016)
-print '------'
-print julian.from_jd(1579075)
-print from_jd(1579075)
+    return metonic_months
 
 if __name__ == '__main__':
     unittest.main()

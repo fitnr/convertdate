@@ -6,10 +6,6 @@ from pkg_resources import resource_stream
 from csv import DictReader
 import ephem
 
-
-BABYLON = ephem.Observer()
-BABYLON.lat, BABYLON.lon, BABYLON.elevation = 32.536389, 44.420833, 35.18280792236328
-
 MOON = ephem.Moon()
 SUN = ephem.Sun()
 
@@ -44,18 +40,6 @@ PARKER_DUBBERSTEIN = dict()
 # }
 
 
-def observer(date):
-    BABYLON = ephem.Observer()
-    # OMFG I can't believe ephem uses d:mm:ss, wtf
-    BABYLON.lat = '32:32:11'
-    BABYLON.lon = '44:25:15'
-    BABYLON.elevation = 32.536389
-
-    if date:
-        BABYLON.date = date
-
-    return BABYLON
-
 
 def load_parker_dubberstein():
     '''Read the P-D "Table for the Restatement of Babylonian
@@ -80,6 +64,19 @@ def load_parker_dubberstein():
                     new['months'][int(monthid)] = julian.to_jd(year, int(month), int(day))
 
             PARKER_DUBBERSTEIN[year] = new
+
+
+def observer(date):
+    BABYLON = ephem.Observer()
+    # OMFG I can't believe ephem uses d:mm:ss, wtf
+    BABYLON.lat = '32:32:11'
+    BABYLON.lon = '44:25:15'
+    BABYLON.elevation = 32.536389
+
+    if date:
+        BABYLON.date = date
+
+    return BABYLON
 
 
 def metonic_number(julianyear):
@@ -221,43 +218,17 @@ def from_gregorian(y, m, d, era):
     return from_jd(julian.to_jd(y, m, d), era)
 
 
-def _rising_babylon(dc, func, body):
-    '''Given a date, body and function, give the next rising of that body after function occurs'''
-    event = func(dc)
-    try:
-        return BABYLON.next_rising(body, start=event)
-    except ephem.AlwaysUpError:
-        return BABYLON.previous_rising(body, start=event)
+def next_visible_nm(dc):
+    nnm = ephem.next_new_moon(dc)
+    babylon = observer(nnm)
 
+    SUN.compute(babylon)
 
-def _setting_babylon(dc, func, body):
-    '''Given a date, body and function, give the next setting of that body after function occurs'''
-    event = func(dc)
-    return BABYLON.next_setting(body, start=event)
+    while SUN.alt > 0:
+        next_moonrise = babylon.next_rising(MOON, start=nnm)
+        SUN.compute(babylon)
 
-
-def _prev_new_rising_babylon(dublindc):
-    '''Given a Dublin DC, give the previous nm rising in Babylon'''
-    return _rising_babylon(dublindc, ephem.previous_new_moon, MOON)
-
-
-def _next_new_rising_babylon(dublindc):
-    '''Given a Dublin DC, give the previous nm rising in Babylon'''
-    return _rising_babylon(dublindc, ephem.next_new_moon, MOON)
-
-
-def _body_up(dc, observer, body):
-    '''Checks if body is visible in the sky right now at observer'''
-    observer.date = dc
-    if observer.next_setting(body) < observer.next_rising(body):
-        return True
-    else:
-        return False
-
-
-def _babylon_daytime(dc):
-    return _body_up(dc, BABYLON, SUN)
-
+    return next_moonrise
 
 def _fromjd_proleptic(jdc, epoch):
     '''Given a Julian Day Count, calculate the Babylonian date proleptically, with choice of eras'''
@@ -266,29 +237,30 @@ def _fromjd_proleptic(jdc, epoch):
     jdc = int(jdc) + 0.5
 
     dublincount = dublin.from_jd(jdc)
+
+    # Are we before or after the VE of this Gregorian year?
+    # If the next VE is in the current year, the year will be the previous one... probably
     # Get start date of current metonic cycle
     julian_date = julian.from_jd(jdc)
     metonic_start = _metonic_start(julian_date[0])
-    prev_equinox = ephem.previous_vernal_equinox('/'.join([str(metonic_start), '7', '1']))
-    new_moon = _next_new_rising_babylon(prev_equinox)
+    metonic_equinox = ephem.previous_vernal_equinox('/'.join([str(metonic_start), '7', '1']))
 
-    mooncount = 1
+    # Only the VE in the metonic base year matters
+    # Loop through the new moons since the metonic base
+    new_moon = moon = next_visible_nm(metonic_equinox)
+    mooncount = 0
 
     # count forward until we're in the current month
-    while new_moon < jdc_dublin:
-        mooncount += 1
-        previous_moon = new_moon
-        new_moon = ephem.next_new_moon(new_moon)
+    while new_moon < dublincount:
+        mooncount = 1 + mooncount
 
-    month_name = _month_name(mooncount - 1)
+        moon = new_moon
 
-    nighttime = BABYLON.previous_setting(SUN, start=previous_moon)
+        new_moon = next_visible_nm(moon)
 
-    day1 = _next_new_rising_babylon(nighttime)
+    month_name = _month_name(mooncount)
 
-    day_count = jdc_dublin - day1
-
-    days = int(day_count)
+    day_count = int(dublincount - new_moon)
 
     return days, month_name, epoch + julian_date[0]
 
