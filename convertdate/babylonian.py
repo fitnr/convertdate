@@ -41,33 +41,48 @@ PARKER_DUBBERSTEIN = dict()
 # }
 
 
-
 def load_parker_dubberstein():
     '''Read the P-D "Table for the Restatement of Babylonian
-    Dates in Terms of the Julian Calendar" into a dict'''
-
+    Dates in Terms of the Julian Calendar" into a dict.
+    At the risk of being somewhat tortured in the conversions,
+    the data is being generally preserved in the format they presented
+    '''
     global PARKER_DUBBERSTEIN
 
-    # header row:
-    # ruler,regnalyear,astroyear,1,2,3,4,5,6,7,8,9,10,11,12,13,14
-    with resource_stream('convertdate', 'data/parker-dubberstein.csv') as f:
-        reader = DictReader(f)
-        for row in reader:
-            new = dict()
-            year = int(row['jyear'])
-            new['ruler'] = row['ruler']
-            new['regnalyear'] = row['regnalyear']
-            new['months'] = {}
+    # Each row of P-D represents a babylonian year, which usually starts around
+    # the Vernal Equinox
+    if len(PARKER_DUBBERSTEIN) == 0:
+        # header row:
+        # ruler,regnalyear,astroyear,1,2,3,4,5,6,7,8,9,10,11,12,13,14
+        # 12,13,14 will generally be in the next JYear
+        with resource_stream('convertdate', 'data/parker-dubberstein.csv') as f:
+            reader = DictReader(f)
+            for row in reader:
+                new = dict()
+                year = int(row['jyear'])
+                new['ruler'] = row['ruler']
+                new['regnalyear'] = row['regnalyear']
+                new['months'] = {}
 
-            for monthid in [str(x) for x in range(1, 15)]:
-                if row.get(monthid):
-                    month, day = row.get(monthid).split('/')
-                    new['months'][int(monthid)] = julian.to_jd(year, int(month), int(day))
+                for monthid in [str(x) for x in range(1, 14)]:
+                    if row.get(monthid):
+                        jmonth, jday = row.get(monthid).split('/')
+                        jmonth, jday = int(jmonth), int(jday)
 
-            PARKER_DUBBERSTEIN[year] = new
+                        # Have we swung over into the next year?
+                        if jmonth < int(monthid):
+                            jyear = year + 1
+                        else:
+                            jyear = year
+
+                        new['months'][int(monthid)] = julian.to_jd(jyear, jmonth, jday)
+
+                PARKER_DUBBERSTEIN[year] = new
+
+    return PARKER_DUBBERSTEIN
 
 
-def observer(date):
+def observer(date=None):
     BABYLON = ephem.Observer()
     # OMFG I can't believe ephem uses d:mm:ss, wtf
     BABYLON.lat = '32:32:11'
@@ -185,68 +200,106 @@ def _set_epoch(era):
 
 
 
-def get_start_jd_of_month(y, m):
-    return [key for key, val in data.lunations.items() if val[0] == y and val[1] == m].pop()
 
 
-def month_length(by, bm):
-    j = get_start_jd_of_month(by, bm)
-
-    possible_keys = [x for x in data.lunations if x < j + 31 and x > j]
-    next_month = possible_keys.pop()
-
-    return next_month - j + 1
 
 
-def _month_name(monthindex):
-    '''Given the number of the month in the metonic cycle of 235, return the name of the month'''
 
-    # Get a number between 0 and 235
-    monthindex = monthindex % 235
 
-    if monthindex == 0:
-        monthindex = 235
-
-    # Use to 0 index
-    return standard_metonic_month_list().pop(monthindex - 1)
 
 
 def from_jd(cjdn, era='seleucid'):
     '''Calculate Babylonian date from Julian Day Count'''
-    jyear, jmonth, jday = julian.from_jd(cjdn)
 
-    if era == 'regnal' and not _valid_regnal(jyear):
+    if cjdn > data.JDC_START_OF_PROLEPTIC:
+        return _fromjd_proleptic(cjdn, era)
+
+    if cjdn < data.JDC_START_OF_REGNAL:
+        raise IndexError('Date is too early for the Babylonian calendar')
+
+    jyear = julian.from_jd(cjdn)[0]
+
+    parkerdub = load_parker_dubberstein()
+
+    # There's no row for the very last year in P-D's table
+    if jyear == 46:
+        jyear = jyear - 1
+
+    pd = parkerdub[jyear]
+
+    # Hop back to the previous row
+    if cjdn < min(pd['months'].values()):
+        jyear = jyear - 1
+        pd = parkerdub[jyear]
+
+    # The JDC of the months' first days => BMonth number (1..13)
+    inverted = dict((v, k) for k, v in pd['months'].items())
+
+    # Start of the current month is highest JD not over input JDC
+    start_of_month = max(mj for mj in inverted.keys() if mj <= cjdn)
+
+    # index of current month
+    bmonth = inverted[start_of_month]
+
+    # Get month name, taking into account intercalary months
+    month_name = intercalate(jyear).get(bmonth)
+
+    # day of the month
+    bday = cjdn - start_of_month + 1
+
+    if era == 'regnal':
+        by = regnalyear(jyear)
+    else:
+        by = jyear - _set_epoch(jyear, era)
+
+        if jyear < 1:
+            by = by + 1
+
+
+    return (by, month_name, int(bday))
+
+
+def to_jd(year, month, day, era=None, ruler=''):
+    if era == 'regnal' and not ruler:
+        raise ValueError('Arugment era=regnal requires a ruler')
+
+    if era.lower() not in ['arascid', 'nabonassar', 'seleucid']:
         era = 'seleucid'
 
-    epoch = _set_epoch(era)
+    epoch = _set_epoch(True, era)
 
-    if jyear >= -146:
-        return _fromjd_proleptic(cjdn, epoch)
+    # Allow for variations in ruler name
+    if ruler.lower() in data.rulers_alt_names:
+        ruler = data.rulers_alt_names[ruler.lower()]
 
-    # pd is the period of the babylonian month cjdn is found in
-    pd = [lu for lu in data.lunations.keys() if lu < cjdn and lu + 31 > cjdn].pop()
-    by, bm = data.lunations[pd]
+    if ruler in data.rulers.values():
+        era = 'regnal'
+        invert = dict((v, k) for k, v in data.rulers.items())
+        epoch = invert[ruler]
 
-    # Day of the month
-    bd = cjdn - pd + 1
+        # Fix for our one zero-based ruler
+        if ruler == 'Nabopolassar':
+            epoch = epoch + 1
 
-    juliandate = julian.from_jd(cjdn)
+    jyear = year + epoch
 
-    months = intercalate(juliandate[0])
+    # Correct for no year 0 in Julian calendar
+    if jyear < 1:
+        jyear = jyear - 1
 
-    # document.calendar.bmonth.selectedIndex            = bm-1
+    # Find the row in parker-dubberstein's table that matches
+    # our julian year and month.
+    parkerdub = load_parker_dubberstein()
+    pdentry = parkerdub[jyear]['months'][month]
 
-    # compute and output the date in the babylonian lunar calendar
-    # bln = 1498 + i
-    # document.calendar.blunnum.value                   = bln
-    # document.calendar.bmlength.value                  = bml
-
-    return (bd, months[bm], by)
+    return pdentry + day - 1
 
 
-def to_jd(y, m, d):
-    key = get_start_jd_of_month(y, m)
-    return key + d - 1
+def to_julian(year, month, day, era=None, ruler=''):
+    return julian.from_jd(to_jd(year, month, day, era, ruler))
+
+def to_gregorian(year, month, day, era=None, ruler=''):
+    return gregorian.from_jd(to_jd(year, month, day, era, ruler))
 
 
 def from_julian(y, m, d, era=None):
@@ -258,18 +311,30 @@ def from_gregorian(y, m, d, era=None):
 
 
 def next_visible_nm(dc):
+    '''The next time the new moon is visible in Babylon, after the input date'''
     nnm = ephem.next_new_moon(dc)
     babylon = observer(nnm)
 
+    moonrise = babylon.next_rising(MOON, start=nnm)
+    babylon.date = moonrise
+
     SUN.compute(babylon)
 
-    while SUN.alt > 0:
-        next_moonrise = babylon.next_rising(MOON, start=nnm)
-        SUN.compute(babylon)
+    # If the sun is below the horizon, we're set: there's a new moon,
+    # the moon is up and it's nighttime
+    if SUN.alt > 0:
+        # If the sun is still up, loop through sunsets, checking if moon is up
+        while MOON.alt < 0:
+            sundown = babylon.next_setting(SUN, start=babylon.date)
+            babylon.date = sundown
+            MOON.compute(babylon)
 
-    return next_moonrise
+    # In Bab reckoning, the day started at sundown
+    # In our reckoning, it starts at midnight
+    return babylon.date
 
-def _fromjd_proleptic(jdc, epoch):
+
+def _fromjd_proleptic(jdc, era=None):
     '''Given a Julian Day Count, calculate the Babylonian date proleptically, with choice of eras'''
     # Calcuate the dublin day count, used in ephem
     # We're going to return the date for noon
@@ -277,29 +342,40 @@ def _fromjd_proleptic(jdc, epoch):
 
     dublincount = dublin.from_jd(jdc)
 
+    # Todo: take account for year slippage
     # Are we before or after the VE of this Gregorian year?
     # If the next VE is in the current year, the year will be the previous one... probably
     # Get start date of current metonic cycle
-    julian_date = julian.from_jd(jdc)
-    mstart = metonic_start(julian_date[0])
-    metonic_equinox = ephem.previous_vernal_equinox('/'.join([str(mstart), '7', '1']))
+    jyear, jmonth, jday = julian.from_jd(jdc)
 
-    # Only the VE in the metonic base year matters
-    # Loop through the new moons since the metonic base
-    new_moon = moon = next_visible_nm(metonic_equinox)
+    prev_equinox = ephem.previous_vernal_equinox(dublincount)
+
+    new_moon = moon = ephem.next_new_moon(prev_equinox)
     mooncount = 0
 
-    # count forward until we're in the current month
-    while new_moon < dublincount:
-        mooncount = 1 + mooncount
+    if new_moon > dublincount:
+        # We're in the last days of the previous year
+        # todo: figure this out
+        moon = ephem.previous_new_moon(dublincount)
 
-        moon = new_moon
+        jyear = jyear - 1
 
-        new_moon = next_visible_nm(moon)
+        months = intercalate(jyear)
+        month_name = months[max(months.keys())]
 
-    month_name = _month_name(mooncount)
+    else:
+        # Loop through the new moons since the start of the year
+        # count forward until we're in the current month
+        while new_moon < dublincount:
+            moon, mooncount = new_moon, 1 + mooncount
+            new_moon = ephem.next_new_moon(moon)
 
-    day_count = int(dublincount - new_moon)
+        months = intercalate(jyear)
+        month_name = months[mooncount]
 
-    return days, month_name, epoch + julian_date[0]
+    monthstart = next_visible_nm(moon - 1)
+    day_count = int(dublincount - monthstart) + 1
 
+    epoch = _set_epoch(jyear, era)
+
+    return jyear - epoch, month_name, day_count
