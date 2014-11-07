@@ -24,6 +24,28 @@ INTERCALARIES = {
     'a': (u"Addaru II", 12),
 }
 
+ASCII_MONTHS = [
+    "Nisanu",
+    "Aru",
+    "Simanu",
+    "Dumuzu",
+    'Abu',
+    "Ululu",
+    "Tisritum",
+    "Samna",
+    "Kislimu",
+    "Tebetum",
+    "Sabatu",
+    "Addaru",
+]
+
+ASCII_INTERCALARIES = {
+    'U': ("Ululu II", 6),
+    'u': ("Ululu II", 6),
+    'A': ("Addaru II", 12),
+    'a': ("Addaru II", 12),
+}
+
 '''Regnal stuff'''
 
 SELEUCID_EPOCH = -311

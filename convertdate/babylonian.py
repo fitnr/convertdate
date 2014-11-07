@@ -121,14 +121,14 @@ def metonic_start(julianyear):
     return julianyear - m + 1
 
 
-def intercalate(julianyear):
+def intercalate(julianyear, plain=None):
     '''For a Julian year, use the intercalation pattern to return a dict of the months'''
     number = metonic_number(julianyear)
     start = metonic_start(julianyear)
-    return intercalation(number, start)
+    return intercalation(number, start, plain)
 
 
-def intercalation(mnumber, mstart=0):
+def intercalation(mnumber, mstart=0, plain=None):
     '''A list of months for a given year (number) in a a particular metonic cycle (start).
     Defaults to the standard intercalation'''
 
@@ -138,16 +138,23 @@ def intercalation(mnumber, mstart=0):
     pattern = data.intercalations.get(mstart, data.standard_intercalation)
     patternkey = pattern.get(mnumber)
 
-    return intercalation_pattern(patternkey)
+    return intercalation_pattern(patternkey, plain)
 
 
-def intercalation_pattern(key):
-    month, index = data.INTERCALARIES.get(key, (None, None))
+def intercalation_pattern(key, plain=None):
+    if plain:
+        intercalaries = data.ASCII_INTERCALARIES
+        base_list = data.ASCII_MONTHS
+    else:
+        intercalaries = data.INTERCALARIES
+        base_list = data.MONTHS
+
+    month, index = intercalaries.get(key, (None, None))
 
     if month:
-        months = data.MONTHS[:index] + [month] + data.MONTHS[index:]
+        months = base_list[:index] + [month] + base_list[index:]
     else:
-        months = data.MONTHS
+        months = base_list
 
     return dict(zip(range(1, len(months) + 1), months))
 
@@ -226,11 +233,11 @@ def _set_epoch(year, era):
 
 
 
-def from_jd(cjdn, era=None):
+def from_jd(cjdn, era=None, plain=None):
     '''Calculate Babylonian date from Julian Day Count'''
 
     if cjdn > data.JDC_START_OF_PROLEPTIC:
-        return _fromjd_proleptic(cjdn, era)
+        return _fromjd_proleptic(cjdn, era, plain)
 
     if cjdn < data.JDC_START_OF_REGNAL:
         raise IndexError('Date is too early for the Babylonian calendar')
@@ -260,7 +267,7 @@ def from_jd(cjdn, era=None):
     bmonth = inverted[start_of_month]
 
     # Get month name, taking into account intercalary months
-    month_name = intercalate(jyear).get(bmonth)
+    month_name = intercalate(jyear, plain).get(bmonth)
 
     # day of the month
     bday = cjdn - start_of_month + 1
@@ -320,13 +327,12 @@ def to_gregorian(year, month, day, era=None, ruler=''):
     return gregorian.from_jd(to_jd(year, month, day, era, ruler))
 
 
-def from_julian(y, m, d, era=None):
-    return from_jd(julian.to_jd(y, m, d), era)
+def from_julian(y, m, d, era=None, plain=None):
+    return from_jd(julian.to_jd(y, m, d), era, plain=plain)
 
 
-def from_gregorian(y, m, d, era=None):
-    return from_jd(gregorian.to_jd(y, m, d), era)
-
+def from_gregorian(y, m, d, era=None, plain=None):
+    return from_jd(gregorian.to_jd(y, m, d), era, plain=plain)
 
 def next_visible_nm(dc):
     '''The next time the new moon is visible in Babylon, after the input date'''
@@ -352,7 +358,7 @@ def next_visible_nm(dc):
     return babylon.date
 
 
-def _fromjd_proleptic(jdc, era=None):
+def _fromjd_proleptic(jdc, era=None, plain=None):
     '''Given a Julian Day Count, calculate the Babylonian date proleptically, with choice of eras'''
     # Calcuate the dublin day count, used in ephem
     # We're going to return the date for noon
@@ -378,7 +384,7 @@ def _fromjd_proleptic(jdc, era=None):
 
         jyear = jyear - 1
 
-        months = intercalate(jyear)
+        months = intercalate(jyear, plain)
         month_name = months[max(months.keys())]
 
     else:
@@ -388,7 +394,7 @@ def _fromjd_proleptic(jdc, era=None):
             moon, mooncount = new_moon, 1 + mooncount
             new_moon = ephem.next_new_moon(moon)
 
-        months = intercalate(jyear)
+        months = intercalate(jyear, plain)
         month_name = months[mooncount]
 
     monthstart = next_visible_nm(moon - 1)
