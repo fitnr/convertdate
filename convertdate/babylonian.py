@@ -165,38 +165,53 @@ def _number_months(metonic_year):
 
 
 def _valid_regnal(julianyear):
-    if julianyear < -749 or julianyear > -146:
+    if julianyear < -626 or julianyear > -146:
         return False
     return True
 
 
 def regnalyear(julianyear):
     '''Determine regnal year based on a Julian year, -200 == 200 BC'''
-    if not _valid_regnal(julianyear):
+
+    if _valid_regnal(julianyear):
+        pass
+    else:
         return False
 
     if julianyear in data.rulers.keys():
         rulername = data.rulers[julianyear]
-        ryear = 0
-
+        ryear = 1
     else:
         key = max([r for r in data.rulers if r <= julianyear])
-        ryear = julianyear - key
+        ryear = julianyear - key + 1
         rulername = data.rulers[key]
 
+    # Doesn't follow the rules, this guy.
+    if rulername == 'Nabopolassar':
+        ryear = ryear - 1
+
     if rulername == 'Alexander the Great':
-        ryear = ryear + 5
+        ryear = ryear + 6
+
+    if rulername == 'Philip III Arrhidaeus':
+        ryear = ryear + 1
+
+    if rulername == 'Alexander IV Aegus':
+        ryear = ryear + 1
 
     return (ryear, rulername)
 
 
-def _set_epoch(era):
-    if era == 'arascid':
-        return -data.ARASCID_EPOCH
+def _set_epoch(year, era):
+    if era == 'regnal' and not _valid_regnal(year):
+        era = 'seleucid'
+
+    if era == 'arsacid':
+        return data.ARSACID_EPOCH
     elif era == 'nabonassar':
-        return -data.NABONASSAR_EPOCH
+        return data.NABONASSAR_EPOCH
     else:
-        return -data.SELEUCID_EPOCH
+        return data.SELEUCID_EPOCH
 
 
 
@@ -208,7 +223,10 @@ def _set_epoch(era):
 
 
 
-def from_jd(cjdn, era='seleucid'):
+
+
+
+def from_jd(cjdn, era=None):
     '''Calculate Babylonian date from Julian Day Count'''
 
     if cjdn > data.JDC_START_OF_PROLEPTIC:
@@ -263,7 +281,7 @@ def to_jd(year, month, day, era=None, ruler=''):
     if era == 'regnal' and not ruler:
         raise ValueError('Arugment era=regnal requires a ruler')
 
-    if era.lower() not in ['arascid', 'nabonassar', 'seleucid']:
+    if era.lower() not in ['arsacid', 'nabonassar', 'seleucid']:
         era = 'seleucid'
 
     epoch = _set_epoch(True, era)
