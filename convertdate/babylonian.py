@@ -357,6 +357,10 @@ def next_visible_nm(dc):
     # In our reckoning, it starts at midnight
     return babylon.date
 
+def _nnm_after_pve(dc):
+    prev_equinox = ephem.previous_vernal_equinox(dc)
+    return ephem.next_new_moon(prev_equinox)
+
 
 def _fromjd_proleptic(jdc, era=None, plain=None):
     '''Given a Julian Day Count, calculate the Babylonian date proleptically, with choice of eras'''
@@ -366,36 +370,39 @@ def _fromjd_proleptic(jdc, era=None, plain=None):
 
     dublincount = dublin.from_jd(jdc)
 
-    # Todo: take account for year slippage
-    # Are we before or after the VE of this Gregorian year?
-    # If the next VE is in the current year, the year will be the previous one... probably
-    # Get start date of current metonic cycle
     jyear, jmonth, jday = julian.from_jd(jdc)
 
-    prev_equinox = ephem.previous_vernal_equinox(dublincount)
+    # Are we before or after the first NM after the VE of this Gregorian year?
+    # three possible parts of the year we can fall in:
+    # A: between Jan 1 and the Vernal Equinox
+    # B: between the V.E. and its next new moon
+    # C: between that new moon and Dec 31
+    new_moon = moon = _nnm_after_pve(dublincount)
 
-    new_moon = moon = ephem.next_new_moon(prev_equinox)
-    mooncount = 0
-
-    if new_moon > dublincount:
-        # We're in the last days of the previous year
-        # todo: figure this out
-        moon = ephem.previous_new_moon(dublincount)
-
+    # Group A
+    # Offset the year
+    if new_moon.datetime().year < jyear:
         jyear = jyear - 1
 
-        months = intercalate(jyear, plain)
-        month_name = months[max(months.keys())]
+    # Group B
+    # reset, so we count from the previous year's VE's NNM
+    # Also, offset the year
+    if new_moon > dublincount:
+        jyear = jyear - 1
+        new_moon = moon = _nnm_after_pve(dublincount - 30)
 
-    else:
-        # Loop through the new moons since the start of the year
-        # count forward until we're in the current month
-        while new_moon < dublincount:
-            moon, mooncount = new_moon, 1 + mooncount
-            new_moon = ephem.next_new_moon(moon)
+    mooncount = 0
 
-        months = intercalate(jyear, plain)
-        month_name = months[mooncount]
+    # Group A, B or C
+    # Loop through the new moons since the start of the year
+    # count forward until we're in the current month
+    while new_moon < dublincount:
+        moon, mooncount = new_moon, 1 + mooncount
+        new_moon = ephem.next_new_moon(moon)
+
+    months = intercalate(jyear, plain)
+
+    month_name = months[mooncount]
 
     monthstart = next_visible_nm(moon - 1)
     day_count = int(dublincount - monthstart) + 1
