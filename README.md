@@ -5,10 +5,11 @@ The convertdate package was originally developed as "[Python Date Utils](http://
 
 Available calendars:
 
+* Babylonian
 * Bahai
 * French Republican
 * Gregorian
-* Hebrew
+* Jewish
 * Indian Civil
 * Islamic
 * Julian
@@ -32,12 +33,36 @@ Or download the package and run `python setup.py install`.
 Using
 -----
 
+In general, years BC are encoded with a negative sign. Giving year 0 in the incorrect context will either give an error or bad results.
+
+Babylonian:
+
+````python
+from convertdate import babylonian
+
+babylonian.from_gregorian(2014, 10, 31)
+# (2325, u'Araḥsamnu', 7)
+
+babylonian.from_gregorian(2014, 10, 31, plain=True)
+# (2325, 'Arahsamnu', 7)
+
+babylonian.from_julian(-326, 4, 2, era='regnal')
+# ((10, u'Alexander the Great'), u'Addaru II', 14)
+````
+
+French Republican:
+
 ````python
 from convertdate import french_republican
-from convertdate import hebrew
 
 french_republican.from_gregorian(2014, 10, 31)
 # (223, 2, 1, 9)
+````
+
+Jewish (aka Hebrew):
+
+````
+from convertdate import hebrew
 
 hebrew.from_gregorian(2014, 10, 31)
 # (5775, 8, 7)
