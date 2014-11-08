@@ -44,7 +44,8 @@ ASCII_MONTHS = [
 
 SELEUCID_EPOCH = -311
 ARSACID_EPOCH = -247
-NABONASSAR_EPOCH = -625
+NABONASSAR_EPOCH = -747
+NABOPOLASSAR_EPOCH = -625
 JDC_START_OF_PROLEPTIC = 1737937.5
 JDC_START_OF_REGNAL = 1492870.5
 
@@ -53,7 +54,7 @@ JDC_START_OF_REGNAL = 1492870.5
 rulers = {
     # No calendar information for these dudes
     # # IX
-    # -748: u'Nabonassar',
+    # -747: u'Nabonassar',
     # -734: u'Nabu-nadin-zeri',
 
     # # X
