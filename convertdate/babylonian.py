@@ -209,7 +209,10 @@ def regnalyear(julianyear):
     return (ryear, rulername)
 
 
-def _set_epoch(year, era):
+def _set_epoch(year, era=None):
+    era = era or ''
+    era = era.lower()
+
     if era == 'regnal' and not _valid_regnal(year):
         era = 'seleucid'
 
@@ -217,6 +220,8 @@ def _set_epoch(year, era):
         return data.ARSACID_EPOCH
     elif era == 'nabonassar':
         return data.NABONASSAR_EPOCH
+    elif era == 'nabopolassar':
+        return data.NABOPOLASSAR_EPOCH
     else:
         return data.SELEUCID_EPOCH
 
