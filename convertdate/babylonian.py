@@ -221,18 +221,6 @@ def _set_epoch(year, era):
         return data.SELEUCID_EPOCH
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 def from_jd(cjdn, era=None, plain=None):
     '''Calculate Babylonian date from Julian Day Count'''
 
@@ -280,7 +268,6 @@ def from_jd(cjdn, era=None, plain=None):
         if jyear < 1:
             by = by + 1
 
-
     return (by, month_name, int(bday))
 
 
@@ -323,6 +310,7 @@ def to_jd(year, month, day, era=None, ruler=''):
 def to_julian(year, month, day, era=None, ruler=''):
     return julian.from_jd(to_jd(year, month, day, era, ruler))
 
+
 def to_gregorian(year, month, day, era=None, ruler=''):
     return gregorian.from_jd(to_jd(year, month, day, era, ruler))
 
@@ -357,6 +345,7 @@ def previous_visible_nm(dc):
     # In Bab reckoning, the day started at sundown
     # In our reckoning, it starts at midnight
     return babylon.date
+
 
 def _nnm_after_pve(dc):
     prev_equinox = ephem.previous_vernal_equinox(dc)
