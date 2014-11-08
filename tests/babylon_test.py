@@ -42,12 +42,12 @@ class test_babylon_cal(unittest.TestCase):
         leapyear_U = bab.intercalate(-596)
 
         assert bab.intercalation_pattern('U') == {
-            1: u'Nis\u0101nu', 2: u'\u0100ru', 3: u'Simanu', 4: u'Dumuzu', 5: u'Abu', 6: u'Ul\u016blu',
-            7: u'Ul\u016blu II', 8: u'Ti\u0161ritum', 9: u'Samna', 10: u'Kislimu', 11: u'\u1e6ceb\u0113tum',
-            12: u'\u0160aba\u1e6du', 13: u'Addaru'}
+            1: u'Nisannu', 2: u'Aiaru', 3: u'Simanu', 4: u'Duzu', 5: u'Abu', 6: u'Ululu',
+            7: u'Ululu II', 8: u'Tashritu', 9: u'Araḥsamnu', 10: u'Kislimu', 11: u'Ṭebetu',
+            12: u'Shabaṭu', 13: u'Addaru'}
 
         assert len(leapyear_U) == 13
-        assert leapyear_U[7] == u"Ulūlu II"
+        assert leapyear_U[7] == u"Ululu II"
 
         assert data.intercalations[bab.metonic_start(-596)][bab.metonic_number(-596)] == 'U'
 
@@ -55,7 +55,7 @@ class test_babylon_cal(unittest.TestCase):
 
         assert len(leapyear_U) == 13
 
-        assert leapyear_U[7] == u"Ulūlu II"
+        assert leapyear_U[7] == u"Ululu II"
 
 
     def test_bab_ry(self):

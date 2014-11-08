@@ -129,7 +129,7 @@ def intercalate(julianyear, plain=None):
 
 
 def intercalation(mnumber, mstart=0, plain=None):
-    '''A list of months for a given year (number) in a a particular metonic cycle (start).
+    '''A list of months for a given year (number) in a particular metonic cycle (start).
     Defaults to the standard intercalation'''
 
     if mstart < -747:
@@ -143,13 +143,11 @@ def intercalation(mnumber, mstart=0, plain=None):
 
 def intercalation_pattern(key, plain=None):
     if plain:
-        intercalaries = data.ASCII_INTERCALARIES
         base_list = data.ASCII_MONTHS
     else:
-        intercalaries = data.INTERCALARIES
         base_list = data.MONTHS
 
-    month, index = intercalaries.get(key, (None, None))
+    month, index = data.INTERCALARIES.get(key, (None, None))
 
     if month:
         months = base_list[:index] + [month] + base_list[index:]

@@ -1,50 +1,44 @@
 # -*- coding: utf-8 -*-
 
 # Months and years
-#
+# Month names from Parker & Dubberstein "Babylonian Chronology" (1924)
+# and Sacha Stern "Calenders in Antiquity" 2012
 MONTHS = [
-    u"Nisānu",
-    u"Āru",
+    u"Nisannu",
+    u"Aiaru",
     u"Simanu",
-    u"Dumuzu",
+    u"Duzu",
     u'Abu',
-    u"Ulūlu",
-    u"Tišritum",
-    u"Samna",
+    u"Ululu",
+    u"Tashritu",
+    u"Araḥsamnu",
     u"Kislimu",
-    u"Ṭebētum",
-    u"Šabaṭu",
+    u"Ṭebetu",
+    u"Shabaṭu",
     u"Addaru",
 ]
 
 INTERCALARIES = {
-    'U': (u"Ulūlu II", 6),
-    'u': (u"Ulūlu II", 6),
+    'U': (u"Ululu II", 6),
+    'u': (u"Ululu II", 6),
     'A': (u"Addaru II", 12),
     'a': (u"Addaru II", 12),
 }
 
 ASCII_MONTHS = [
-    "Nisanu",
-    "Aru",
+    "Nisannu",
+    "Aiaru",
     "Simanu",
-    "Dumuzu",
+    "Duzu",
     'Abu',
     "Ululu",
-    "Tisritum",
-    "Samna",
+    "Tashritu",
+    "Arahsamnu",
     "Kislimu",
-    "Tebetum",
-    "Sabatu",
+    "Tebetu",
+    "Shabatu",
     "Addaru",
 ]
-
-ASCII_INTERCALARIES = {
-    'U': ("Ululu II", 6),
-    'u': ("Ululu II", 6),
-    'A': ("Addaru II", 12),
-    'a': ("Addaru II", 12),
-}
 
 '''Regnal stuff'''
 
