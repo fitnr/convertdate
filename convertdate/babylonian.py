@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
+from math import ceil
 from itertools import chain
 from .data import babylonian_data as data
 from . import dublin, julian, gregorian
+from .utils import amod
 from pkg_resources import resource_stream
 from csv import DictReader
 import ephem
@@ -332,14 +334,15 @@ def from_julian(y, m, d, era=None, plain=None):
 def from_gregorian(y, m, d, era=None, plain=None):
     return from_jd(gregorian.to_jd(y, m, d), era, plain=plain)
 
-def next_visible_nm(dc):
-    '''The next time the new moon is visible in Babylon, after the input date'''
-    nnm = ephem.next_new_moon(dc)
-    babylon = observer(nnm)
 
-    moonrise = babylon.next_rising(MOON, start=nnm)
-    babylon.date = moonrise
+def previous_visible_nm(dc):
+    '''The previous time the new moon was visible in Babylon'''
+    # If the date of a new moon is passed, p_n_m will equal dc
+    p_n_m = ephem.previous_new_moon(dc)
+    babylon = observer(p_n_m)
 
+    # What's the sun doing at moonrise?
+    babylon.date = babylon.next_rising(MOON, start=p_n_m)
     SUN.compute(babylon)
 
     # If the sun is below the horizon, we're set: there's a new moon,
@@ -366,7 +369,7 @@ def _fromjd_proleptic(jdc, era=None, plain=None):
     # We're going to return the date for noon
     jdc = int(jdc) + 0.5
 
-    dublincount = dublin.from_jd(jdc)
+    dublincount = ephem.Date(dublin.from_jd(jdc))
 
     jyear, jmonth, jday = julian.from_jd(jdc)
 
@@ -375,7 +378,7 @@ def _fromjd_proleptic(jdc, era=None, plain=None):
     # A: between Jan 1 and the Vernal Equinox
     # B: between the V.E. and its next new moon
     # C: between that new moon and Dec 31
-    new_moon = moon = _nnm_after_pve(dublincount)
+    new_moon = _nnm_after_pve(dublincount)
 
     # Group A
     # Offset the year
@@ -387,24 +390,43 @@ def _fromjd_proleptic(jdc, era=None, plain=None):
     # Also, offset the year
     if new_moon > dublincount:
         jyear = jyear - 1
-        new_moon = moon = _nnm_after_pve(dublincount - 30)
-
-    mooncount = 0
+        new_moon = _nnm_after_pve(dublincount - 31)
 
     # Group A, B or C
     # Loop through the new moons since the start of the year
     # count forward until we're in the current month
+    mooncount = 0
     while new_moon < dublincount:
-        moon, mooncount = new_moon, 1 + mooncount
-        new_moon = ephem.next_new_moon(moon)
+        mooncount = 1 + mooncount
+        new_moon = ephem.next_new_moon(new_moon)
+
+    monthstart = previous_visible_nm(dublincount)
 
     months = intercalate(jyear, plain)
 
+    # Sometimes this happens.
+    # Jump to the previous month, accounting that we might be at month 1
+    if dublincount < monthstart:
+        mooncount = amod(mooncount - 1, len(months))
+        monthstart = previous_visible_nm(dublincount - 1)
+
     month_name = months[mooncount]
 
-    monthstart = next_visible_nm(moon - 1)
-    day_count = int(dublincount - monthstart) + 1
+    day_count = int(ceil(dublincount - monthstart))
 
     epoch = _set_epoch(jyear, era)
 
     return jyear - epoch, month_name, day_count
+
+
+def day_duration(jdc):
+    '''The start and end times of the Babylonian day that overlaps with noon on the day of the input.
+    For best results, pass a Julian Day Count with a decimal of .5 (e.g. 1737937.5)
+    '''
+    ddc = dublin.from_jd(jdc)
+    babylon = observer(ddc)
+
+    start = babylon.previous_setting(SUN)
+    end = babylon.next_setting(SUN)
+
+    return dublin.to_datetime(start), dublin.to_datetime(end)
