@@ -229,8 +229,8 @@ def _set_epoch(year, era=None):
 def from_jd(cjdn, era=None, plain=None):
     '''Calculate Babylonian date from Julian Day Count'''
 
-    if cjdn > data.JDC_START_OF_PROLEPTIC:
-        return _fromjd_proleptic(cjdn, era, plain)
+    if cjdn > data.JDC_START_OF_ANALEPTIC:
+        return _from_jd_analeptic(cjdn, era, plain)
 
     if cjdn < data.JDC_START_OF_REGNAL:
         raise IndexError('Date is too early for the Babylonian calendar')
@@ -307,7 +307,10 @@ def to_jd(year, month, day, era=None, ruler=''):
     # Find the row in parker-dubberstein's table that matches
     # our julian year and month.
     parkerdub = load_parker_dubberstein()
-    pdentry = parkerdub[jyear]['months'][month]
+    try:
+        pdentry = parkerdub[jyear]['months'][month]
+    except KeyError:
+        return _to_jd_analeptic(year, month, day, era=era)
 
     return pdentry + day - 1
 
@@ -357,8 +360,19 @@ def _nnm_after_pve(dc):
     return ephem.next_new_moon(prev_equinox)
 
 
-def _fromjd_proleptic(jdc, era=None, plain=None):
-    '''Given a Julian Day Count, calculate the Babylonian date proleptically, with choice of eras'''
+def moons_between_dates(start, end):
+    '''Number of moons observed in Babylon between 2 ephem.Dates'''
+    count = -1
+
+    while start < end:
+        start = ephem.next_new_moon(start)
+        count += 1
+
+    return count
+
+
+def _from_jd_analeptic(jdc, era=None, plain=None):
+    '''Given a Julian Day Count, calculate the Babylonian date analeptically, with choice of eras'''
     # Calcuate the dublin day count, used in ephem
     # We're going to return the date for noon
     jdc = int(jdc) + 0.5
@@ -404,7 +418,14 @@ def _fromjd_proleptic(jdc, era=None, plain=None):
         mooncount = amod(mooncount - 1, len(months))
         monthstart = previous_visible_nm(dublincount - 1)
 
-    month_name = months[mooncount]
+    try:
+        month_name = months[mooncount]
+    except KeyError:
+        if mooncount > len(months):
+            mooncount = mooncount - len(months)
+            jyear += 1
+            months = intercalate(jyear, plain)
+        month_name = months[mooncount]
 
     day_count = int(ceil(dublincount - monthstart))
 
