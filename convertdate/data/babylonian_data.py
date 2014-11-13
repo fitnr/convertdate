@@ -201,7 +201,7 @@ rulers_alt_names = {
 # JD_START_OF_METONIC = 1587851.5
 
 standard_intercalation = {
-    3: 'A', 5: 'A', 8: 'A', 11: 'A', 14: 'A', 17: 'U', 19: 'A'
+    3: 'A', 6: 'A', 8: 'A', 11: 'A', 14: 'A', 17: 'U', 19: 'A'
 }
 
 # year: {
