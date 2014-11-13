@@ -331,14 +331,12 @@ def from_gregorian(y, m, d, era=None, plain=None):
     return from_jd(gregorian.to_jd(y, m, d), era, plain=plain)
 
 
-def previous_visible_nm(dc):
-    '''The previous time the new moon was visible in Babylon'''
-    # If the date of a new moon is passed, p_n_m will equal dc
-    p_n_m = ephem.previous_new_moon(dc)
-    babylon = observer(p_n_m)
+def _visible_nm(dc, func):
+    starting_nm = func(dc)
+    babylon = observer(starting_nm)
 
     # What's the sun doing at moonrise?
-    babylon.date = babylon.next_rising(MOON, start=p_n_m)
+    babylon.date = babylon.next_rising(MOON, start=starting_nm)
     SUN.compute(babylon)
 
     # If the sun is below the horizon, we're set: there's a new moon,
@@ -355,9 +353,21 @@ def previous_visible_nm(dc):
     return babylon.date
 
 
-def _nnm_after_pve(dc):
+def previous_visible_nm(dc):
+    '''The previous time the new moon was visible in Babylon'''
+    func = ephem.previous_new_moon
+    return _visible_nm(dc, func)
+
+
+def next_visible_nm(dc):
+    '''The next time the new moon will be visible in Babylon'''
+    func = ephem.next_new_moon
+    return _visible_nm(dc, func)
+
+
+def _nvnm_after_pve(dc):
     prev_equinox = ephem.previous_vernal_equinox(dc)
-    return ephem.next_new_moon(prev_equinox)
+    return next_visible_nm(prev_equinox)
 
 
 def moons_between_dates(start, end):
@@ -379,26 +389,26 @@ def _from_jd_analeptic(jdc, era=None, plain=None):
 
     dublincount = ephem.Date(dublin.from_jd(jdc))
 
-    jyear, jmonth, jday = julian.from_jd(jdc)
+    gyear, gmonth, gday = gregorian.from_jd(jdc)
 
     # Are we before or after the first NM after the VE of this Gregorian year?
     # three possible parts of the year we can fall in:
     # A: between Jan 1 and the Vernal Equinox
     # B: between the V.E. and its next new moon
     # C: between that new moon and Dec 31
-    new_moon = _nnm_after_pve(dublincount)
+    new_moon = _nvnm_after_pve(dublincount)
 
     # Group A
     # Offset the year
-    if new_moon.datetime().year < jyear:
-        jyear = jyear - 1
+    if new_moon.datetime().year < gyear:
+        gyear = gyear - 1
 
     # Group B
     # reset, so we count from the previous year's VE's NNM
     # Also, offset the year
     if new_moon > dublincount:
-        jyear = jyear - 1
-        new_moon = _nnm_after_pve(dublincount - 31)
+        gyear = gyear - 1
+        new_moon = _nvnm_after_pve(dublincount - 31)
 
     # Group A, B or C
     # Loop through the new moons since the start of the year
@@ -410,8 +420,7 @@ def _from_jd_analeptic(jdc, era=None, plain=None):
 
     monthstart = previous_visible_nm(dublincount)
 
-    months = intercalate(jyear, plain)
-
+    months = intercalate(gyear, plain)
     # Sometimes this happens.
     # Jump to the previous month, accounting that we might be at month 1
     if dublincount < monthstart:
@@ -423,15 +432,15 @@ def _from_jd_analeptic(jdc, era=None, plain=None):
     except KeyError:
         if mooncount > len(months):
             mooncount = mooncount - len(months)
-            jyear += 1
-            months = intercalate(jyear, plain)
+            gyear += 1
+            months = intercalate(gyear, plain)
         month_name = months[mooncount]
 
     day_count = int(ceil(dublincount - monthstart))
 
-    epoch = _set_epoch(jyear, era)
+    epoch = _set_epoch(gyear, era)
 
-    return jyear - epoch, month_name, day_count
+    return gyear - epoch, month_name, day_count
 
 
 def day_duration(jdc):
