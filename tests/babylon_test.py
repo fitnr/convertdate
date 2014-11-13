@@ -10,6 +10,9 @@ import ephem
 
 class test_babylon_cal(unittest.TestCase):
 
+    def setUp(self):
+        self.string = "{jyear}\t{jdate}\t{daysinyear}\t{m}\t{ve}\t{nm}"
+
     def test_metonic(self):
         assert bab.metonic_number(-747) == 1
         assert bab.metonic_number(-440) == 4
@@ -102,7 +105,7 @@ class test_babylon_cal(unittest.TestCase):
         dc = dublin.from_gregorian(2014, 11, 25)
         assert bab.previous_visible_nm(dc).tuple() == (2014, 11, 23, 13, 58, 27.14136839378625)
 
-    def test_babylon_from_jd_proleptic(self):
+    def test_babylon_from_jd_analeptic(self):
         assert bab.from_julian(46, 3, 27, 'seleucid') == (357, u'Addaru II', 30)
 
         cjs = [
@@ -192,6 +195,13 @@ class test_babylon_cal(unittest.TestCase):
         self.assertEqual(bab.to_julian(1, 1, 1, era='regnal', ruler='Nabopolassar'), (-625, 3, 24))
 
         assert bab.to_julian(21, 10, 1, era='regnal', ruler='Nabopolassar') == (-604, 1, 3)
+
+    def test_moons_between_dates(self):
+        d1 = ephem.Date('2014/11/1')
+
+        assert bab.moons_between_dates(d1, ephem.Date('2014/12/1')) == 1
+        assert bab.moons_between_dates(d1, d1 + 1) == 0
+        assert bab.moons_between_dates(ephem.Date('2014/11/20'), ephem.Date('2014/11/25')) == 1
 
 
 def thing(jdc):
