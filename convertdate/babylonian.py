@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
-from math import ceil
+from math import ceil, floor
 from itertools import chain
 from .data import babylonian_data as data
 from . import dublin, julian, gregorian
@@ -276,7 +276,9 @@ def from_jd(cjdn, era=None, plain=None):
     return (by, month_name, int(bday))
 
 
-def to_jd(year, month, day, era=None, ruler=''):
+def to_jd(year, month, day, era=None, ruler=None):
+    era = era or ''
+    ruler = ruler or ''
     if era == 'regnal' and not ruler:
         raise ValueError('Arugment era=regnal requires a ruler')
 
@@ -313,6 +315,43 @@ def to_jd(year, month, day, era=None, ruler=''):
         return _to_jd_analeptic(year, month, day, era=era)
 
     return pdentry + day - 1
+
+
+def _to_jd_analeptic(year, month, day, era):
+    if era == 'regnal':
+        raise ValueError('Regnal era not valid for this date')
+
+    if era.lower() not in ['arsacid', 'nabonassar', 'seleucid']:
+        era = 'seleucid'
+
+    epoch = _set_epoch(True, era)
+    jyear = year + epoch
+
+    if type(month) in [str, unicode]:
+        months = intercalate(jyear)
+        inverted = dict((v, k) for k, v in months.items())
+
+        try:
+            month = inverted[month]
+        except KeyError:
+            months = intercalate(jyear, plain=1)
+            inverted = dict((v, k) for k, v in months.items())
+
+            month = inverted[month]
+        except Exception as e:
+            raise e
+
+    start_year = dublin.from_julian(jyear, 5, 1)
+    moon = _nvnm_after_pve(start_year)
+
+    for x in range(1, month):
+        moon = ephem.next_new_moon(moon)
+
+    pvnm = previous_visible_nm(moon + 2)
+
+    outdc = floor(pvnm + day) - 0.5
+
+    return dublin.to_jd(outdc)
 
 
 def to_julian(year, month, day, era=None, ruler=''):
