@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import division
 from .utils import floor
 
 EPOCH = 1721425.5

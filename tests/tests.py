@@ -118,7 +118,7 @@ class CalTestCase(unittest.TestCase):
         assert gregorian.to_jd(1794, 7, 27) == fr.to_jd(2, 11, 9)
 
     def test_hebrew(self):
-        assert self.jd == hebrew.to_jd(*hebrew.from_jd(self.jd))
+        self.assertEqual(self.jd, hebrew.to_jd(*hebrew.from_jd(self.jd)))
 
     def test_islamic(self):
         assert self.jd == islamic.to_jd(*islamic.from_jd(self.jd))

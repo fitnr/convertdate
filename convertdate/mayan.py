@@ -91,11 +91,11 @@ def lc_to_haab_tzolkin(baktun, katun, tun, uinal, kin):
 
 
 def translate_haab(h):
-    return dict(zip(HAAB_MONTHS, HAAB_TRANSLATIONS)).get(h)
+    return dict(list(zip(HAAB_MONTHS, HAAB_TRANSLATIONS))).get(h)
 
 
 def translate_tzolkin(tz):
-    return dict(zip(TZOLKIN_NAMES, TZOLKIN_TRANSLATIONS)).get(tz)
+    return dict(list(zip(TZOLKIN_NAMES, TZOLKIN_TRANSLATIONS))).get(tz)
 
 
 def _haab_count(day, month):

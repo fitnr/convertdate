@@ -21,9 +21,9 @@ def year_months(year):
 def delay_1(year):
     '''Test for delay of start of new year and to avoid'''
     #//  Sunday, Wednesday, and Friday as start of the new year.
-    months = ((235 * year) - 234) / 19
+    months = trunc(((235 * year) - 234) / 19)
     parts = 12084 + (13753 * months)
-    day = (months * 29) + parts / 25920
+    day = trunc((months * 29) + parts / 25920)
 
     if ((3 * (day + 1)) % 7) < 3:
         day += 1
@@ -88,7 +88,7 @@ def to_jd(year, month, day):
         for mon in range(7, month):
             jd += month_days(year, mon)
 
-    return jd
+    return int(jd) + 0.5
 
 
 def from_jd(jd):
@@ -131,7 +131,7 @@ def to_jd_gregorianyear(gregorianyear, hebrew_month, hebrew_day):
         raise ValueError("Could not determine gregorian year")
 
     # tuple: (y, m, d)
-    return gd
+    return (gd[0], gd[1], gd[2])
 
 def from_gregorian(year, month, day):
     return from_jd(gregorian.to_jd(year, month, day))
