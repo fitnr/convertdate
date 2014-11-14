@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import time
-from copy import copy
+from math import trunc
 import calendar
 from . import hebrew
 
@@ -35,24 +35,19 @@ NOV = 11
 DEC = 12
 
 # Hebrew months
-Nisan = 1
-Iyyar = 2
-Sivan = 3
-Tammuz = 4
-Av = 5
-Elul = 6
-Tishri = 7
-Heshvan = 8
-Kislev = 9
-Teveth = 10
-Shevat = 11
-Adar = 12
-Veadar = 13
-
-HAVE_30_DAYS = (APR, JUN, SEP, NOV)
-HAVE_31_DAYS = (JAN, MAR, MAY, JUL, AUG, OCT, DEC)
-
-SECONDS_PER_DAY = 60 * 60 * 24
+NISAN = 1
+IYYAR = 2
+SIVAN = 3
+TAMMUZ = 4
+AV = 5
+ELUL = 6
+TISHRI = 7
+HESHVAN = 8
+KISLEV = 9
+TEVETH = 10
+SHEVAT = 11
+ADAR = 12
+VEADAR = 13
 
 
 def adjust_date(timelist):
@@ -70,339 +65,336 @@ def adjust_date(timelist):
 
 
 def nth_day_of_month(n, weekday, month, year):
-    '''Return the nth weekday of month in year'''
-    # returns the day of the month 1..31
-    if not year:
-        raise IndexError
+    '''Return (year, month, day) tuple that represents nth weekday of month in year. If n==0, returns last weekday of month'''
+    if not (0 <= n <= 5):
+        raise IndexError("Nth day of month must be 0-5. Received: {}".format(n))
+
+    if not (0 <= weekday <= 6):
+        raise IndexError("Weekday must be 0-6")
 
     firstday, daysinmonth = calendar.monthrange(year, month)
 
     # Get first WEEKDAY of month
-    # firstday is MON, weekday is WED -- start with 3rd day of month
-    # firstday is WED, weekday is MON --
-    # firstday = weekday
-    if firstday < weekday:
-        date = weekday - firstday + 1  # 2 - 0 + 1
-    elif firstday > weekday:
-        date = 7 - (firstday - weekday) + 1
+    first_weekday_of_kind = 1 + (weekday - firstday) % 7
+
+    if n == 0:
+        # find last weekday of kind, which is 5 if these conditions are met, else 4
+        if first_weekday_of_kind in [1, 2, 3] and first_weekday_of_kind + 28 < daysinmonth:
+            n = 5
+        else:
+            n = 4
+
+    day = first_weekday_of_kind + ((n - 1) * 7)
+
+    if day > daysinmonth:
+        raise IndexError("No {}th day of month {}".format(n, month))
+
+    return (year, month, day)
+
+
+def new_years(year):
+    '''Jan 1st'''
+    return (year, JAN, 1)
+
+
+def martin_luther_king_day(year):
+    '''third monday in January'''
+    return nth_day_of_month(3, MON, JAN, year)
+
+
+def lincolns_birthday(year):
+    '''Feb 12'''
+    return (year, FEB, 12)
+
+
+def valentines_day(year):
+    '''feb 14th'''
+    return (year, FEB, 14)
+
+
+def washingtons_birthday(year):
+    '''Feb 22'''
+    return (year, FEB, 22)
+
+
+def presidents_day(year):
+    '''3rd Monday of Feb'''
+    return nth_day_of_month(3, MON, FEB, year)
+
+
+def pulaski_day(year):
+    '''1st monday in March'''
+    return nth_day_of_month(1, MON, MAR, year)
+
+
+def easter(year):
+    '''Calculate western easter'''
+    # formula taken from http://aa.usno.navy.mil/faq/docs/easter.html
+    c = trunc(year / 100)
+    n = year - 19 * trunc(year / 19)
+
+    k = trunc((c - 17) / 25)
+
+    i = c - trunc(c / 4) - trunc((c - k) / 3) + (19 * n) + 15
+    i = i - 30 * trunc(i / 30)
+    i = i - trunc(i / 28) * (1 - trunc(i / 28) * trunc(29 / (i + 1)) * trunc((21 - n) / 11))
+
+    j = year + trunc(year / 4) + i + 2 - c + trunc(c / 4)
+    j = j - 7 * trunc(j / 7)
+
+    l = i - j
+
+    month = 3 + trunc((l + 40) / 44)
+    day = l + 28 - 31 * trunc(month / 4)
+
+    return year, int(month), int(day)
+
+
+def may_day(year):
+    return (year, MAY, 1)
+
+
+def mothers_day(year):
+    '''2nd Sunday in May'''
+    return nth_day_of_month(2, SUN, MAY, year)
+
+
+def memorial_day(year):
+    '''last Monday in May'''
+    return nth_day_of_month(0, MON, MAY, year)
+
+
+def fathers_day(year):
+    '''3rd Sunday in June'''
+    return nth_day_of_month(3, SUN, JUN, year)
+
+
+def flag_day(year):
+    '''June 14th'''
+    return (year, JUN, 14)
+
+
+def indepedence_day(year, observed=None):
+    '''July 4th'''
+    day = 4
+
+    if observed:
+        if calendar.weekday(year, JUL, 4) == SAT:
+            day = 3
+
+        if calendar.weekday(year, JUL, 4) == SUN:
+            day = 5
+
+    return (year, JUL, day)
+
+
+def labor_day(year):
+    '''first Monday in Sep'''
+    return nth_day_of_month(1, MON, SEP, year)
+
+
+def columbus_day(year, country='usa'):
+    '''in USA: 2nd Monday in Oct
+       Elsewhere: Oct 12'''
+    if country == 'usa':
+        return nth_day_of_month(2, MON, OCT, year)
     else:
-        date = 1
+        return (year, OCT, 12)
 
-    if n == 1:
-        return date
 
-    # Get nth WEEKDAY of month. Subtract 1 because already have 1st
-    date += (n - 1) * 7
+def halloween(year):
+    '''Oct 31'''
+    return (year, OCT, 31)
 
-    if month in HAVE_30_DAYS and date > 30:
-        raise IndexError
-    if month in HAVE_31_DAYS and date > 31:
-        raise IndexError
-    if month == FEB and date > 28:
-        ignore, daysinfeb = calendar.monthrange(year, FEB)
-        if date > daysinfeb:
-            raise IndexError
 
-    return date
+def election_day(year):
+    '''1st Tues in Nov'''
+    return nth_day_of_month(1, TUE, NOV, year)
+
+
+def veterans_day(year):
+    '''Nov 11'''
+    return (year, NOV, 11)
+
+
+def rememberance_day(year):
+    return veterans_day(year)
+
+
+def armistice_day(year):
+    return veterans_day(year)
+
+
+def thanksgiving(year, country='usa'):
+    '''USA: last Thurs. of November, Canada: 2nd Mon. of October'''
+    if country == 'usa':
+        if year in [1940, 1941]:
+            return nth_day_of_month(3, THU, NOV, year)
+        elif year == 1939:
+            return nth_day_of_month(4, THU, NOV, year)
+        else:
+            return nth_day_of_month(0, THU, NOV, year)
+
+    if country == 'canada':
+        return nth_day_of_month(2, MON, OCT, year)
+
+
+def christmas_eve(year):
+    '''24th of December'''
+    return (year, DEC, 24)
+
+
+def christmas(year):
+    '''25th of December'''
+    return (year, DEC, 25)
+
+
+def new_years_eve(year):
+    '''Dec 31st'''
+    return (year, DEC, 31)
+
+# Jewish holidays begins the sunset before the first (secular) day of the holiday
+# With the eve option set, the day of this sunset is returned
+# without the option, the (secular) day is returned
+
+
+def hanukkah(year, eve=False):
+    year, month, day = hebrew.to_jd_gregorianyear(year, KISLEV, 25)
+    if eve:
+        day = day - 1
+    return year, month, day
+
+
+def rosh_hashanah(year, eve=False):
+    year, month, day = hebrew.to_jd_gregorianyear(year, TISHRI, 1)
+    if eve:
+        day = day - 1
+    return year, month, day
+
+
+def yom_kippur(year, eve=False):
+    year, month, day = hebrew.to_jd_gregorianyear(year, TISHRI, 10)
+    if eve:
+        day = day - 1
+
+    return year, month, day
+
+
+def passover(year, eve=False):
+    year, month, day = hebrew.to_jd_gregorianyear(year, NISAN, 15)
+    if eve:
+        day = day - 1
+
+    return year, month, day
 
 
 class Holidays(object):
 
-    def __init__(self, year=None, ymd=False):
-        self.time_list = list(time.localtime())
-
-        if year:
-            self.set_year(year)
-
-        if ymd:
-            self.ymd = True
-
-    def get_epoch(self):
-        t = tuple(self.time_list)
-        return time.mktime(t)
+    def __init__(self, year=None):
+        self.year = year or time.localtime().tm_year
 
     def set_year(self, year):
-        self.time_list[YEAR] = year
-
-    def returnwrapper(self, tl):
-        if self.ymd:
-            return (tl[YEAR], tl[MONTH], tl[DAY])
-        else:
-            return tl
-
-    @property
-    def timelist(self):
-        return self.time_list
+        self.year = year
 
     # the holidays...
     @property
     def christmas(self):
-        '''25th of December'''
-        tl = copy(self.timelist)
-        tl[MONTH] = DEC
-        tl[DAY] = 25
-        return self.returnwrapper(tl)
+        return christmas(self.year)
 
     @property
     def christmas_eve(self):
-        '''24th of December'''
-        tl = copy(self.timelist)
-        tl[MONTH] = DEC
-        tl[DAY] = 24
-        return self.returnwrapper(tl)
+        return christmas_eve(self.year)
 
     @property
-    def thanksgiving(self):
-        '''4th Thursday of November'''
-        tl = copy(self.timelist)
-        tl[MONTH] = NOV
-        tl[DAY] = nth_day_of_month(4, THU, NOV, tl[YEAR])
-        return self.returnwrapper(tl)
+    def thanksgiving(self, country='usa'):
+        return thanksgiving(self.year, country)
 
     @property
     def new_years(self):
-        '''Jan 1st'''
-        tl = copy(self.timelist)
-
-        tl[MONTH] = JAN
-        tl[DAY] = 1
-
-        return self.returnwrapper(tl)
+        return new_years(self.year)
 
     @property
     def new_years_eve(self):
-        '''Dec 31st'''
-        tl = copy(self.timelist)
-
-        tl[MONTH] = DEC
-        tl[DAY] = 31
-
-        return self.returnwrapper(tl)
+        return new_years_eve(self.year)
 
     @property
     def indepedence_day(self, observed=None):
-        '''July 4th'''
-        tl = copy(self.timelist)
-        tl[MONTH] = JUL
-        tl[DAY] = 4
-
-        if observed:
-            if tl[WEEKDAY] == SAT:
-                tl[DAY] = 3
-
-            if tl[WEEKDAY] == SUN:
-                tl[DAY] = 5
-
-        return self.returnwrapper(tl)
+        return indepedence_day(self.year, observed)
 
     @property
     def flag_day(self):
-        '''June 14th'''
-        tl = copy(self.timelist)
-        tl[MONTH] = JUN
-        tl[DAY] = 14
-        return self.returnwrapper(tl)
+        return flag_day(self.year)
 
     @property
     def election_day(self):
-        '''1st Tues in Nov'''
-        tl = copy(self.timelist)
-        tl[MONTH] = NOV
-        tl[DAY] = nth_day_of_month(1, TUE, NOV, tl[YEAR])
-        return self.returnwrapper(tl)
+        return election_day(self.year)
 
     @property
     def presidents_day(self):
-        '''3rd Monday of Feb'''
-        tl = copy(self.timelist)
-        tl[MONTH] = NOV
-        tl[DAY] = nth_day_of_month(3, MON, FEB, tl[YEAR])
-        return self.returnwrapper(tl)
+        return presidents_day(self.year)
 
     @property
     def washingtons_birthday(self):
-        '''Feb 22'''
-        tl = copy(self.timelist)
-        tl[MONTH] = FEB
-        tl[DAY] = 22
-        return self.returnwrapper(tl)
+        return washingtons_birthday(self.year)
 
     @property
     def lincolns_birthday(self):
-        '''Feb 12'''
-        tl = copy(self.timelist)
-        tl[MONTH] = FEB
-        tl[DAY] = 12
-        return self.returnwrapper(tl)
+        return lincolns_birthday(self.year)
 
     @property
     def memorial_day(self):
-        '''last Monday in May'''
-        tl = copy(self.timelist)
-        tl[MONTH] = MAY
-        # if May has 5 Mondays...
-        try:
-            tl[DAY] = nth_day_of_month(5, MON, MAY, tl[YEAR])
-        except IndexError:
-            # otherwise, May has only 4 Mondays
-            tl[DAY] = nth_day_of_month(4, MON, MAY, tl[YEAR])
-        return self.returnwrapper(tl)
+        return memorial_day(self.year)
 
     @property
     def labor_day(self):
-        '''first Monday in Sep'''
-        tl = copy(self.timelist)
-        tl[MONTH] = SEP
-        tl[DAY] = nth_day_of_month(1, MON, SEP, tl[YEAR])
-
-        return self.returnwrapper(tl)
+        return labor_day(self.year)
 
     @property
-    def columbus_day(self, UnitedStates=1):
-        '''in USA: 2nd Monday in Oct
-           Elsewhere: Oct 12'''
-        tl = copy(self.timelist)
-        tl[MONTH] = OCT
-        if UnitedStates:
-            tl[DAY] = nth_day_of_month(2, MON, OCT, tl[YEAR])
-        else:
-            tl[DAY] = 12
-
-        return self.returnwrapper(tl)
+    def columbus_day(self, country='usa'):
+        return columbus_day(self.year, country)
 
     @property
     def veterans_day(self):
-        '''Nov 11'''
-        tl = copy(self.timelist)
-        tl[MONTH] = NOV
-        tl[DAY] = 11
-        return self.returnwrapper(tl)
+        return veterans_day(self.year)
 
     @property
     def valentines_day(self):
-        '''feb 14th'''
-        tl = copy(self.timelist)
-        tl[MONTH] = FEB
-        tl[DAY] = 14
-        return self.returnwrapper(tl)
+        return valentines_day(self.year)
 
     @property
     def halloween(self):
-        '''Oct 31'''
-        tl = copy(self.timelist)
-        tl[MONTH] = OCT
-        tl[DAY] = 31
-        return self.returnwrapper(tl)
+        return halloween(self.year)
 
     @property
     def mothers_day(self):
-        '''2nd Sunday in May'''
-        tl = copy(self.timelist)
-        tl[MONTH] = MAY
-        tl[DAY] = nth_day_of_month(2, SUN, MAY, tl[YEAR])
-        return self.returnwrapper(tl)
+        return mothers_day(self.year)
 
-    @property
     def fathers_day(self):
-        '''3rd Sunday in June'''
-        tl = copy(self.timelist)
-        tl[MONTH] = JUN
-        tl[DAY] = nth_day_of_month(3, SUN, JUN, tl[YEAR])
-        return self.returnwrapper(tl)
+        return fathers_day(self.year)
 
     @property
     def easter(self):
-        tl = copy(self.timelist)
-        y = tl[YEAR]
-
-        # formula taken from http://aa.usno.navy.mil/faq/docs/easter.html
-        c = (y / 100)
-        n = y - 19 * (y / 19)
-        k = (c - 17) / 25
-        i = c - c / 4 - (c - k) / 3 + 19 * n + 15
-        i = i - 30 * (i / 30)
-        i = i - (i / 28) * (1 - (i / 28) * (29 / (i + 1)) * ((21 - n) / 11))
-        j = y + y / 4 + i + 2 - c + c / 4
-        j = j - 7 * (j / 7)
-        l = i - j
-        m = 3 + (l + 40) / 44
-        d = l + 28 - 31 * (m / 4)
-
-        tl[MONTH] = m
-        tl[DAY] = d
-        return self.returnwrapper(tl)
+        return easter(self.year)
 
     @property
     def martin_luther_king_day(self):
-        '''3rd Monday in Jan'''
-        tl = copy(self.timelist)
-        tl[MONTH] = JAN
-        tl[DAY] = nth_day_of_month(3, MON, JAN, tl[YEAR])
-        return self.returnwrapper(tl)
-
-    # Jewish holidays begin the evening before the first day of the holiday
-    # therefor each function, set_holiday() returns the first day
-    # and the function set_holiday_eve() returns the prior day.
-    @property
-    def hanukkah(self):
-        '''need an algorithm to compute gregorian first day...'''
-        tl = copy(self.timelist)
-        gd = hebrew.to_jd_gregorianyear(tl[YEAR], Kislev, 25)
-        tl[MONTH] = gd[MONTH]
-        tl[DAY] = gd[DAY]
-        return self.returnwrapper(tl)
+        return martin_luther_king_day(self.year)
 
     @property
-    def hanukkah_eve(self):
-        tl = self.hanukkah
-        tl[DAY] -= 1
-        tl = adjust_date(tl)
-        return self.returnwrapper(tl)
+    def hanukkah(self, eve=None):
+        return hanukkah(self.year, eve)
 
     @property
-    def rosh_hashanah(self):
-        tl = copy(self.timelist)
-        gd = hebrew.to_jd_gregorianyear(tl[YEAR], Tishri, 1)
-        tl[MONTH] = gd[MONTH]
-        tl[DAY] = gd[DAY]
-        return self.returnwrapper(tl)
+    def rosh_hashanah(self, eve=None):
+        return rosh_hashanah(self.year, eve)
 
     @property
-    def rosh_hashanah_eve(self):
-        tl = self.rosh_hashanah
-        tl[DAY] -= 1
-        tl = adjust_date(tl)
-        return self.returnwrapper(tl)
+    def yom_kippur(self, eve=None):
+        return yom_kippur(self.year, eve)
 
     @property
-    def yom_kippur(self):
-        tl = copy(self.timelist)
-        gd = hebrew.to_jd_gregorianyear(tl[YEAR], Tishri, 10)
-        tl[MONTH] = gd[MONTH]
-        tl[DAY] = gd[DAY]
-        return self.returnwrapper(tl)
-
-    @property
-    def yom_kippur_eve(self):
-        tl = self.rosh_hashanah
-        tl[DAY] += 8
-        tl = adjust_date(tl)
-        return self.returnwrapper(tl)
-
-    @property
-    def passover(self):
-        tl = copy(self.timelist)
-        gd = hebrew.to_jd_gregorianyear(tl[YEAR], Nisan, 15)
-        tl[MONTH] = gd[MONTH]
-        tl[DAY] = gd[DAY]
-        return self.returnwrapper(tl)
-
-    @property
-    def passover_eve(self):
-        tl = self.passover
-        tl[DAY] -= 1
-        tl = adjust_date(tl)
-        return self.returnwrapper(tl)
+    def passover(self, eve=None):
+        return passover(self.year, eve)
 
 
 if __name__ == '__main__':
