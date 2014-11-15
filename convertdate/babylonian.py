@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
-from math import ceil, floor
+from math import ceil, floor, trunc
 from itertools import chain
 from .data import babylonian_data as data
 from . import dublin, julian, gregorian
@@ -388,8 +388,8 @@ def _visible_nm(dc, func):
             MOON.compute(babylon)
 
     # In Bab reckoning, the day started at sundown
-    # In our reckoning, it starts at midnight
-    return babylon.date
+    # For record-keeping, we use midnight (day count = x.5)
+    return ephem.Date(trunc(babylon.date) - 0.5)
 
 
 def previous_visible_nm(dc):
@@ -453,7 +453,7 @@ def _from_jd_analeptic(jdc, era=None, plain=None):
     # Loop through the new moons since the start of the year
     # count forward until we're in the current month
     mooncount = 0
-    while new_moon < dublincount:
+    while new_moon <= dublincount:
         mooncount = 1 + mooncount
         new_moon = ephem.next_new_moon(new_moon)
 
