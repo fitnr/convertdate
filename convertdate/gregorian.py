@@ -6,29 +6,26 @@ EPOCH = 1721425.5
 HAVE_30_DAYS = (4, 6, 9, 11)
 HAVE_31_DAYS = (1, 3, 5, 7, 8, 10, 12)
 
-
 def leap(year):
     return year % 4 == 0 and not ((year % 100) == 0 and (year % 400) != 0)
 
-
-def _legal_date(year, month, day):
-    if day > 31:
-        raise IndexError("Day greater than 31")
-
-    if month in HAVE_30_DAYS and day == 31:
-        raise IndexError("Month {0} only has 30 days".format(month))
-
+def legal_date(year, month, day):
+    '''Check if this is a legal date in the Gregorian calendar'''
     if month == 2:
-        daysinfeb = 29 if leap(year) else 28
-        if day > daysinfeb:
-            raise IndexError("February doesn't have that many days")
+        daysinmonth = 29 if leap(year) else 28
+    else:
+        daysinmonth = 30 if month in HAVE_30_DAYS else 31
 
+    if not (0 < day <= daysinmonth):
+        raise IndexError("Month {} doesn't have a day {}".format(month, day))
+
+    return True
 
 def to_jd2(year, month, day):
     '''Gregorian to Julian Day Count for years between 1801-2099'''
     # http://quasar.as.utexas.edu/BillInfo/JulianDatesG.html
 
-    _legal_date(year, month, day)
+    legal_date(year, month, day)
 
     if month <= 2:
         year = year - 1
@@ -44,7 +41,7 @@ def to_jd2(year, month, day):
 
 def to_jd(year, month, day):
 
-    _legal_date(year, month, day)
+    legal_date(year, month, day)
 
     if month <= 2:
         leap_adj = 0

@@ -58,6 +58,24 @@ class CalTestCase(unittest.TestCase):
     def test_gregorian_2_ma(self):
         assert gregorian.to_jd2(*self.c_greg) == 2266295.5
 
+    def test_legal_date(self):
+        self.assertRaises(IndexError, gregorian.to_jd, 1900, 2, 29)
+        self.assertRaises(IndexError, gregorian.to_jd, 2014, 2, 29)
+        self.assertRaises(IndexError, gregorian.to_jd, 2014, 3, 32)
+        self.assertRaises(IndexError, gregorian.to_jd, 2014, 4, 31)
+        self.assertRaises(IndexError, gregorian.to_jd, 2014, 5, -1)
+
+        try:
+            julian.to_jd(1900, 2, 29)
+        except IndexError:
+            self.fail('Unexpected IndexError: "julian.to_jd(1900, 2, 29)"')
+
+        self.assertRaises(IndexError, julian.to_jd, 2014, 2, 29)
+        self.assertRaises(IndexError, julian.to_jd, 2014, 3, 32)
+        self.assertRaises(IndexError, julian.to_jd, 2014, 4, 31)
+        self.assertRaises(IndexError, julian.to_jd, 2014, 5, -1)
+
+
     def test_gregorian_proleptic(self):
         for y in range(int(gregorian.EPOCH), int(gregorian.EPOCH) - 10000, -100):
             assert gregorian.to_jd(*gregorian.from_jd(y)) == y - 0.5
