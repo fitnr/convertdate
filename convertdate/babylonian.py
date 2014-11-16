@@ -475,7 +475,7 @@ def _from_jd_analeptic(jdc, era=None, plain=None):
             months = intercalate(gyear, plain)
         month_name = months[mooncount]
 
-    day_count = int(ceil(dublincount - monthstart))
+    day_count = int(ceil(dublincount - monthstart)) + 1
 
     epoch = _set_epoch(gyear, era)
 
