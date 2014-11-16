@@ -8,6 +8,7 @@ from .utils import amod
 from pkg_resources import resource_stream
 from csv import DictReader
 import ephem
+import codecs
 
 MOON = ephem.Moon()
 SUN = ephem.Sun()
@@ -58,7 +59,8 @@ def load_parker_dubberstein():
         # ruler,regnalyear,astroyear,1,2,3,4,5,6,7,8,9,10,11,12,13,14
         # 12,13,14 will generally be in the next JYear
         with resource_stream('convertdate', 'data/parker-dubberstein.csv') as f:
-            reader = DictReader(f)
+            stringreader = codecs.getreader('ascii')
+            reader = DictReader(stringreader(f))
             for row in reader:
                 new = dict()
                 year = int(row['jyear'])
@@ -156,11 +158,11 @@ def intercalation_pattern(key, plain=None):
     else:
         months = base_list
 
-    return dict(zip(range(1, len(months) + 1), months))
+    return dict(list(zip(list(range(1, len(months) + 1)), months)))
 
 
 def standard_metonic_month_list():
-    return list(chain(*[intercalation(y).values() for y in range(1, 20)]))
+    return list(chain(*[list(intercalation(y).values()) for y in range(1, 20)]))
 
 
 def _number_months(metonic_year):
@@ -185,7 +187,7 @@ def regnalyear(julianyear):
     else:
         return False
 
-    if julianyear in data.rulers.keys():
+    if julianyear in list(data.rulers.keys()):
         rulername = data.rulers[julianyear]
         ryear = 1
     else:
@@ -251,10 +253,10 @@ def from_jd(cjdn, era=None, plain=None):
         pd = parkerdub[jyear]
 
     # The JDC of the months' first days => BMonth number (1..13)
-    inverted = dict((v, k) for k, v in pd['months'].items())
+    inverted = dict((v, k) for k, v in list(pd['months'].items()))
 
     # Start of the current month is highest JD not over input JDC
-    start_of_month = max(mj for mj in inverted.keys() if mj <= cjdn)
+    start_of_month = max(mj for mj in list(inverted.keys()) if mj <= cjdn)
 
     # index of current month
     bmonth = inverted[start_of_month]
@@ -291,9 +293,9 @@ def to_jd(year, month, day, era=None, ruler=None):
     if ruler.lower() in data.rulers_alt_names:
         ruler = data.rulers_alt_names[ruler.lower()]
 
-    if ruler in data.rulers.values():
+    if ruler in list(data.rulers.values()):
         era = 'regnal'
-        invert = dict((v, k) for k, v in data.rulers.items())
+        invert = dict((v, k) for k, v in list(data.rulers.items()))
         epoch = invert[ruler]
 
         # Fix for our one zero-based ruler
@@ -327,15 +329,22 @@ def _to_jd_analeptic(year, month, day, era):
     epoch = _set_epoch(True, era)
     jyear = year + epoch
 
-    if type(month) in [str, unicode]:
+
+    # Py 2/3 compat. This is a bad way to do things?
+    try:
+        stringmonth = type(month) in [str, unicode]
+    except NameError:
+        stringmonth = type(month) in [str]
+
+    if stringmonth:
         months = intercalate(jyear)
-        inverted = dict((v, k) for k, v in months.items())
+        inverted = dict((v, k) for k, v in list(months.items()))
 
         try:
             month = inverted[month]
         except KeyError:
             months = intercalate(jyear, plain=1)
-            inverted = dict((v, k) for k, v in months.items())
+            inverted = dict((v, k) for k, v in list(months.items()))
 
             month = inverted[month]
         except Exception as e:
