@@ -33,7 +33,7 @@ class test_babylon_cal(unittest.TestCase):
         self.assertRaises(IndexError, bab.metonic_number, 0)
 
     def test_intercal_patterns(self):
-        assert bab.intercalation(1) == dict(zip(range(1, 13), data.MONTHS))
+        assert bab.intercalation(1) == dict(list(zip(list(range(1, 13)), data.MONTHS)))
 
         leapyear_A = bab.intercalate(-385)
         assert len(leapyear_A) == 13
@@ -212,7 +212,7 @@ class test_babylon_cal(unittest.TestCase):
         for x in range(0, 1000, 20):
             try:
                 w = bab.to_jd(*bab.from_jd(z + x))
-                print u"{}\t{}\t{}\t{}\t{}\t{}".format((z + x), w, w - z - x, *bab.from_jd(z + x, plain=1))
+                print(u"{}\t{}\t{}\t{}\t{}\t{}".format((z + x), w, w - z - x, *bab.from_jd(z + x, plain=1)))
 
                 assert (z + x) == bab.to_jd(*bab.from_jd(z + x))
 
@@ -235,7 +235,7 @@ class test_babylon_cal(unittest.TestCase):
                 try:
                     assert yearlen > 382.5
                 except:
-                    print 'xxx', x, yearlen
+                    print('xxx', x, yearlen)
 
     def test_overall_days_of_month(self):
         r = randint(1757584, 2450544)
@@ -247,9 +247,9 @@ class test_babylon_cal(unittest.TestCase):
             try:
                 assert round(nvnm - pvnm, 0) in [29.0, 30.0]
             except AssertionError:
-                print 'AssertionError', nvnm, pvnm, round(nvnm - pvnm, 0)
-                print 'previous NM', ephem.previous_new_moon(dc)
-                print 'next NM', ephem.next_new_moon(dc)
+                print('AssertionError', nvnm, pvnm, round(nvnm - pvnm, 0))
+                print('previous NM', ephem.previous_new_moon(dc))
+                print('next NM', ephem.next_new_moon(dc))
 
 
 def thing(jdc):
@@ -259,12 +259,12 @@ def thing(jdc):
     days_since_nm = dc - ephem.previous_new_moon(dc)
     jy, jm, jd = julian.from_jd(jdc)
 
-    print "{year}\t{month}\t{day}\t{M}\t{pve}\t{nm}".format(
+    print("{year}\t{month}\t{day}\t{M}\t{pve}\t{nm}".format(
         year=jy, month=jm, day=jd,
         pve=int(days_since_pve),
         nm=int(days_since_nm),
         M=bab.metonic_number(jy)
-    )
+    ))
 
 
 def count_pattern(startingve):
@@ -284,7 +284,7 @@ def count_pattern(startingve):
 
     metonic_months = []
 
-    for months in metonic.values():
+    for months in list(metonic.values()):
         metonic_months.append(len(months))
 
     return metonic_months
