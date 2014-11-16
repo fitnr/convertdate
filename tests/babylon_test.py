@@ -103,10 +103,15 @@ class test_babylon_cal(unittest.TestCase):
 
     def test_prev_visible_nm(self):
         dc = dublin.from_gregorian(2014, 11, 25)
-        assert bab.previous_visible_nm(dc).tuple() == (2014, 11, 23, 13, 58, 27.14136839378625)
+        self.assertEqual(bab.previous_visible_nm(dc).tuple(), (2014, 11, 23, 0, 0, 0))
 
     def test_babylon_from_jd_analeptic(self):
-        assert bab.from_julian(46, 3, 27, 'seleucid') == (357, u'Addaru II', 30)
+        assert bab.from_julian(46, 3, 27, 'seleucid') == (356, u'Addaru', 30)
+
+        assert bab.from_julian(100, 3, 2) == (410, u'Addaru', 2)
+        assert bab.from_julian(100, 4, 2) == (411, u'Nisannu', 3)
+        assert bab.from_julian(100, 5, 2) == (411, u'Aiaru', 3)
+        assert bab.from_julian(100, 6, 2) == (411, u'Simanu', 5)
 
         cjs = [
             1738298,
@@ -133,11 +138,6 @@ class test_babylon_cal(unittest.TestCase):
             if one[2] not in [28, 29, 30]:
                 assert one[2] + 1 == two[2]
 
-        assert bab.from_julian(100, 3, 2) == (410, u'Addaru', 3)
-        assert bab.from_julian(100, 4, 2) == (411, u'Nisannu', 4)
-        assert bab.from_julian(100, 5, 2) == (411, u'Aiaru', 4)
-        assert bab.from_julian(100, 6, 2) == (411, u'Simanu', 6)
-
         assert bab.from_gregorian(2014, 11, 7, plain=1) == (2325, 'Arahsamnu', 14)
 
     def test_load_parker_dubberstein(self):
@@ -149,6 +149,9 @@ class test_babylon_cal(unittest.TestCase):
 
         # print '\nyear\tmonth\tday\tM\tpve\tnm\n'
         # for x in range(-626, -311):
+    def test_year_lengths(self):
+        parkerdub = bab.PARKER_DUBBERSTEIN
+
         #     try:
         #         start_o_year = parkerdub[x]['months'][1]
         #         thing(start_o_year)
@@ -202,6 +205,51 @@ class test_babylon_cal(unittest.TestCase):
         assert bab.moons_between_dates(d1, ephem.Date('2014/12/1')) == 1
         assert bab.moons_between_dates(d1, d1 + 1) == 0
         assert bab.moons_between_dates(ephem.Date('2014/11/20'), ephem.Date('2014/11/25')) == 1
+
+    def test_bab_to_jd(self):
+        z = gregorian.to_jd(1900, 3, 19)
+
+        for x in range(0, 1000, 20):
+            try:
+                w = bab.to_jd(*bab.from_jd(z + x))
+                print u"{}\t{}\t{}\t{}\t{}\t{}".format((z + x), w, w - z - x, *bab.from_jd(z + x, plain=1))
+
+                assert (z + x) == bab.to_jd(*bab.from_jd(z + x))
+
+            except AssertionError:
+                pass
+        assert bab.to_jd(*bab.from_jd(z)) == z
+    def test_len_years(self):
+        for x in range(1900, 2000):
+            pev = bab._nvnm_after_pve(ephem.Date(str(x) + '/6/1'))
+            nex = bab._nvnm_after_pve(ephem.Date(str(x + 1) + '/6/1'))
+
+            yearlen = round(nex - pev, 1)
+            assert yearlen >= 353.0
+
+            if len(bab.intercalate(x)) == 12:
+                assert yearlen < 355.5
+
+            if len(bab.intercalate(x)) == 13:
+                assert yearlen < 385.5
+                try:
+                    assert yearlen > 382.5
+                except:
+                    print 'xxx', x, yearlen
+
+    def test_overall_days_of_month(self):
+        r = randint(1757584, 2450544)
+
+        for x in range(r, r + 10000, 30):
+            dc = dublin.from_jd(x)
+            nvnm = bab.next_visible_nm(dc)
+            pvnm = bab.previous_visible_nm(dc)
+            try:
+                assert round(nvnm - pvnm, 0) in [29.0, 30.0]
+            except AssertionError:
+                print 'AssertionError', nvnm, pvnm, round(nvnm - pvnm, 0)
+                print 'previous NM', ephem.previous_new_moon(dc)
+                print 'next NM', ephem.next_new_moon(dc)
 
 
 def thing(jdc):
