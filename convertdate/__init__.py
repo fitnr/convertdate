@@ -10,14 +10,15 @@
 __version__ = "2.0.3.1"
 
 __all__ = [
-    'holidays', 'astro', 'utils', 'bahai',
+    'holidays', 'babylonian', 'utils', 'bahai', 'dublin',
     'french_republican', 'gregorian', 'hebrew',
-    'indian_civil', 'islamic', 'iso',
+    'indian_civil', 'islamic', 'iso', 'julianday',
     'julian', 'mayan', 'persian', 'mayan',
     'ordinal',
 ]
 
 from . import bahai
+from . import babylonian
 from . import dublin
 from . import french_republican
 from . import gregorian
