@@ -136,7 +136,7 @@ def intercalation(mnumber, mstart=0, plain=None):
     '''A list of months for a given year (number) in a particular metonic cycle (start).
     Defaults to the standard intercalation'''
 
-    if mstart < -747:
+    if mstart < -633:
         raise IndexError("Input year out of range. The Babylonian calendar doesn't go that far back")
 
     pattern = data.intercalations.get(mstart, data.standard_intercalation)
@@ -381,20 +381,17 @@ def from_gregorian(y, m, d, era=None, plain=None):
 
 def _visible_nm(dc, func):
     starting_nm = func(dc)
-    babylon = observer(starting_nm)
+    babylon = observer()
+    babylon.date = babylon.next_setting(SUN, start=starting_nm)
+    MOON.compute(babylon)
 
-    # What's the sun doing at moonrise?
-    babylon.date = babylon.next_rising(MOON, start=starting_nm)
-    SUN.compute(babylon)
-
-    # If the sun is below the horizon, we're set: there's a new moon,
-    # the moon is up and it's nighttime
-    if SUN.alt > 0:
-        # If the sun is still up, loop through sunsets, checking if moon is up
-        while MOON.alt < 0:
-            sundown = babylon.next_setting(SUN, start=babylon.date)
-            babylon.date = sundown
-            MOON.compute(babylon)
+    if MOON.alt < 0:
+        # Moon is down when the sun goes down.
+        # Does it rise before morning?
+        if babylon.next_rising(MOON) < babylon.next_rising(SUN):
+            pass
+        else:
+            babylon.date = babylon.next_setting(SUN)
 
     # In Bab reckoning, the day started at sundown
     # For record-keeping, we use midnight (day count = x.5)
