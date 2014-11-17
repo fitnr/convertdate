@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name="convertdate",
 
-    version="2.0.2",
+    version="2.0.2.1",
 
     description="Convert dates across calendar systems",
 

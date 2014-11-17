@@ -41,6 +41,15 @@ hebrew.from_gregorian(2014, 10, 31)
 # Keep in mind that for some systems, the day begins at sundown
 ````
 
+Before the Common Era
+---------------------
+
+For dates before the Common Era (year 1), `convertdate` uses astronomical notation: 1 BC is recorded as 0, 2 BC is -1, etc. This system always for much easier arithmatic, at the expense of ignoring custom.
+
+Note that for dates before 4 CE, `convertdate` uses the [proleptic Julian calendar](https://en.wikipedia.org/wiki/Proleptic_Julian_calendar). The Julian Calendar was in use from 45 BC to 4 CE, but with an irregular leap year pattern.
+
+The [proleptic Gregorian calendar](https://en.wikipedia.org/wiki/Proleptic_Gregorian_calendar) is used for dates before 1582 CE, the year of the Gregorian calendar reform.
+
 Holidays
 --------
 

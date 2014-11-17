@@ -58,6 +58,23 @@ class CalTestCase(unittest.TestCase):
     def test_gregorian_2_ma(self):
         assert gregorian.to_jd2(*self.c_greg) == 2266295.5
 
+    def test_gregorian_julian_dif_proleptic(self):
+        assert julian.to_jd(1500, 5, 10) == gregorian.to_jd(1500, 5, 20)
+        assert julian.to_jd(1300, 5, 10) == gregorian.to_jd(1300, 5, 18)
+        assert julian.to_jd(1000, 5, 10) == gregorian.to_jd(1000, 5, 16)
+        assert julian.to_jd(900, 5, 10) == gregorian.to_jd(900, 5, 15)
+        assert julian.to_jd(300, 5, 10) == gregorian.to_jd(300, 5, 11)
+        assert julian.to_jd(200, 5, 10) == gregorian.to_jd(200, 5, 10)
+        assert julian.to_jd(100, 5, 10) == gregorian.to_jd(100, 5, 9)
+        assert julian.to_jd(-1, 5, 10) == gregorian.to_jd(-1, 5, 8)
+
+    def test_year_zero(self):
+        assert gregorian.to_jd(1, 1, 1) == 1.0 + gregorian.to_jd(0, 12, 31)
+        assert julian.to_jd(1, 1, 1) == 1.0 + julian.to_jd(0, 12, 31)
+
+        assert julian.from_jd(julian.to_jd(1, 1, 1) - 1) == (0, 12, 31)
+        assert gregorian.from_jd(gregorian.to_jd(1, 1, 1) - 1) == (0, 12, 31)
+
     def test_legal_date(self):
         self.assertRaises(IndexError, gregorian.to_jd, 1900, 2, 29)
         self.assertRaises(IndexError, gregorian.to_jd, 2014, 2, 29)
@@ -74,7 +91,6 @@ class CalTestCase(unittest.TestCase):
         self.assertRaises(IndexError, julian.to_jd, 2014, 3, 32)
         self.assertRaises(IndexError, julian.to_jd, 2014, 4, 31)
         self.assertRaises(IndexError, julian.to_jd, 2014, 5, -1)
-
 
     def test_gregorian_proleptic(self):
         for y in range(int(gregorian.EPOCH), int(gregorian.EPOCH) - 10000, -100):

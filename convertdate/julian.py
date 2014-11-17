@@ -54,23 +54,13 @@ def from_jd(jd):
 
     day = b - d - trunc(30.6001 * e)
 
-    #  If year is less than 1, subtract one to convert from
-    #    a zero based date system to the common era system in
-    #    which the year -1 (1 B.C.E) is followed by year 1 (1 C.E.).
-
-    if year < 1:
-        year -= 1
-
     return (year, month, day)
 
 
 def to_jd(year, month, day):
-    '''Adjust negative common era years to the zero-based notation we use.'''
+    '''Convert to Julian day using astronomical years (0 = 1 BC, -1 = 2 BC)'''
 
     legal_date(year, month, day)
-
-    if year < 1:
-        year += 1
 
     # Algorithm as given in Meeus, Astronomical Algorithms, Chapter 7, page 61
 
