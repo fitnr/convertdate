@@ -171,7 +171,7 @@ def regnalyear(julianyear):
     if _valid_regnal(julianyear):
         pass
     else:
-        return False
+        return (False, False)
 
     if julianyear in list(data.rulers.keys()):
         rulername = data.rulers[julianyear]
@@ -197,12 +197,31 @@ def regnalyear(julianyear):
     return (ryear, rulername)
 
 
-def _set_epoch(year, era=None):
+def _regnal_epoch(ruler):
+    '''Return the year that a ruler's epoch began'''
+
+    invert = dict((v, k) for k, v in list(data.rulers.items()))
+    epoch = invert[ruler] - 1
+
+    # Doesn't follow the rules, these guys
+    if ruler == 'Nabopolassar':
+        return epoch + 1
+
+    if ruler == 'Alexander the Great':
+        return epoch - 6
+
+    if ruler == 'Philip III Arrhidaeus':
+        return epoch - 1
+
+    if ruler == 'Alexander IV Aegus':
+        return epoch - 1
+
+    return epoch
+
+
+def _set_epoch(era=None):
     era = era or ''
     era = era.lower()
-
-    if era == 'regnal' and not _valid_regnal(year):
-        era = 'seleucid'
 
     if era == 'arsacid':
         return data.ARSACID_EPOCH
@@ -216,6 +235,11 @@ def _set_epoch(year, era=None):
 
 def from_jd(cjdn, era=None, plain=None):
     '''Calculate Babylonian date from Julian Day Count'''
+
+    era = era or 'AG'
+
+    if era.lower() == 'seleucid':
+        era = 'AG'
 
     if cjdn > data.JDC_START_OF_ANALEPTIC:
         return _from_jd_analeptic(cjdn, era, plain)
@@ -254,42 +278,36 @@ def from_jd(cjdn, era=None, plain=None):
     bday = cjdn - start_of_month + 1
 
     if era == 'regnal':
-        by = regnalyear(jyear)
+        by, era = regnalyear(jyear)
     else:
-        by = jyear - _set_epoch(jyear, era)
+        by = jyear - _set_epoch(era)
 
-    return (by, month_name, int(bday))
+    return (by, month_name, int(bday), era)
 
 
 def to_jd(year, month, day, era=None, ruler=None):
     era = era or ''
-    ruler = ruler or ''
-    if era == 'regnal' and not ruler:
-        raise ValueError('Arugment era=regnal requires a ruler')
 
-    if era.lower() not in ['arsacid', 'nabonassar', 'seleucid']:
-        era = 'seleucid'
+    if era.lower() not in ['arsacid', 'seleucid', 'ag', 'regnal'] or era.lower == 'ag':
+        era = 'AG'
 
-    epoch = _set_epoch(True, era)
+    if era == 'regnal':
+        if not ruler:
+            raise ValueError("Missing argument for 'ruler'")
+        epoch = _regnal_epoch(ruler)
 
-    # Allow for variations in ruler name
-    if ruler.lower() in data.rulers_alt_names:
-        ruler = data.rulers_alt_names[ruler.lower()]
+    else:
+        epoch = _set_epoch(era)
 
-    if ruler in list(data.rulers.values()):
-        era = 'regnal'
-        invert = dict((v, k) for k, v in list(data.rulers.items()))
-        epoch = invert[ruler]
-
-        # Fix for our one zero-based ruler
-        if ruler == 'Nabopolassar':
-            epoch = epoch + 1
+    if era.lower() in ['ag', 'seleucid'] and year > 356:
+        return _to_jd_analeptic(year, month, day, era=era)
 
     jyear = year + epoch
 
     # Find the row in parker-dubberstein's table that matches
     # our julian year and month.
     parkerdub = load_parker_dubberstein()
+
     try:
         pdentry = parkerdub[jyear]['months'][month]
     except KeyError:
@@ -305,9 +323,8 @@ def _to_jd_analeptic(year, month, day, era):
     if era.lower() not in ['arsacid', 'nabonassar', 'seleucid']:
         era = 'seleucid'
 
-    epoch = _set_epoch(True, era)
+    epoch = _set_epoch(era)
     jyear = year + epoch
-
 
     # Py 2/3 compat. This is a bad way to do things?
     try:
@@ -342,12 +359,12 @@ def _to_jd_analeptic(year, month, day, era):
     return dublin.to_jd(outdc)
 
 
-def to_julian(year, month, day, era=None, ruler=''):
+def to_julian(year, month, day, era=None, ruler=None):
     return julian.from_jd(to_jd(year, month, day, era, ruler))
 
 
-def to_gregorian(year, month, day, era=None, ruler=''):
-    return gregorian.from_jd(to_jd(year, month, day, era, ruler))
+def to_gregorian(year, month, day, era=None, ruler=None):
+    return gregorian.from_jd(to_jd(year, month, day, era=era, ruler=ruler))
 
 
 def from_julian(y, m, d, era=None, plain=None):
@@ -410,6 +427,7 @@ def _from_jd_analeptic(jdc, era=None, plain=None):
     # Calcuate the dublin day count, used in ephem
     # We're going to return the date for noon
     jdc = int(jdc) + 0.5
+    era = era or 'AG'
 
     dublincount = ephem.Date(dublin.from_jd(jdc))
 
@@ -462,9 +480,9 @@ def _from_jd_analeptic(jdc, era=None, plain=None):
 
     day_count = int(ceil(dublincount - monthstart)) + 1
 
-    epoch = _set_epoch(gyear, era)
+    epoch = _set_epoch(era)
 
-    return gyear - epoch, month_name, day_count
+    return gyear - epoch, month_name, day_count, era
 
 
 def day_duration(jdc):
