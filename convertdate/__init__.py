@@ -9,19 +9,22 @@
 
 
 __all__ = [
-    'holidays', 'astro', 'utils', 'bahai',
+    'holidays', 'babylonian', 'utils', 'bahai', 'dublin',
     'french_republican', 'gregorian', 'hebrew',
-    'indian_civil', 'islamic', 'iso',
+    'indian_civil', 'islamic', 'iso', 'julianday',
     'julian', 'mayan', 'persian', 'mayan'
 ]
 
 from . import bahai
+from . import babylonian
+from . import dublin
 from . import french_republican
 from . import gregorian
 from . import hebrew
 from . import indian_civil
 from . import islamic
 from . import julian
+from . import julianday
 from . import mayan
 from . import persian
 from . import mayan
