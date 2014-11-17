@@ -88,8 +88,8 @@ class test_babylon_cal(unittest.TestCase):
         assert bab.regnalyear(-333) == (2, u'Darius III')
 
     def test_babylon_from_jd_regnal(self):
-        assert bab.from_jd(1492870.5, 'regnal') == ((0, u'Nabopolassar'), u"Nisannu", 1)
-        assert bab.from_julian(-330, 7, 30, 'regnal') == ((7, u'Alexander the Great'), u'Abu', 1)
+        assert bab.from_jd(1492870.5, 'regnal') == (0, u"Nisannu", 1, u'Nabopolassar')
+        assert bab.from_julian(-329, 7, 30, 'regnal') == (7, u'Abu', 1, u'Alexander the Great')
 
         self.assertRaises(IndexError, bab.from_julian, -626, 4, 1)
 
@@ -112,26 +112,26 @@ class test_babylon_cal(unittest.TestCase):
         self.assertEqual(bab.from_julian(-5, 4, 20, 'AG'), (306, u'Nisannu', 1, 'AG'))
         self.assertEqual(bab.from_julian(-5, 3, 22, 'AG'), (305, u"Addaru II", 1, 'AG'))
 
-        assert bab.from_julian(40, 4, 2, 'seleucid') == (351, u'Nisannu', 1)
+        self.assertEqual(bab.from_julian(40, 4, 2, 'seleucid'), (351, u'Nisannu', 1, 'AG'))
 
-        assert bab.from_julian(45, 4, 8, 'seleucid') == (356, u'Nisannu', 1)
-        assert bab.from_julian(45, 3, 10, 'seleucid') == (355, u"Addaru", 2)
+        assert bab.from_julian(45, 4, 8, 'seleucid') == (356, u'Nisannu', 1, 'AG')
+        assert bab.from_julian(45, 3, 10, 'seleucid') == (355, u"Addaru", 2, 'AG')
 
-        assert bab.from_julian(45, 11, 30, 'seleucid') == (356, u"Kislimu", 1)
+        assert bab.from_julian(45, 11, 30, 'seleucid') == (356, u"Kislimu", 1, 'AG')
 
-        assert bab.from_julian(46, 2, 26, 'seleucid') == (356, u"Addaru", 1)
+        assert bab.from_julian(46, 2, 26, 'seleucid') == (356, u"Addaru", 1, 'AG')
 
     def test_prev_visible_nm(self):
         dc = dublin.from_gregorian(2014, 11, 25)
         self.assertEqual(bab.previous_visible_nm(dc).tuple(), (2014, 11, 22, 0, 0, 0))
 
     def test_babylon_from_jd_analeptic(self):
-        self.assertEqual(bab.from_julian(46, 3, 27, 'seleucid'), (356, u'Nisannu', 1))
+        self.assertEqual(bab.from_julian(46, 3, 27, 'seleucid'), (357, u'Nisannu', 1, 'AG'))
 
-        self.assertEqual(bab.from_julian(100, 3, 2), (410, u'Addaru', 3))
-        self.assertEqual(bab.from_julian(100, 4, 2), (411, u'Nisannu', 4))
-        self.assertEqual(bab.from_julian(100, 5, 1), (411, u'Aiaru', 4))
-        self.assertEqual(bab.from_julian(100, 6, 1), (411, u'Simanu', 5))
+        self.assertEqual(bab.from_julian(100, 3, 2), (410, u'Addaru', 3, 'AG'))
+        self.assertEqual(bab.from_julian(100, 4, 2), (411, u'Nisannu', 4, 'AG'))
+        self.assertEqual(bab.from_julian(100, 5, 1), (411, u'Aiaru', 4, 'AG'))
+        self.assertEqual(bab.from_julian(100, 6, 1), (411, u'Simanu', 5, 'AG'))
 
         # for x in range(1730298, 1738622):
         for x in range(1737936, 1737938):
@@ -168,7 +168,7 @@ class test_babylon_cal(unittest.TestCase):
 
             print('')
 
-        self.assertEqual(bab.from_gregorian(2014, 11, 7, plain=1), (2325, 'Arahsamnu', 15))
+        self.assertEqual(bab.from_gregorian(2014, 11, 7, plain=1), (2325, 'Arahsamnu', 15, 'AG'))
 
     def test_load_parker_dubberstein(self):
         bab.load_parker_dubberstein()

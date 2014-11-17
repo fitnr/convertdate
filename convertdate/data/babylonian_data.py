@@ -41,7 +41,7 @@ ASCII_MONTHS = [
 ]
 
 '''Regnal stuff'''
-# These aren't the J year that the epoch started, but one greater,
+# These aren't the J year that the epoch started, but one smaller (greater abs val),
 # Which lets us do straightforward addition/subtraction
 SELEUCID_EPOCH = -311
 ARSACID_EPOCH = -247
