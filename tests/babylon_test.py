@@ -116,30 +116,40 @@ class test_babylon_cal(unittest.TestCase):
         self.assertEqual(bab.from_julian(100, 5, 1), (411, u'Aiaru', 4))
         self.assertEqual(bab.from_julian(100, 6, 1), (411, u'Simanu', 5))
 
-        cjs = [
-            1738298,
-            1738357,
-            1738387,
-            1738416,
-            1738475,
-            1738504,
-            1738534,
-            1738563,
-            1738593,
-            1738622,
-        ]
-
-        for x in cjs:
+        # for x in range(1730298, 1738622):
+        for x in range(1737936, 1737938):
             bab.from_jd(x - 1, plain=1)
             one = bab.from_jd(x, plain=1)
             two = bab.from_jd(x + 1, plain=1)
 
-            assert one[0] <= two[0]
+            jyear, jmonth, jday = julian.from_jd(x)
+            print('{}\t{}\t{}'.format(jyear, jmonth, jday), end='\t')
 
-            assert one != two
+            dublincount = ephem.Date(dublin.from_jd(x))
+            new_moon = bab._nvnm_after_pve(dublincount)
 
-            if one[2] not in [28, 29, 30]:
-                assert one[2] + 1 == two[2]
+            print('{}\t'.format(dublincount), end='\t')
+
+            print('new_moon.datetime().year < gyear', new_moon.datetime().year < gyear, end='\t')
+            print('new_moon > dublincount', new_moon > dublincount, end='\t')
+
+            print("{}\t{}\t{}\t{}".format(x, *one), end='\t')
+
+            try:
+                self.assertLessEqual(one[0], two[0])
+                self.assertNotEqual(one, two)
+            except AssertionError:
+                print('*', end='\t')
+
+            try:
+                if one[2] not in [29, 30]:
+                    self.assertEqual(one[2] + 1, two[2])
+                else:
+                    assert two[2] in [30, 1]
+            except AssertionError:
+                print('#', end='\t')
+
+            print('')
 
         self.assertEqual(bab.from_gregorian(2014, 11, 7, plain=1), (2325, 'Arahsamnu', 15))
 
