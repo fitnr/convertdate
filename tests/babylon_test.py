@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 from copy import copy
 import unittest
 from convertdate import dublin
@@ -17,48 +18,49 @@ class test_babylon_cal(unittest.TestCase):
         self.string = "{jyear}\t{jdate}\t{daysinyear}\t{m}\t{ve}\t{nm}"
 
     def test_metonic(self):
-        assert bab.metonic_number(-747) == 1
-        assert bab.metonic_number(-440) == 4
+        assert bab.metonic_number(-613) == 1
+        assert bab.metonic_number(-440) == 3
 
-        assert bab.metonic_start(-500) == -500
-        assert bab.metonic_start(-380) == -386
+        assert bab.metonic_start(-500) == -518
+        assert bab.metonic_start(-380) == -385
 
-        assert bab.metonic_start(-576) == -576
+        assert bab.metonic_start(-576) == -594
 
-        assert bab.metonic_start(1) == -6
+        assert bab.metonic_start(1) == -5
+
+        assert bab.metonic_start(19) - bab.metonic_start(1) == 19
 
         assert bab.metonic_number(1) == 7
 
-        assert bab.metonic_start(-596) == -614
-        assert bab.metonic_number(-596) == 19
-
-        self.assertRaises(IndexError, bab.metonic_start, 0)
-        self.assertRaises(IndexError, bab.metonic_number, 0)
+        assert bab.metonic_start(-596) == -613
+        assert bab.metonic_number(-595) == 19
 
     def test_intercal_patterns(self):
         assert bab.intercalation(1) == dict(list(zip(list(range(1, 13)), data.MONTHS)))
 
-        leapyear_A = bab.intercalate(-385)
+        leapyear_A = bab.intercalate(-384)
         assert len(leapyear_A) == 13
         assert leapyear_A[13] == u"Addaru II"
 
-        assert len(bab.intercalate(-576)) == 12
-        assert len(bab.intercalate(-595)) == 12
-        assert len(bab.intercalate(-535)) == 12
+        assert len(bab.intercalate(-575)) == 12
+        assert len(bab.intercalate(-594)) == 12
+        assert len(bab.intercalate(-534)) == 12
 
-        leapyear_U = bab.intercalate(-596)
+        leapyear_U = bab.intercalate(-595)
 
-        assert bab.intercalation_pattern('U') == {
+        self.assertEqual(bab.intercalation_pattern('U'), {
             1: u'Nisannu', 2: u'Aiaru', 3: u'Simanu', 4: u'Duzu', 5: u'Abu', 6: u'Ululu',
-            7: u'Ululu II', 8: u'Tashritu', 9: u'Araá¸¥samnu', 10: u'Kislimu', 11: u'á¹¬ebetu',
-            12: u'Shabaá¹­u', 13: u'Addaru'}
+            7: u'Ululu II', 8: u'Tashritu', 9: u'Araḥsamnu', 10: u'Kislimu', 11: u'Ṭebetu',
+            12: u'Shabaṭu', 13: u'Addaru'})
+
+        self.assertEqual(leapyear_U, bab.intercalation_pattern('U'))
 
         assert len(leapyear_U) == 13
         assert leapyear_U[7] == u"Ululu II"
 
-        assert data.intercalations[bab.metonic_start(-596)][bab.metonic_number(-596)] == 'U'
+        assert data.intercalations[bab.metonic_start(-595)][bab.metonic_number(-595)] == 'U'
 
-        assert data.intercalations[bab.metonic_start(-596)][bab.metonic_number(-596)] == 'U'
+        assert data.intercalations[bab.metonic_start(-595)][bab.metonic_number(-595)] == 'U'
 
         assert len(leapyear_U) == 13
 
@@ -69,21 +71,21 @@ class test_babylon_cal(unittest.TestCase):
     def test_valid_regnal(self):
         assert bab._valid_regnal(-500)
         assert bab._valid_regnal(-627) == False
-        assert bab._valid_regnal(-145) == False
+        assert bab._valid_regnal(-144) == False
 
     def test_bab_regnal_year(self):
-        assert bab.regnalyear(-604) == (1, u'Nebuchadnezzar II')
-        assert bab.regnalyear(-329) == (8, u'Alexander the Great')
-        assert bab.regnalyear(-627) == False
+        assert bab.regnalyear(-603) == (1, u'Nebuchadnezzar II')
+        assert bab.regnalyear(-328) == (8, u'Alexander the Great')
+        assert bab.regnalyear(-626) == (False, False)
 
-        assert bab.regnalyear(-626) == (0, u'Nabopolassar')
-        assert bab.regnalyear(-625) == (1, u'Nabopolassar')
-        assert bab.regnalyear(-624) == (2, u'Nabopolassar')
-        assert bab.regnalyear(-623) == (3, u'Nabopolassar')
-        assert bab.regnalyear(-622) == (4, u'Nabopolassar')
-        assert bab.regnalyear(-621) == (5, u'Nabopolassar')
+        assert bab.regnalyear(-625) == (0, u'Nabopolassar')
+        assert bab.regnalyear(-624) == (1, u'Nabopolassar')
+        assert bab.regnalyear(-623) == (2, u'Nabopolassar')
+        assert bab.regnalyear(-622) == (3, u'Nabopolassar')
+        assert bab.regnalyear(-621) == (4, u'Nabopolassar')
+        assert bab.regnalyear(-620) == (5, u'Nabopolassar')
 
-        assert bab.regnalyear(-334) == (2, u'Darius III')
+        assert bab.regnalyear(-333) == (2, u'Darius III')
 
     def test_babylon_from_jd_regnal(self):
         assert bab.from_jd(1492870.5, 'regnal') == ((0, u'Nabopolassar'), u"Nisannu", 1)
@@ -91,9 +93,24 @@ class test_babylon_cal(unittest.TestCase):
 
         self.assertRaises(IndexError, bab.from_julian, -626, 4, 1)
 
+    def test_julian_jd(self):
+        self.assertEqual(bab.from_jd(1721142.5), bab.from_julian(0, 3, 26))
+
+    def test_setting_epoch(self):
+        assert bab._set_epoch('seleucid') == data.SELEUCID_EPOCH
+        assert bab._set_epoch('arsacid') == data.ARSACID_EPOCH
+        assert bab._set_epoch('nabonassar') == data.NABONASSAR_EPOCH
+        assert bab._set_epoch('nabopolassar') == data.NABOPOLASSAR_EPOCH
+
     def test_babylon_from_jd_seleucid(self):
-        assert bab.from_julian(-6, 4, 20, 'seleucid') == (306, u'Nisannu', 1)
-        assert bab.from_julian(-6, 3, 22, 'seleucid') == (305, u"Addaru II", 1)
+        self.assertEqual(bab.from_julian(1, 4, 14, 'AG'), (312, u'Nisannu', 1, 'AG'))
+        self.assertEqual(bab.from_julian(0, 3, 26, 'AG'), (311, u'Nisannu', 1, 'AG'))
+        self.assertEqual(bab.from_julian(-1, 4, 7, 'AG'), (310, u'Nisannu', 1, 'AG'))
+        self.assertEqual(bab.from_julian(-2, 4, 17, 'AG'), (309, u'Nisannu', 1, 'AG'))
+        self.assertEqual(bab.from_julian(-3, 3, 29, 'AG'), (308, u'Nisannu', 1, 'AG'))
+        self.assertEqual(bab.from_julian(-4, 4, 8, 'AG'), (307, u'Nisannu', 1, 'AG'))
+        self.assertEqual(bab.from_julian(-5, 4, 20, 'AG'), (306, u'Nisannu', 1, 'AG'))
+        self.assertEqual(bab.from_julian(-5, 3, 22, 'AG'), (305, u"Addaru II", 1, 'AG'))
 
         assert bab.from_julian(40, 4, 2, 'seleucid') == (351, u'Nisannu', 1)
 
@@ -109,7 +126,7 @@ class test_babylon_cal(unittest.TestCase):
         self.assertEqual(bab.previous_visible_nm(dc).tuple(), (2014, 11, 22, 0, 0, 0))
 
     def test_babylon_from_jd_analeptic(self):
-        self.assertEqual(bab.from_julian(46, 3, 27, 'seleucid'), (357, u'Nisannu', 1))
+        self.assertEqual(bab.from_julian(46, 3, 27, 'seleucid'), (356, u'Nisannu', 1))
 
         self.assertEqual(bab.from_julian(100, 3, 2), (410, u'Addaru', 3))
         self.assertEqual(bab.from_julian(100, 4, 2), (411, u'Nisannu', 4))
@@ -130,7 +147,7 @@ class test_babylon_cal(unittest.TestCase):
 
             print('{}\t'.format(dublincount), end='\t')
 
-            print('new_moon.datetime().year < gyear', new_moon.datetime().year < gyear, end='\t')
+            print('new_moon.datetime().year < gyear', new_moon.datetime().year < jyear, end='\t')
             print('new_moon > dublincount', new_moon > dublincount, end='\t')
 
             print("{}\t{}\t{}\t{}".format(x, *one), end='\t')
@@ -157,8 +174,8 @@ class test_babylon_cal(unittest.TestCase):
         bab.load_parker_dubberstein()
         parkerdub = bab.PARKER_DUBBERSTEIN
 
-        assert parkerdub[-604].get('months')
-        assert parkerdub[-581].get('months').get(6) == julian.to_jd(-581, 9, 12)
+        assert parkerdub[-603].get('months')
+        assert parkerdub[-580].get('months').get(6) == julian.to_jd(-580, 9, 12)
 
     def test_year_lengths_parker_dubberstein(self):
         parkerdub = bab.PARKER_DUBBERSTEIN
@@ -201,37 +218,38 @@ class test_babylon_cal(unittest.TestCase):
         assert sum(metonic_months) == 235
 
     def test_bab_to_julian_seleucid(self):
-        assert bab.to_julian(1, 1, 1, era='seleucid') == (-311, 4, 3)
-        assert bab.to_julian(312, 1, 1, era='seleucid') == (1, 4, 14)
-        assert bab.to_julian(311, 2, 3, era='seleucid') == (-1, 4, 26)
+        self.assertEqual(bab.to_julian(1, 1, 1, era='seleucid'), (-310, 4, 3))
+        self.assertEqual(bab.to_julian(312, 1, 1, era='seleucid'), (1, 4, 14))
+        assert bab.to_julian(311, 2, 3, era='seleucid') == (0, 4, 26)
 
         assert bab.to_julian(311, 12, 1, era='seleucid') == (1, 2, 14)
         assert bab.to_julian(311, 12, 5, era='seleucid') == (1, 2, 18)
         assert bab.to_julian(327, 1, 1, era='seleucid') == (16, 3, 29)
 
     def test_bab_to_julian_arsacid(self):
-        assert bab.to_julian(1, 1, 1, era='arsacid') == (-247, 4, 15)
-        assert bab.to_julian(2, 1, 1, era='arsacid') == (-246, 4, 4)
-        assert bab.to_julian(22, 1, 1, era='arsacid') == (-226, 4, 22)
-        assert bab.to_julian(232, 1, 1, era='arsacid') == (-16, 4, 11)
-        assert bab.to_julian(142, 1, 1, era='arsacid') == (-106, 4, 17)
-        assert bab.to_julian(242, 1, 1, era='arsacid') == (-6, 4, 20)
+        self.assertEqual(bab.to_julian(1, 1, 1, era='arsacid'), (-246, 4, 15))
+        assert bab.to_julian(2, 1, 1, era='arsacid') == (-245, 4, 4)
+        assert bab.to_julian(22, 1, 1, era='arsacid') == (-225, 4, 22)
+        assert bab.to_julian(232, 1, 1, era='arsacid') == (-15, 4, 11)
+        assert bab.to_julian(142, 1, 1, era='arsacid') == (-105, 4, 17)
+        assert bab.to_julian(242, 1, 1, era='arsacid') == (-5, 4, 20)
         assert bab.to_julian(263, 1, 1, era='arsacid') == (16, 3, 29)
 
     def test_bab_to_julian_regnal(self):
         self.assertRaises(ValueError, bab.to_julian, 1, 1, 1, era='regnal')
-        assert bab.to_julian(1, 13, 1, era='regnal', ruler='Nabunaid') == (-554, 3, 20)
-        assert bab.to_julian(1, 13, 10, era='regnal', ruler='Nabunaid') == (-554, 3, 29)
+        self.assertEqual(bab.to_julian(1, 13, 1, era='regnal', ruler='Nabunaid'), (-553, 3, 20))
+        assert bab.to_julian(1, 13, 10, era='regnal', ruler='Nabunaid') == (-553, 3, 29)
 
-        assert bab.to_julian(3, 12, 1, era='regnal', ruler='Cyrus') == (-535, 2, 19)
+        assert bab.to_julian(3, 12, 1, era='regnal', ruler='Cyrus') == (-534, 2, 19)
 
-        assert bab.to_julian(4, 13, 1, era='regnal', ruler='Nebuchadnezzar II') == (-600, 3, 18)
+        assert bab.to_julian(4, 13, 1, era='regnal', ruler='Nebuchadnezzar II') == (-599, 3, 18)
 
-        assert bab.to_julian(0, 1, 1, era='regnal', ruler='Nabopolassar') == (-626, 4, 5)
+        assert bab.to_julian(0, 1, 1, era='regnal', ruler='Nabopolassar') == (-625, 4, 5)
 
-        self.assertEqual(bab.to_julian(1, 1, 1, era='regnal', ruler='Nabopolassar'), (-625, 3, 24))
+        self.assertEqual(bab.to_julian(1, 1, 1, era='regnal', ruler='Nabopolassar'), (-624, 3, 24))
+        self.assertEqual(bab.to_julian(0, 1, 1, era='regnal', ruler='Nabopolassar'), (-625, 4, 5))
 
-        assert bab.to_julian(21, 10, 1, era='regnal', ruler='Nabopolassar') == (-604, 1, 3)
+        assert bab.to_julian(21, 10, 1, era='regnal', ruler='Nabopolassar') == (-603, 1, 3)
 
     def test_moons_between_dates(self):
         d1 = ephem.Date('2014/11/1')

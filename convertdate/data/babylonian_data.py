@@ -41,11 +41,12 @@ ASCII_MONTHS = [
 ]
 
 '''Regnal stuff'''
-
+# These aren't the J year that the epoch started, but one greater,
+# Which lets us do straightforward addition/subtraction
 SELEUCID_EPOCH = -311
 ARSACID_EPOCH = -247
-NABONASSAR_EPOCH = -747
-NABOPOLASSAR_EPOCH = -625
+NABONASSAR_EPOCH = -746
+NABOPOLASSAR_EPOCH = -624
 JDC_START_OF_ANALEPTIC = 1737937.5
 JDC_START_OF_REGNAL = 1492870.5
 
@@ -54,71 +55,71 @@ JDC_START_OF_REGNAL = 1492870.5
 rulers = {
     # No calendar information for these dudes
     # # IX
-    # -747: u'Nabonassar',
-    # -734: u'Nabu-nadin-zeri',
+    # -746: u'Nabonassar',
+    # -733: u'Nabu-nadin-zeri',
 
     # # X
-    # -732: u'Nabu-mukin-zeri',
-    # -729: u'Tiglath-Pileser III',
-    # -727: u'Salmanassar V',
-    # -722: u'Marduk-apal-iddina',
-    # -710: u'Sargon II',
-    # -705: u'Sennacherib',
-    # -703: u'Bel-ibni',
-    # -700: u'Aššur-nadim-šum',
-    # -694: u'Nergal-ušezib',
-    # -693: u'Mušezib-Marduk',
+    # -731: u'Nabu-mukin-zeri',
+    # -728: u'Tiglath-Pileser III',
+    # -726: u'Salmanassar V',
+    # -721: u'Marduk-apal-iddina',
+    # -709: u'Sargon II',
+    # -704: u'Sennacherib',
+    # -702: u'Bel-ibni',
+    # -699: u'Aššur-nadim-šum',
+    # -693: u'Nergal-ušezib',
+    # -692: u'Mušezib-Marduk',
 
     # # Sack of babylon
-    # -689: u'Sennacherib (II)',
-    # -681: u'Asarhaddon',
-    # -668: u'Šamaš-šum-ukin',
-    # -648: u'Kandalānu',
-    # -626: u'interregnum',
+    # -688: u'Sennacherib (II)',
+    # -680: u'Asarhaddon',
+    # -667: u'Šamaš-šum-ukin',
+    # -647: u'Kandalānu',
+    # -625: u'interregnum',
 
     # XI
     # Nabopolassar has a year 0
-    -626: u'Nabopolassar',
-    -604: u'Nebuchadnezzar II',
-    -561: u'Amēl-Marduk',
-    -559: u'Nergal-šar-usur', # Labashi-Marduk=year,4 of Nergal-shar-usur
-    -555: u'Nabunaid',
-    -538: u'Cyrus',
+    -625: u'Nabopolassar',
+    -603: u'Nebuchadnezzar II',
+    -560: u'Amēl-Marduk',
+    -558: u'Nergal-šar-usur', # Labashi-Marduk=year,4 of Nergal-shar-usur
+    -554: u'Nabunaid',
+    -537: u'Cyrus',
 
     # Achaemaenid
-    -529: u'Cambyses',
+    -528: u'Cambyses',
     # Bardiya = year 8 of Cambyses
     # Nebuchadnezzar III=year 8 of Cambyses
 
-    -521: u'Darius I', # Nebuchadnezzar IV=year 1 of Darius I
-    -485: u'Xerxes',
-    -464: u'Artaxerxes I',
-    -423: u'Darius II',
-    -404: u'Artaxerxes II Memnon',
-    -358: u'Artaxerxes III Ochus',
-    -337: u'Artaxerxes IV Arses',
-    -335: u'Darius III',
+    -520: u'Darius I', # Nebuchadnezzar IV=year 1 of Darius I
+    -484: u'Xerxes',
+    -463: u'Artaxerxes I',
+    -422: u'Darius II',
+    -403: u'Artaxerxes II Memnon',
+    -357: u'Artaxerxes III Ochus',
+    -336: u'Artaxerxes IV Arses',
+    -334: u'Darius III',
 
     # Seleucid Dynasty
-    -330: u'Alexander the Great', # Year 6 of Alexander = year 5 of Darius III
-    -322: u'Philip III Arrhidaeus', # Year 1 of Philip = year 14 of Alexander
+    -329: u'Alexander the Great', # Year 6 of Alexander = year 5 of Darius III
+    -321: u'Philip III Arrhidaeus', # Year 1 of Philip = year 14 of Alexander
 
     # Year 1 of Alexander = year 8 of Philip
-    -315: u'Alexander IV Aegus',
+    -314: u'Alexander IV Aegus',
     # Years 6-10 of Alexander IV = years 1-5 of Seleucid Era
-    -311: u'Seleucus I Nicator',
-    -281: u'Antiochus I Soter',
-    -261: u'Antiochus II Theos',
+    -310: u'Seleucus I Nicator',
+    -280: u'Antiochus I Soter',
+    -260: u'Antiochus II Theos',
 
     # Year 65 Seleucid era = year 1 Arsacid era
-    -246: u'Seleucus II Callinicus',
-    -225: u'Seleucus III Soter',
-    -222: u'Antiochus the Great',
-    -187: u'Seleucus IV Philopater',
-    -175: u'Antiochus IV Epiphanes',
-    -164: u'Antiochus V Eupator',
-    -160: u'Demetrius I Soter',
-    -149: u'Alexander Balas',
+    -245: u'Seleucus II Callinicus',
+    -224: u'Seleucus III Soter',
+    -221: u'Antiochus the Great',
+    -186: u'Seleucus IV Philopater',
+    -174: u'Antiochus IV Epiphanes',
+    -163: u'Antiochus V Eupator',
+    -159: u'Demetrius I Soter',
+    -148: u'Alexander Balas',
     # : u'Demetrius II Nicator',
     # : u'Antiochus VI Dionysus',
     # : u'Diodotus Tryphon',
@@ -210,31 +211,31 @@ standard_intercalation = {
 # years are in BC (-1 == 1 BC)
 #
 intercalations = {
-    # -747: {3: 'U'},
-    # -728: {},  # No intercalary months
-    # -709: {},  # No intercalary months
-    # -690: {13: 'A'},
-    # -671: {},  # No intercalary months
+    # -746: {3: 'U'},
+    # -727: {},  # No intercalary months
+    # -708: {},  # No intercalary months
+    # -689: {13: 'A'},
+    # -670: {},  # No intercalary months
 
-    # -652: {10: 'U'},
-    -633: {9: 'a', 12: 'u', 15: 'U', 18: 'U'},
-    -614: {1: 'u', 4: 'U', 6: 'u', 9: 'A', 12: 'U', 14: 'A', 17: 'U', 19: 'U'},
-    -595: {3: 'u', 5: 'a', 8: 'A', 12: 'u', 14: 'A', 17: 'A', 19: 'A'},
-    -576: {3: 'U', 5: 'A', 8: 'A', 13: 'U', 14: 'A', 17: 'A'},
+    # -651: {10: 'U'},
+    -632: {9: 'a', 12: 'u', 15: 'U', 18: 'U'},
+    -613: {1: 'u', 4: 'U', 6: 'u', 9: 'A', 12: 'U', 14: 'A', 17: 'U', 19: 'U'},
+    -594: {3: 'u', 5: 'a', 8: 'A', 12: 'u', 14: 'A', 17: 'A', 19: 'A'},
+    -575: {3: 'U', 5: 'A', 8: 'A', 13: 'U', 14: 'A', 17: 'A'},
 
-    -557: {1: 'A', 3: 'A', 5: 'A', 8: 'A', 12: 'U', 14: 'A', 16: 'A'},
-    -538: {2: 'U', 3: 'A', 6: 'A', 9: 'U', 12: 'U', 14: 'A', 16: 'A'},
-    -519: {1: 'U', 3: 'A', 6: 'A', 9: 'U', 11: 'A', 14: 'A', 17: 'U'},
-    -500: {1: 'A', 3: 'A', 6: 'A', 8: 'a', 9: 'A', 14: 'A', 17: 'U'},
-    -481: {1: 'A', 3: 'a', 6: 'a', 8: 'A', 11: 'a', 14: 'a', 17: 'u', 19: 'a'},
+    -556: {1: 'A', 3: 'A', 5: 'A', 8: 'A', 12: 'U', 14: 'A', 16: 'A'},
+    -537: {2: 'U', 3: 'A', 6: 'A', 9: 'U', 12: 'U', 14: 'A', 16: 'A'},
+    -518: {1: 'U', 3: 'A', 6: 'A', 9: 'U', 11: 'A', 14: 'A', 17: 'U'},
+    -499: {1: 'A', 3: 'A', 6: 'A', 8: 'a', 9: 'A', 14: 'A', 17: 'U'},
+    -480: {1: 'A', 3: 'a', 6: 'a', 8: 'A', 11: 'a', 14: 'a', 17: 'u', 19: 'a'},
 
-    -462: {3: 'a', 6: 'a', 8: 'A', 11: 'a', 14: 'a', 17: 'u', 19: 'a'},
-    -443: {3: 'a', 6: 'a', 8: 'a', 11: 'A', 14: 'a', 17: 'u', 19: 'A'},
-    -424: {3: 'A', 6: 'A', 8: 'a', 11: 'A', 14: 'a', 17: 'u', 19: 'a'},
-    -405: {3: 'a', 5: 'a', 8: 'a', 11: 'a', 14: 'a', 17: 'u', 19: 'A'},
-    -386: {2: 'A', 6: 'A', 8: 'A', 11: 'A', 14: 'A', 17: 'U', 19: 'A'},
+    -461: {3: 'a', 6: 'a', 8: 'A', 11: 'a', 14: 'a', 17: 'u', 19: 'a'},
+    -442: {3: 'a', 6: 'a', 8: 'a', 11: 'A', 14: 'a', 17: 'u', 19: 'A'},
+    -423: {3: 'A', 6: 'A', 8: 'a', 11: 'A', 14: 'a', 17: 'u', 19: 'a'},
+    -404: {3: 'a', 5: 'a', 8: 'a', 11: 'a', 14: 'a', 17: 'u', 19: 'A'},
+    -385: {2: 'A', 6: 'A', 8: 'A', 11: 'A', 14: 'A', 17: 'U', 19: 'A'},
 
-    -367: standard_intercalation
+    -366: standard_intercalation
 
 }
 # standard 19 year cycle is used after -366
