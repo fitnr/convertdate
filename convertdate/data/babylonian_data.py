@@ -202,7 +202,15 @@ rulers_alt_names = {
 # JD_START_OF_METONIC = 1587851.5
 
 standard_intercalation = {
-    3: 'A', 6: 'A', 8: 'A', 11: 'A', 14: 'A', 17: 'U', 19: 'A'
+    0: 'A',
+    3: 'A',
+    6: 'A',
+    8: 'A',
+    11: 'A',
+    14: 'A',
+    17: 'U',
+    # For the 3-year bonus cycle that occurs every 687 years
+    21: 'A',
 }
 
 # year: {
@@ -210,32 +218,36 @@ standard_intercalation = {
 # }
 # years are in BC (-1 == 1 BC)
 #
+# This is slightly edited from Plate I in Parker & Dubberstein
+# This version of the cycle runs from 0-18. Year 19 of each cycle has been moved to year 0
+# of the following cycle.
+# The benefit of this is that the Seleucid era begins in year 0 of a cycle, simplifying arithmatic
 intercalations = {
-    # -746: {3: 'U'},
-    # -727: {},  # No intercalary months
-    # -708: {},  # No intercalary months
-    # -689: {13: 'A'},
-    # -670: {},  # No intercalary months
+    # -747: {3: 'U'},
+    # -728: {},  # No intercalary months
+    # -709: {},  # No intercalary months
+    # -690: {13: 'A'},
+    # -671: {},  # No intercalary months
 
-    # -651: {10: 'U'},
-    -632: {9: 'a', 12: 'u', 15: 'U', 18: 'U'},
-    -613: {1: 'u', 4: 'U', 6: 'u', 9: 'A', 12: 'U', 14: 'A', 17: 'U', 19: 'U'},
-    -594: {3: 'u', 5: 'a', 8: 'A', 12: 'u', 14: 'A', 17: 'A', 19: 'A'},
-    -575: {3: 'U', 5: 'A', 8: 'A', 13: 'U', 14: 'A', 17: 'A'},
+    # -652: {10: 'U'},
+    -633: {9: 'a', 12: 'u', 15: 'U', 18: 'U'},
+    -614: {1: 'u', 4: 'U', 6: 'u', 9: 'A', 12: 'U', 14: 'A', 17: 'U'},
+    -595: {0: 'U', 3: 'u', 5: 'a', 8: 'A', 12: 'u', 14: 'A', 17: 'A'},
+    -576: {0: 'A', 3: 'U', 5: 'A', 8: 'A', 13: 'U', 14: 'A', 17: 'A'},
 
-    -556: {1: 'A', 3: 'A', 5: 'A', 8: 'A', 12: 'U', 14: 'A', 16: 'A'},
-    -537: {2: 'U', 3: 'A', 6: 'A', 9: 'U', 12: 'U', 14: 'A', 16: 'A'},
-    -518: {1: 'U', 3: 'A', 6: 'A', 9: 'U', 11: 'A', 14: 'A', 17: 'U'},
-    -499: {1: 'A', 3: 'A', 6: 'A', 8: 'a', 9: 'A', 14: 'A', 17: 'U'},
-    -480: {1: 'A', 3: 'a', 6: 'a', 8: 'A', 11: 'a', 14: 'a', 17: 'u', 19: 'a'},
+    -557: {1: 'A', 3: 'A', 5: 'A', 8: 'A', 12: 'U', 14: 'A', 16: 'A'},
+    -538: {2: 'U', 3: 'A', 6: 'A', 9: 'U', 12: 'U', 14: 'A', 16: 'A'},
+    -519: {1: 'U', 3: 'A', 6: 'A', 9: 'U', 11: 'A', 14: 'A', 17: 'U'},
+    -500: {1: 'A', 3: 'A', 6: 'A', 8: 'a', 9: 'A', 14: 'A', 17: 'U'},
+    -481: {1: 'A', 3: 'a', 6: 'a', 8: 'A', 11: 'a', 14: 'a', 17: 'u'},
 
-    -461: {3: 'a', 6: 'a', 8: 'A', 11: 'a', 14: 'a', 17: 'u', 19: 'a'},
-    -442: {3: 'a', 6: 'a', 8: 'a', 11: 'A', 14: 'a', 17: 'u', 19: 'A'},
-    -423: {3: 'A', 6: 'A', 8: 'a', 11: 'A', 14: 'a', 17: 'u', 19: 'a'},
-    -404: {3: 'a', 5: 'a', 8: 'a', 11: 'a', 14: 'a', 17: 'u', 19: 'A'},
-    -385: {2: 'A', 6: 'A', 8: 'A', 11: 'A', 14: 'A', 17: 'U', 19: 'A'},
+    -462: {0: 'a', 3: 'a', 6: 'a', 8: 'A', 11: 'a', 14: 'a', 17: 'u'},
+    -443: {0: 'a', 3: 'a', 6: 'a', 8: 'a', 11: 'A', 14: 'a', 17: 'u'},
+    -424: {0: 'A', 3: 'A', 6: 'A', 8: 'a', 11: 'A', 14: 'a', 17: 'u'},
+    -405: {0: 'a', 3: 'a', 5: 'a', 8: 'a', 11: 'a', 14: 'a', 17: 'u'},
+    -386: {0: 'A', 2: 'A', 6: 'A', 8: 'A', 11: 'A', 14: 'A', 17: 'U'},
 
-    -366: standard_intercalation
+    -367: standard_intercalation
 
 }
 # standard 19 year cycle is used after -366
