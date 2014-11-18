@@ -100,15 +100,27 @@ def observer(date=None):
 
 
 def metonic_number(julianyear):
-    '''The start year of the current metonic cycle and the current year (1-19) in the cycle'''
+    '''The current year in the 19-year cycle. 20-22 are returned once per 687 years as leap-year correctives'''
     # Input should be the JY of the first day of the Babylonian year in question
-    # Add 1 because cycle runs 1-19 in Parker & Dubberstein
-    return 1 + ((julianyear - 14) % 19)
+    # Determine which 687-year cycle we're in
+
+    # Year in the Seleucid era
+    ag_year = julianyear - data.SELEUCID_EPOCH
+
+    # The special years, outside of the cycle
+    if ag_year > 0 and ag_year % 687 in [0, 685, 686]:
+        return 21 - 687 + amod(ag_year, 687)
+
+    # Year that the currrent cycle began: 1, 688, 1375, 2062
+    base_year = 1 + trunc((ag_year - 1) / 687) * 687
+
+    # For most years, cycle runes 0-18, starts in base_year
+    return (ag_year - base_year) % 19
 
 
 def metonic_start(julianyear):
     '''The julian year that the metonic cycle of input began'''
-    return julianyear - metonic_number(julianyear) + 1
+    return julianyear - metonic_number(julianyear)
 
 
 def intercalate(julianyear, plain=None):
@@ -428,9 +440,7 @@ def _from_jd_analeptic(jdc, era=None, plain=None):
     # We're going to return the date for noon
     jdc = int(jdc) + 0.5
     era = era or 'AG'
-
-    dublincount = ephem.Date(dublin.from_jd(jdc))
-
+    dublincount = dublin.from_jd(jdc)
     gyear, gmonth, gday = gregorian.from_jd(jdc)
 
     # Are we before or after the first NM after the VE of this Gregorian year?
@@ -438,7 +448,15 @@ def _from_jd_analeptic(jdc, era=None, plain=None):
     # A: between Jan 1 and the Vernal Equinox
     # B: between the V.E. and its next new moon
     # C: between that new moon and Dec 31
+    # |------(A)-------VE---(B)---NM---....|
     new_moon = _nvnm_after_pve(dublincount)
+
+    monthstart = previous_visible_nm(dublincount)
+
+    # We're at the 30th day of the month
+    if dublincount < monthstart:
+        monthstart = previous_visible_nm(monthstart.real - 15)
+
 
     # Group A
     # Offset the year
@@ -456,24 +474,18 @@ def _from_jd_analeptic(jdc, era=None, plain=None):
     # Loop through the new moons since the start of the year
     # count forward until we're in the current month
     mooncount = 0
-    while new_moon <= dublincount:
+
+    while new_moon <= monthstart:
         mooncount = 1 + mooncount
         new_moon = ephem.next_new_moon(new_moon)
 
-    monthstart = previous_visible_nm(dublincount)
-
     months = intercalate(gyear, plain)
-    # Sometimes this happens.
-    # Jump to the previous month, accounting that we might be at month 1
-    if dublincount < monthstart:
-        mooncount = amod(mooncount - 1, len(months))
-        monthstart = previous_visible_nm(dublincount - 1)
 
     try:
         month_name = months[mooncount]
     except KeyError:
-        if mooncount > len(months):
-            mooncount = mooncount - len(months)
+        if mooncount > max(months):
+            mooncount = mooncount - max(months)
             gyear += 1
             months = intercalate(gyear, plain)
         month_name = months[mooncount]
