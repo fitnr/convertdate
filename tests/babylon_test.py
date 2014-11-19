@@ -60,7 +60,6 @@ class test_babylon_cal(unittest.TestCase):
                 count12 += 1
                 list12.append(y)
 
-
         self.assertEqual(count13, 253)
         self.assertEqual(count12, 434)
         self.assertEqual(monthcount, 8497)
@@ -298,7 +297,7 @@ class test_babylon_cal(unittest.TestCase):
 
         for x in range(0, 1000, 20):
             w = bab.to_jd(*bab.from_jd(z + x))
-                # print((u"{}\t{}\t{}\t{}\t{}\t{}".format((z + x), w, w - z - x, *bab.from_jd(z + x, plain=1))))
+            # print((u"{}\t{}\t{}\t{}\t{}\t{}".format((z + x), w, w - z - x, *bab.from_jd(z + x, plain=1))))
 
             self.assertEqual((z + x), bab.to_jd(*bab.from_jd(z + x)))
 
@@ -323,7 +322,7 @@ class test_babylon_cal(unittest.TestCase):
     #         if moon.datetime().year > pve.datetime().year:
     #             m -= 1
 
-    #         # print("{}\t{}\t{}\t{}".format(x, m, moon, v))
+    #         print("{}\t{}\t{}\t{}".format(x, m, moon, v))
     #         moon = ephem.next_new_moon(moon)
 
     # def test_na1(self):
@@ -351,8 +350,12 @@ class test_babylon_cal(unittest.TestCase):
     #     print("{}\t{}\t{}".format(x, round(moon.alt * 57.2957795), round(sun.az * 57.2957795)))
 
     def test_glitchy_1700s(self):
+        for y in range(1691, 1691 + 19):
+            ve = ephem.next_vernal_equinox(str(y) + '/1/1')
+            nm = bab.next_visible_nm(ve)
+            print("{}\t{}\t{}".format(ve, nm, round(nm - ve, 1)))
+
         for x in range(2342434 - 1, 2342434 + 5):
-            print(bab._from_jd_analeptic(x + 1, vocal=1, plain=1), end="\n\n")
             self.compare_to_next(x)
 
     def test_overall_days_of_month(self):
@@ -403,13 +406,13 @@ class test_babylon_cal(unittest.TestCase):
 
     def test_metonic_lag(self):
         for x in range(-518, 59 + (19 * 150), 19):
-            #     ve = ephem.next_vernal_equinox(dublin.from_gregorian(x, 1, 1))
-            #     nmve = ephem.next_new_moon(ve)
-            #     print("{}\t{}".format(x, round(nmve - ve, 1)))
-            compare_lunisolar_metonic(x)
+            ve = ephem.next_vernal_equinox(dublin.from_gregorian(bab.metonic_start(x), 1, 1))
+            nmve = ephem.next_new_moon(ve)
+            assert nmve - ve < 20
 
 
 def compare_lunisolar_metonic(start):
+    '''Compare the difference between the NM and VE at the end of the Metoinc Cycle'''
     start = bab.metonic_start(start)
     ve = ephem.next_vernal_equinox(dublin.from_gregorian(start, 1, 1))
     nm = ephem.next_new_moon(ve)
