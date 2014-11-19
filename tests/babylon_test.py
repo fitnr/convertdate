@@ -215,36 +215,6 @@ class test_babylon_cal(unittest.TestCase):
             self.assertGreater(diy, monlen * 29)
             self.assertLess(diy, monlen * 30)
 
-    def test_year_starts(self):
-        for x in range(1700, 2000):
-            pev = bab._nvnm_after_pve(ephem.Date(str(x) + '/6/1'))
-            nex = bab._nvnm_after_pve(ephem.Date(str(x + 1) + '/6/1'))
-
-            diy = round(nex - pev, 1)
-            monlen = len(bab.intercalate(x))
-
-            try:
-                self.assertGreater(diy, monlen * 29)
-                self.assertLess(diy, monlen * 30)
-
-            except AssertionError as e:
-                print('****', pev)
-                print(bab.intercalate(x))
-
-                p = dublin.to_jd(pev.real)
-                n = dublin.to_jd(nex.real)
-
-                # Next year
-                print(gregorian.from_jd(p), bab.from_jd(p))
-                print(gregorian.from_jd(n), bab.from_jd(n))
-
-                jd = int(p)
-
-                for y in range(jd, jd + 730):
-                    self.compare_to_next(y)
-
-                raise e
-
     def test_year_lengths_analeptic(self):
         for year in range(2000, 2200):
             start = bab.to_jd(year, 'Nisannu', 1)
@@ -370,9 +340,7 @@ class test_babylon_cal(unittest.TestCase):
             self.compare_to_next(x)
 
     def test_overall_days_of_month(self):
-
         # nnm = ephem.next_new_moon(10)
-
         # for x in range(1, 100):
         #     pnm = nnm
         #     nnm = ephem.next_new_moon(pnm)
@@ -381,10 +349,12 @@ class test_babylon_cal(unittest.TestCase):
         #     print(round(nnm - pnm, 2), round(nvnm - pvnm, 2))
 
         r = randint(1757584, 2450544)
+
         for x in range(r, r + 10000, 30):
             dc = dublin.from_jd(x)
             nvnm = bab.next_visible_nm(dc)
             pvnm = bab.previous_visible_nm(dc)
+
             try:
                 assert round(nvnm - pvnm, 0) in [29.0, 30.0, 29, 30, 30, 31.0]
             except AssertionError as e:
