@@ -4,13 +4,6 @@ from math import trunc
 import calendar
 from . import hebrew
 
-
-# time tuple/list index
-YEAR = 0
-MONTH = 1
-DAY = 2
-WEEKDAY = 6
-
 # weekdays
 MON = 0
 TUE = 1
@@ -48,20 +41,6 @@ TEVETH = 10
 SHEVAT = 11
 ADAR = 12
 VEADAR = 13
-
-
-def adjust_date(timelist):
-    '''after a date calculation, this method will coerce the list members to ensure
-       that they are within the correct bounds. That is, a date of Oct 32
-       becomes Nov 1, etc'''
-    tm = (timelist[YEAR], timelist[
-        MONTH], timelist[DAY], 0, 0, 0, 0, 0, -1)
-    e = time.mktime(tm)
-    tm = time.localtime(e)
-    timelist[MONTH] = tm[MONTH]
-    timelist[DAY] = tm[DAY]
-
-    return timelist
 
 
 def nth_day_of_month(n, weekday, month, year):
