@@ -412,10 +412,11 @@ def from_gregorian(y, m, d, era=None, plain=None):
     return from_jd(gregorian.to_jd(y, m, d), era, plain=plain)
 
 
-def _visible_nm(dc, func):
-    starting_nm = func(dc)
+def _moon_visibility(newmoon):
+    '''given a new moon (ephem.Date or dublin.dc), when is it visible'''
     babylon = observer()
-    babylon.date = babylon.next_setting(SUN, start=starting_nm)
+    babylon.date = babylon.next_setting(SUN, start=newmoon)
+
     MOON.compute(babylon)
 
     if MOON.alt < 0:
@@ -427,25 +428,50 @@ def _visible_nm(dc, func):
             babylon.date = babylon.next_setting(SUN)
 
     # In Bab reckoning, the day started at sundown
-    # For record-keeping, we use midnight (day count = x.5)
+    # For record-keeping, we use midnight
+    # (day count = x.5)
     return ephem.Date(trunc(babylon.date) - 0.5)
 
 
 def previous_visible_nm(dc):
     '''The previous time the new moon was visible in Babylon'''
-    func = ephem.previous_new_moon
-    return _visible_nm(dc, func)
+    pnm = ephem.previous_new_moon(dc)
+    visible = _moon_visibility(pnm)
+
+    # Extra work to ensure that we're really before the input DC
+    if visible > dc:
+        visible = _moon_visibility(ephem.previous_new_moon(pnm))
+
+    return visible
 
 
 def next_visible_nm(dc):
     '''The next time the new moon will be visible in Babylon'''
-    func = ephem.next_new_moon
-    return _visible_nm(dc, func)
+    nnm = ephem.next_new_moon(dc)
+    visible = _moon_visibility(nnm)
+
+    # One bad possibility:
+    # dc falls between NM and VNM:
+    # ---NM---dc---VNM---
+    # If so, we're actually a month later than the right answer
+    if visible - dc > 28.5:
+        # Check if dc is beform the end of the previous month
+        pnm = ephem.previous_new_moon(dc)
+        pnm_visible = _moon_visibility(pnm)
+        if dc <= pnm_visible:
+            visible = pnm_visible
+
+    return visible
 
 
 def _nvnm_after_pve(dc):
     prev_equinox = ephem.previous_vernal_equinox(dc)
     return next_visible_nm(prev_equinox)
+
+
+def _nvnm_after_nve(dc):
+    next_equinox = ephem.next_vernal_equinox(dc)
+    return next_visible_nm(next_equinox)
 
 
 def moons_between_dates(start, end):
