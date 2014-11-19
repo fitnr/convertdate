@@ -75,6 +75,16 @@ class test_babylon_cal(unittest.TestCase):
         assert bab._cycle_length(374) == 22
         assert bab._cycle_length(1060) == 22
 
+    def test_counting_months(self):
+        assert bab.month_count_to_cycle_year(0) == 0
+        assert bab.month_count_to_cycle_year(13) == 0
+        assert bab.month_count_to_cycle_year(14) == 1
+        assert bab.month_count_to_cycle_year(74) == 5
+        assert bab.month_count_to_cycle_year(76) == 6
+        assert bab.month_count_to_cycle_year(235) == 18
+        assert bab.month_count_to_cycle_year(236) == 19
+        self.assertRaises(ValueError, bab.month_count_to_cycle_year, 900)
+
     def test_intercal_patterns(self):
         assert bab.intercalation(1) == dict(list(zip(list(range(1, 13)), data.MONTHS)))
 
@@ -192,7 +202,7 @@ class test_babylon_cal(unittest.TestCase):
         assert bab.from_julian(46, 3, 16) == (356, 'Addaru', 19, 'AG')
         assert bab.from_julian(46, 3, 18) == (356, 'Addaru', 21, 'AG')
         assert bab.from_julian(46, 3, 20) == (356, 'Addaru', 23, 'AG')
-        assert bab.from_julian(46, 3, 22) == (356, 'Addaru', 25, 'AG')
+        self.assertEqual(bab.from_julian(46, 3, 22), (356, 'Addaru', 25, 'AG'))
         assert bab.from_julian(46, 3, 24) == (356, 'Addaru', 27, 'AG')
         assert bab.from_julian(46, 3, 26) == (356, 'Addaru', 29, 'AG')
         assert bab.from_julian(46, 3, 28) == (357, 'Nisannu', 2, 'AG')
@@ -333,8 +343,9 @@ class test_babylon_cal(unittest.TestCase):
     def test_glitchy_1700s(self):
         for y in range(1691, 1691 + 19):
             ve = ephem.next_vernal_equinox(str(y) + '/1/1')
-            nm = bab.next_visible_nm(ve)
-            print("{}\t{}\t{}".format(ve, nm, round(nm - ve, 1)))
+
+            agy = y - data.SELEUCID_EPOCH
+            assert dublin.from_jd(bab.to_jd(agy, 1, 1)) > ve.real
 
         for x in range(2342434 - 1, 2342434 + 5):
             self.compare_to_next(x)
