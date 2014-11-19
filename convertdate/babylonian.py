@@ -188,6 +188,18 @@ def metonic_month_list(julianyear, plain=None):
     return list(chain(*[list(intercalation(y, start, plain).values()) for y in range(0, c)]))
 
 
+def month_count_to_cycle_year(count):
+    """Given that we're <count> months into a metonic cycle, return the cycle-year [0, 21]"""
+    if count > 272:
+        raise ValueError("Month count too high")
+
+    cumulative = 0
+    for (year, months) in zip(range(0, 22), data.YEAR_LENGTH_LIST):
+        cumulative = cumulative + months
+        if count <= cumulative:
+            return year
+
+
 def _number_months(metonic_year):
     '''Number of months in the metonic year in the standard system'''
     if metonic_year in data.standard_intercalation:
@@ -429,8 +441,9 @@ def _moon_visibility(newmoon):
 
     # In Bab reckoning, the day started at sundown
     # For record-keeping, we use midnight
-    # (day count = x.5)
-    return ephem.Date(trunc(babylon.date) - 0.5)
+    # trunc sets up back to noon,
+    # adding 0.5 takes us to the following midnight (day count = x.5)
+    return ephem.Date(trunc(babylon.date) + 0.5)
 
 
 def previous_visible_nm(dc):
@@ -487,65 +500,46 @@ def moons_between_dates(start, end):
 
 def _from_jd_analeptic(jdc, era=None, plain=None):
     '''Given a Julian Day Count, calculate the Babylonian date analeptically, with choice of eras'''
-    # Calcuate the dublin day count, used in ephem
-    # We're going to return the date for noon
+    # Make sure we're at midnight
     jdc = int(jdc) + 0.5
     era = era or 'AG'
+    # Calcuate the dublin day count, used in ephem
     dublincount = dublin.from_jd(jdc)
-    gyear, gmonth, gday = gregorian.from_jd(jdc)
 
-    # Are we before or after the first NM after the VE of this Gregorian year?
-    # three possible parts of the year we can fall in:
-    # A: between Jan 1 and the Vernal Equinox
-    # B: between the V.E. and its next new moon
-    # C: between that new moon and Dec 31
-    # |------(A)-------VE---(B)---NM---....|
-    new_moon = _nvnm_after_pve(dublincount)
-
+    # Start of the current month
     monthstart = previous_visible_nm(dublincount)
+    monthstart = _correct_handoff(monthstart)
 
-    # We're at the 30th day of the month
-    if dublincount < monthstart:
-        monthstart = previous_visible_nm(monthstart.real - 15)
+    # We're now at the start of the metonic cycle that contains
+    # the year we're in. Call this M0
+    metonicstart = metonic_start(monthstart.datetime().year)
 
+    # This is a list of all the months in this cycle
+    month_list = metonic_month_list(metonicstart, plain)
+    past_months = []
 
-    # Group A
-    # Offset the year
-    if new_moon.datetime().year < gyear:
-        gyear = gyear - 1
+    # Start of the BY that begins in JY M0
+    moon = _nvnm_after_nve('{}/1/1'.format(metonicstart))
 
-    # Group B
-    # reset, so we count from the previous year's VE's NNM
-    # Also, offset the year
-    if new_moon > dublincount:
-        gyear = gyear - 1
-        new_moon = _nvnm_after_pve(dublincount - 31)
+    # Loop through NMs until we arrive at close to monthstart
+    # 3 is a fudge factor to make sure we don't fall between NM and visibility
+    # We move months from the active list to a past list
+    while moon + 3 < monthstart:
+        moon = ephem.next_new_moon(moon)
+        past_months.append(month_list.pop(0))
 
-    # Group A, B or C
-    # Loop through the new moons since the start of the year
-    # count forward until we're in the current month
-    mooncount = 0
+    # month name is next month in queue
+    month_name = month_list[0]
 
-    while new_moon <= monthstart:
-        mooncount = 1 + mooncount
-        new_moon = ephem.next_new_moon(new_moon)
+    # set year with month name and epoch
+    cycleyear = month_count_to_cycle_year(len(past_months) + 1)
 
-    months = intercalate(gyear, plain)
-
-    try:
-        month_name = months[mooncount]
-    except KeyError:
-        if mooncount > max(months):
-            mooncount = mooncount - max(months)
-            gyear += 1
-            months = intercalate(gyear, plain)
-        month_name = months[mooncount]
-
-    day_count = int(ceil(dublincount - monthstart)) + 1
-
+    year = metonicstart + cycleyear
     epoch = _set_epoch(era)
 
-    return gyear - epoch, month_name, day_count, era
+    day_count = int(dublincount - monthstart) + 1
+
+    return year - epoch, month_name, day_count, era
 
 
 def day_duration(jdc):

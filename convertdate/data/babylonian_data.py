@@ -213,6 +213,16 @@ standard_intercalation = {
     21: 'A',
 }
 
+YEAR_LENGTH_LIST = [
+    13, 12, 12,
+    13, 12, 12,
+    13, 12, 13,
+    12, 12, 13,
+    12, 12, 13,
+    12, 12, 13,
+    12, 12, 12, 13
+]
+
 # year: {
 #    periods [ intercalations]
 # }
