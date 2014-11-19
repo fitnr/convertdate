@@ -64,6 +64,17 @@ class test_babylon_cal(unittest.TestCase):
         self.assertEqual(count12, 434)
         self.assertEqual(monthcount, 8497)
 
+    def test_cycle_length(self):
+        assert bab._cycle_length(-300) == 19
+        assert bab._cycle_length(389) == 19
+        assert bab._cycle_length(354) == 19
+        assert bab._cycle_length(377) == 19
+
+        assert bab._cycle_length(376) == 22
+        assert bab._cycle_length(355) == 22
+        assert bab._cycle_length(374) == 22
+        assert bab._cycle_length(1060) == 22
+
     def test_intercal_patterns(self):
         assert bab.intercalation(1) == dict(list(zip(list(range(1, 13)), data.MONTHS)))
 

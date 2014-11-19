@@ -99,23 +99,46 @@ def observer(date=None):
     return BABYLON
 
 
+def _agyear(julianyear):
+    '''Convert to AG (Seleucid) Epoch'''
+    return julianyear - data.SELEUCID_EPOCH
+
+
 def metonic_number(julianyear):
     '''The current year in the 19-year cycle. 20-22 are returned once per 687 years as leap-year correctives'''
     # Input should be the JY of the first day of the Babylonian year in question
     # Determine which 687-year cycle we're in
 
     # Year in the Seleucid era
-    ag_year = julianyear - data.SELEUCID_EPOCH
+    ag_year = _agyear(julianyear)
 
     # The special years, outside of the cycle
     if ag_year > 0 and ag_year % 687 in [0, 685, 686]:
         return 21 - 687 + amod(ag_year, 687)
 
-    # Year that the currrent cycle began: 1, 688, 1375, 2062
-    base_year = 1 + trunc((ag_year - 1) / 687) * 687
+    base_year = _687_base_year(julianyear)
 
     # For most years, cycle runes 0-18, starts in base_year
     return (ag_year - base_year) % 19
+
+
+def _687_base_year(julianyear):
+    '''Year that the currrent cycle began: 1, 688, 1375, 2062'''
+    return 1 + trunc((_agyear(julianyear) - 1) / 687) * 687
+
+
+def _cycle_length(julianyear):
+    '''Length of the "metonic" cycle of the given year. Usually 19, once every 687 years it's 22'''
+    # cycleyear will be in [0, 686]
+    cycleyear = _agyear(julianyear) - _687_base_year(julianyear)
+
+    # The 687-year super-cycle is 35 metonic cycles and one 22-year leap cycle. (19 * 35 + 22 = 687)
+    # Integer division checks current sub-cycle of the super-cycle
+    # 35 or 36 mean that we're in the last 22 years of the 687-year super-cycle
+    if trunc(cycleyear / 19) >= 35:
+        return 22
+
+    return 19
 
 
 def metonic_start(julianyear):
@@ -159,8 +182,10 @@ def intercalation_pattern(key, plain=None):
     return dict(list(zip(list(range(1, len(months) + 1)), months)))
 
 
-def standard_metonic_month_list():
-    return list(chain(*[list(intercalation(y).values()) for y in range(1, 20)]))
+def metonic_month_list(julianyear, plain=None):
+    start = metonic_start(julianyear)
+    c = _cycle_length(julianyear) - 1
+    return list(chain(*[list(intercalation(y, start, plain).values()) for y in range(0, c)]))
 
 
 def _number_months(metonic_year):
