@@ -19,6 +19,7 @@ def amod(a, b):
     return b if modded is 0 else modded
 
 
+# Sane people of the world, use calendar.weekday!
 def jwday(j):
     '''Calculate day of week from Julian day'''
     return math.trunc((j + 0.5)) % 7
@@ -28,7 +29,7 @@ def weekday_before(weekday, jd):
     return jd - jwday(jd - weekday)
 
 
-# @param weekday      Day of week desired, 0 = Sunday
+# @param weekday      Day of week desired, 0 = Monday
 # @param jd           Julian date to begin search
 # @param direction    1 = next weekday, -1 = last weekday
 # @param offset       Offset from jd to begin search
