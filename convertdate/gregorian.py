@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
 from .utils import floor
+from calendar import isleap as leap
 
 EPOCH = 1721425.5
 
 HAVE_30_DAYS = (4, 6, 9, 11)
 HAVE_31_DAYS = (1, 3, 5, 7, 8, 10, 12)
-
-def leap(year):
-    return year % 4 == 0 and not ((year % 100) == 0 and (year % 400) != 0)
 
 def legal_date(year, month, day):
     '''Check if this is a legal date in the Gregorian calendar'''
