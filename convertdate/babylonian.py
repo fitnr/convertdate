@@ -498,6 +498,13 @@ def moons_between_dates(start, end):
     return count
 
 
+def _correct_handoff(dublin_monthstart):
+    if dublin_monthstart < dublin.from_julian(46, 3, 1):
+        return ephem.Date('46/2/26')
+    else:
+        return dublin_monthstart
+
+
 def _from_jd_analeptic(jdc, era=None, plain=None):
     '''Given a Julian Day Count, calculate the Babylonian date analeptically, with choice of eras'''
     # Make sure we're at midnight
