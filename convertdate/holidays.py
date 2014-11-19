@@ -27,21 +27,6 @@ OCT = 10
 NOV = 11
 DEC = 12
 
-# Hebrew months
-NISAN = 1
-IYYAR = 2
-SIVAN = 3
-TAMMUZ = 4
-AV = 5
-ELUL = 6
-TISHRI = 7
-HESHVAN = 8
-KISLEV = 9
-TEVETH = 10
-SHEVAT = 11
-ADAR = 12
-VEADAR = 13
-
 
 def nth_day_of_month(n, weekday, month, year):
     '''Return (year, month, day) tuple that represents nth weekday of month in year. If n==0, returns last weekday of month'''
@@ -238,14 +223,14 @@ def new_years_eve(year):
 
 
 def hanukkah(year, eve=False):
-    year, month, day = hebrew.to_jd_gregorianyear(year, KISLEV, 25)
+    year, month, day = hebrew.to_jd_gregorianyear(year, hebrew.KISLEV, 25)
     if eve:
         day = day - 1
     return year, month, day
 
 
 def rosh_hashanah(year, eve=False):
-    year, month, day = hebrew.to_jd_gregorianyear(year, TISHRI, 1)
+    year, month, day = hebrew.to_jd_gregorianyear(year, hebrew.TISHRI, 1)
     if eve:
         day = day - 1
     return year, month, day
@@ -260,7 +245,7 @@ def yom_kippur(year, eve=False):
 
 
 def passover(year, eve=False):
-    year, month, day = hebrew.to_jd_gregorianyear(year, NISAN, 15)
+    year, month, day = hebrew.to_jd_gregorianyear(year, hebrew.NISAN, 15)
     if eve:
         day = day - 1
 

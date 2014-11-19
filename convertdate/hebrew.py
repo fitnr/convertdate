@@ -5,6 +5,21 @@ from .utils import jwday, monthcalendarhelper
 EPOCH = 347995.5
 HEBREW_YEAR_OFFSET = 3760
 
+# Hebrew months
+NISAN = 1
+IYYAR = 2
+SIVAN = 3
+TAMMUZ = 4
+AV = 5
+ELUL = 6
+TISHRI = 7
+HESHVAN = 8
+KISLEV = 9
+TEVETH = 10
+SHEVAT = 11
+ADAR = 12
+VEADAR = 13
+
 
 def leap(year):
     #//  Is a given Hebrew year a leap year ?
@@ -57,23 +72,23 @@ def month_days(year, month):
     if month > 13:
         raise ValueError("Incorrect month index")
 
-    #//  First of all, dispose of fixed-length 29 day months
-    if month in (2, 4, 6, 10, 13):
+    # First of all, dispose of fixed-length 29 day months
+    if month in (IYYAR, TAMMUZ, ELUL, TEVETH, VEADAR):
         return 29
 
-    #//  If it's not a leap year, Adar has 29 days
-    if month == 12 and not leap(year):
+    # If it's not a leap year, Adar has 29 days
+    if month == ADAR and not leap(year):
         return 29
 
-    #//  If it's Heshvan, days depend on length of year
-    if month == 8 and (year_days(year) % 10) != 5:
+    # If it's Heshvan, days depend on length of year
+    if month == HESHVAN and (year_days(year) % 10) != 5:
         return 29
 
-    #//  Similarly, Kislev varies with the length of year
-    if month == 9 and (year_days(year) % 10) == 3:
+    # Similarly, Kislev varies with the length of year
+    if month == KISLEV and (year_days(year) % 10) == 3:
         return 29
 
-    #//  Nope, it's a 30 day month
+    # Nope, it's a 30 day month
     return 30
 
 
