@@ -303,11 +303,15 @@ def _numeral_month(agyear, month):
     if type(month) == float:
         month = int(month)
 
+    months = ag_intercalate(agyear)
+
     if type(month) == int:
-        return month
+        if month <= len(months):
+            return month
+        else:
+            raise ValueError("Invalid month")
 
     # Flip it around to get the month
-    months = ag_intercalate(agyear)
     inverted = dict((v, k) for k, v in list(months.items()))
 
     try:
@@ -418,6 +422,8 @@ def _to_jd_analeptic(year, month, day, era):
     if era.lower() not in ['arsacid', 'nabonassar', 'seleucid']:
         era = 'seleucid'
 
+    month = _numeral_month(year, month)
+
     epoch = _set_epoch(era)
     jyear = year + epoch
 
@@ -427,8 +433,6 @@ def _to_jd_analeptic(year, month, day, era):
     metonicstart = jyear - m
 
     moon = _nvnm_after_nve(dublin.from_julian(metonicstart, 1, 1))
-
-    month = _numeral_month(year, month)
 
     # Number of months we're into the current cycle
     months = month + sum(data.YEAR_LENGTH_LIST[0:m])
