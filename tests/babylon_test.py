@@ -179,21 +179,19 @@ class test_babylon_cal(unittest.TestCase):
 
     def test_prev_visible_nm(self):
         dc = dublin.from_gregorian(2014, 11, 25)
-        self.assertEqual(bab.previous_visible_nm(dc).tuple(), (2014, 11, 22, 0, 0, 0))
+        self.assertEqual(bab.previous_visible_nm(dc).tuple(), (2014, 11, 23, 0, 0, 0))
 
     def test_babylon_from_jd_analeptic(self):
-        self.assertEqual(bab.from_julian(46, 3, 27, 'seleucid'), (357, u'Nisannu', 1, 'AG'))
+        self.assertEqual(bab.from_julian(100, 3, 2), (410, u'Addaru', 2, 'AG'))
+        self.assertEqual(bab.from_julian(100, 4, 2), (411, u'Nisannu', 3, 'AG'))
+        self.assertEqual(bab.from_julian(100, 5, 1), (411, u'Aiaru', 3, 'AG'))
+        self.assertEqual(bab.from_julian(100, 6, 1), (411, u'Simanu', 4, 'AG'))
 
-        self.assertEqual(bab.from_julian(100, 3, 2), (410, u'Addaru', 3, 'AG'))
-        self.assertEqual(bab.from_julian(100, 4, 2), (411, u'Nisannu', 4, 'AG'))
-        self.assertEqual(bab.from_julian(100, 5, 1), (411, u'Aiaru', 4, 'AG'))
-        self.assertEqual(bab.from_julian(100, 6, 1), (411, u'Simanu', 5, 'AG'))
-
-        for x in range(1757582, 1757582 + 100):
+        for x in range(1757582, 1757582 + 100, 2):
             bab.from_jd(x - 1, plain=1)
             self.compare_to_next(x)
 
-        self.assertEqual(bab.from_gregorian(2014, 11, 7, plain=1), (2325, 'Arahsamnu', 15, 'AG'))
+        self.assertEqual(bab.from_gregorian(2014, 11, 7, plain=1), (2325, 'Arahsamnu', 14, 'AG'))
 
     def test_pd_analeptic_handoff(self):
         assert bab.from_julian(46, 2, 26) == (356, 'Addaru', 1, 'AG')
@@ -211,7 +209,8 @@ class test_babylon_cal(unittest.TestCase):
         self.assertEqual(bab.from_julian(46, 3, 22), (356, 'Addaru', 25, 'AG'))
         assert bab.from_julian(46, 3, 24) == (356, 'Addaru', 27, 'AG')
         assert bab.from_julian(46, 3, 26) == (356, 'Addaru', 29, 'AG')
-        assert bab.from_julian(46, 3, 28) == (357, 'Nisannu', 2, 'AG')
+        self.assertEqual(bab.from_julian(46, 3, 27), (356, 'Addaru', 30, 'AG'))
+        assert bab.from_julian(46, 3, 28) == (357, 'Nisannu', 1, 'AG')
 
     def test_load_parker_dubberstein(self):
         bab.load_parker_dubberstein()
@@ -223,7 +222,7 @@ class test_babylon_cal(unittest.TestCase):
     def test_year_lengths_parker_dubberstein(self):
         parkerdub = bab.PARKER_DUBBERSTEIN
 
-        for year in list(range(-311, -1)) + list(range(1, 41)):
+        for year in range(-311, -41, 2):
             diy = days_in_year(parkerdub, year)
 
             monlen = len(bab.intercalate(year))
@@ -232,13 +231,23 @@ class test_babylon_cal(unittest.TestCase):
             self.assertLess(diy, monlen * 30)
 
     def test_year_lengths_analeptic(self):
-        for year in range(2000, 2200):
+        for year in range(2000, 2190, 2):
             start = bab.to_jd(year, 'Nisannu', 1)
-            monlen = len(bab.intercalate(gregorian.from_jd(start)[0]))
-            end = bab.to_jd(year, monlen, 30)
 
-            self.assertLess(end - start, monlen * 30)
-            self.assertGreater(end - start, monlen * 29)
+            gyear = gregorian.from_jd(start)[0]
+            m = len(bab.intercalate(gyear))
+
+            end = bab.to_jd(year + 1, 1, 1)
+
+            try:
+                self.assertLess(end - start, m * 30)
+                self.assertGreater(end - start, m * 29)
+            except AssertionError as e:
+                print('year (AG, CE)', year, gyear)
+                print('start', gregorian.from_jd(start))
+                print('end', gregorian.from_jd(end))
+                print('months', m)
+                raise e
 
     def test_metonic_cycle(self):
         dc = dublin.from_gregorian(1900, 3, 19)
@@ -292,11 +301,17 @@ class test_babylon_cal(unittest.TestCase):
     def test_bab_to_jd(self):
         z = gregorian.to_jd(1900, 3, 19)
 
-        for x in range(0, 1000, 20):
-            w = bab.to_jd(*bab.from_jd(z + x))
-            # print((u"{}\t{}\t{}\t{}\t{}\t{}".format((z + x), w, w - z - x, *bab.from_jd(z + x, plain=1))))
+        for x in range(0, 1000, 50):
+            try:
+                assert z + x == bab.to_jd(*bab.from_jd(z + x))
 
-            self.assertEqual((z + x), bab.to_jd(*bab.from_jd(z + x)))
+            except AssertionError:
+                raise AssertionError("{} != {}, Baby: {}".format(
+                    gregorian.from_jd(z + x), gregorian.from_jd(bab.to_jd(*bab.from_jd(z + x))), bab.from_jd(z + x)))
+
+            except (StopIteration, IndexError) as e:
+                print(z + x, gregorian.from_jd(z + x))
+                raise e
 
         assert bab.to_jd(*bab.from_jd(z)) == z
 
@@ -347,11 +362,11 @@ class test_babylon_cal(unittest.TestCase):
     #     print("{}\t{}\t{}".format(x, round(moon.alt * 57.2957795), round(sun.az * 57.2957795)))
 
     def test_glitchy_1700s(self):
-        for y in range(1691, 1691 + 19):
+        for y in range(1691 - 19, 1730, 19):
             ve = ephem.next_vernal_equinox(str(y) + '/1/1')
 
             agy = y - data.SELEUCID_EPOCH
-            assert dublin.from_jd(bab.to_jd(agy, 1, 1)) > ve.real
+            self.assertGreater(dublin.from_jd(bab.to_jd(agy, 1, 1)), ve.real)
 
         for x in range(2342434 - 1, 2342434 + 5):
             self.compare_to_next(x)
@@ -367,7 +382,7 @@ class test_babylon_cal(unittest.TestCase):
 
         r = randint(1757584, 2450544)
 
-        for x in range(r, r + 10000, 30):
+        for x in range(r, r + 10000, 50):
             dc = dublin.from_jd(x)
             nvnm = bab.next_visible_nm(dc)
             pvnm = bab.previous_visible_nm(dc)
@@ -403,7 +418,7 @@ class test_babylon_cal(unittest.TestCase):
     #     track_lunisolar_metonic(45+19)
 
     def test_metonic_lag(self):
-        for x in range(-518, 59 + (19 * 150), 19):
+        for x in range(-518, 59 + (19 * 100), 114):
             ve = ephem.next_vernal_equinox(dublin.from_gregorian(bab.metonic_start(x), 1, 1))
             nmve = ephem.next_new_moon(ve)
             assert nmve - ve < 20
