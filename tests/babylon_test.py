@@ -9,13 +9,13 @@ from convertdate import babylonian as bab
 from convertdate.data import babylonian_data as data
 import ephem
 from random import randint
-from math import trunc
+# from math import trunc
 
 
 class test_babylon_cal(unittest.TestCase):
 
-    def setUp(self):
-        self.string = "{jyear}\t{jdate}\t{daysinyear}\t{m}\t{ve}\t{nm}"
+    # def setUp(self):
+    #     self.string = "{jyear}\t{jdate}\t{daysinyear}\t{m}\t{ve}\t{nm}"
 
     def test_metonic(self):
         assert bab.metonic_number(-613) == 1
