@@ -315,6 +315,9 @@ class test_babylon_cal(unittest.TestCase):
 
         assert bab.to_jd(*bab.from_jd(z)) == z
 
+        self.assertRaises(ValueError, bab.to_jd, 1900, 'Addaru', -1)
+        self.assertRaises(ValueError, bab.to_jd, 1900, -1, 1)
+
     # def test_limits_of_metonic(self):
     #     print('test_limits_of_metonic')
     #     for y in list(range(-595, 0, 38)) + list(range(14, 4000, 38)):

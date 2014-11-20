@@ -376,8 +376,8 @@ def from_jd(cjdn, era=None, plain=None):
 
 
 def to_jd(year, month, day, era=None, ruler=None):
-    if month < 1 or day < 1:
-        raise ValueError("Month and day must be at least one")
+    if day < 1 or (type(month) in [int, float] and month < 1):
+        raise ValueError("Month and day must be at least 1")
 
     era = era or ''
 
