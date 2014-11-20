@@ -85,6 +85,12 @@ class test_babylon_cal(unittest.TestCase):
         assert bab.month_count_to_cycle_year(236) == 19
         self.assertRaises(ValueError, bab.month_count_to_cycle_year, 900)
 
+    def test_iterate_metonic_months(self):
+        self.assertEqual(len(list(bab.iterate_metonic_months(387))), 235)
+        assert len(list(bab.iterate_metonic_months(1063))) == 235 + 37
+        assert len(list(bab.iterate_metonic_months(1072))) == 235
+        assert len(list(bab.iterate_metonic_months(2437))) == 235 + 37
+
     def test_intercal_patterns(self):
         assert bab.intercalation(1) == dict(list(zip(list(range(1, 13)), data.MONTHS)))
 

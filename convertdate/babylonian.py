@@ -112,25 +112,31 @@ def metonic_number(julianyear):
     # Year in the Seleucid era
     ag_year = _agyear(julianyear)
 
+    return ag_metonic_number(ag_year)
+
+
+def ag_metonic_number(ag_year):
     # The special years, outside of the cycle
     if ag_year > 0 and ag_year % 687 in [0, 685, 686]:
         return 21 - 687 + amod(ag_year, 687)
 
-    base_year = _687_base_year(julianyear)
+    base_year = _687_base_year(ag_year)
 
     # For most years, cycle runes 0-18, starts in base_year
     return (ag_year - base_year) % 19
 
 
-def _687_base_year(julianyear):
+def _687_base_year(ag_year):
     '''Year that the currrent cycle began: 1, 688, 1375, 2062'''
-    return 1 + trunc((_agyear(julianyear) - 1) / 687) * 687
+    return 1 + trunc((ag_year - 1) / 687) * 687
 
 
 def _cycle_length(julianyear):
     '''Length of the "metonic" cycle of the given year. Usually 19, once every 687 years it's 22'''
+    ag_year = _agyear(julianyear)
+
     # cycleyear will be in [0, 686]
-    cycleyear = _agyear(julianyear) - _687_base_year(julianyear)
+    cycleyear = ag_year - _687_base_year(ag_year)
 
     # The 687-year super-cycle is 35 metonic cycles and one 22-year leap cycle. (19 * 35 + 22 = 687)
     # Integer division checks current sub-cycle of the super-cycle
@@ -182,10 +188,11 @@ def intercalation_pattern(key, plain=None):
     return dict(list(zip(list(range(1, len(months) + 1)), months)))
 
 
-def metonic_month_list(julianyear, plain=None):
+def iterate_metonic_months(julianyear, plain=None):
     start = metonic_start(julianyear)
-    c = _cycle_length(julianyear) - 1
-    return list(chain(*[list(intercalation(y, start, plain).values()) for y in range(0, c)]))
+    c = _cycle_length(julianyear)
+    years = range(start, start + c)
+    return chain(*[list(intercalate(y, plain).values()) for y in years])
 
 
 def month_count_to_cycle_year(count):
@@ -522,7 +529,7 @@ def _from_jd_analeptic(jdc, era=None, plain=None):
     metonicstart = metonic_start(monthstart.datetime().year)
 
     # This is a list of all the months in this cycle
-    month_list = metonic_month_list(metonicstart, plain)
+    month_iter = iterate_metonic_months(metonicstart, plain)
     past_months = []
 
     # Start of the BY that begins in JY M0
@@ -533,10 +540,10 @@ def _from_jd_analeptic(jdc, era=None, plain=None):
     # We move months from the active list to a past list
     while moon + 3 < monthstart:
         moon = ephem.next_new_moon(moon)
-        past_months.append(month_list.pop(0))
+        past_months.append(next(month_iter))
 
     # month name is next month in queue
-    month_name = month_list[0]
+    month_name = next(month_iter)
 
     # set year with month name and epoch
     cycleyear = month_count_to_cycle_year(len(past_months) + 1)
