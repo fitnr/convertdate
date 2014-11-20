@@ -159,6 +159,13 @@ def intercalate(julianyear, plain=None):
     return intercalation(number, start, plain)
 
 
+def ag_intercalate(agyear, plain=None):
+    '''For a Julian year, use the intercalation pattern to return a dict of the months'''
+    number = ag_metonic_number(agyear)
+    start = agyear - number
+    return intercalation(number, start, plain)
+
+
 def intercalation(mnumber, mstart=0, plain=None):
     '''A list of months for a given year (number) in a particular metonic cycle (start).
     Defaults to the standard intercalation'''
@@ -289,6 +296,33 @@ def _set_epoch(era=None):
         return data.SELEUCID_EPOCH
 
 
+def _numeral_month(agyear, month):
+    '''Return the numeral of a Babylonian month'''
+
+    # easy cases
+    if type(month) == float:
+        month = int(month)
+
+    if type(month) == int:
+        return month
+
+    # Flip it around to get the month
+    months = ag_intercalate(agyear)
+    inverted = dict((v, k) for k, v in list(months.items()))
+
+    try:
+        month = inverted[month]
+    except KeyError:
+        months = ag_intercalate(agyear, plain=1)
+        inverted = dict((v, k) for k, v in list(months.items()))
+
+        month = inverted[month]
+    except Exception as e:
+        raise e
+
+    return month
+
+
 def from_jd(cjdn, era=None, plain=None):
     '''Calculate Babylonian date from Julian Day Count'''
 
@@ -342,6 +376,9 @@ def from_jd(cjdn, era=None, plain=None):
 
 
 def to_jd(year, month, day, era=None, ruler=None):
+    if month < 1 or day < 1:
+        raise ValueError("Month and day must be at least one")
+
     era = era or ''
 
     if era.lower() not in ['arsacid', 'seleucid', 'ag', 'regnal'] or era.lower == 'ag':
@@ -364,6 +401,8 @@ def to_jd(year, month, day, era=None, ruler=None):
     # our julian year and month.
     parkerdub = load_parker_dubberstein()
 
+    month = _numeral_month(jyear, month)
+
     try:
         pdentry = parkerdub[jyear]['months'][month]
     except KeyError:
@@ -382,35 +421,24 @@ def _to_jd_analeptic(year, month, day, era):
     epoch = _set_epoch(era)
     jyear = year + epoch
 
-    # Py 2/3 compat. This is a bad way to do things?
-    try:
-        stringmonth = type(month) in [str, unicode]
-    except NameError:
-        stringmonth = type(month) in [str]
+    # cycle number
+    m = ag_metonic_number(year)
 
-    if stringmonth:
-        months = intercalate(jyear)
-        inverted = dict((v, k) for k, v in list(months.items()))
+    metonicstart = jyear - m
 
-        try:
-            month = inverted[month]
-        except KeyError:
-            months = intercalate(jyear, plain=1)
-            inverted = dict((v, k) for k, v in list(months.items()))
+    moon = _nvnm_after_nve(dublin.from_julian(metonicstart, 1, 1))
 
-            month = inverted[month]
-        except Exception as e:
-            raise e
+    month = _numeral_month(year, month)
 
-    start_year = dublin.from_julian(jyear, 5, 1)
-    moon = _nvnm_after_pve(start_year)
+    # Number of months we're into the current cycle
+    months = month + sum(data.YEAR_LENGTH_LIST[0:m])
 
-    for x in range(1, month):
+    for x in range(1, months):
         moon = ephem.next_new_moon(moon)
 
-    pvnm = previous_visible_nm(moon + 2)
+    vnm = _moon_visibility(moon)
 
-    outdc = floor(pvnm + day) - 0.5
+    outdc = floor(vnm + day) - 0.5
 
     return dublin.to_jd(outdc)
 
