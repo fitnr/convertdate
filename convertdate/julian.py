@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from math import trunc
+from .utils import jwday, monthcalendarhelper
 from .gregorian import to_jd as gregorian_to_jd, from_jd as gregorian_from_jd
 
 J0000 = 1721424.5  # Julian date of Gregorian epoch: 0000-01-01
@@ -11,18 +12,26 @@ JULIAN_EPOCH = 1721423.5
 HAVE_30_DAYS = (4, 6, 9, 11)
 HAVE_31_DAYS = (1, 3, 5, 7, 8, 10, 12)
 
+
 def leap(year):
     if year % 4 and year > 0:
         return 0
     else:
         return 3
 
-def legal_date(year, month, day):
-    '''Check if this is a legal date in the Julian calendar'''
+
+def month_length(year, month):
     if month == 2:
         daysinmonth = 29 if leap(year) else 28
     else:
         daysinmonth = 30 if month in HAVE_30_DAYS else 31
+
+    return daysinmonth
+
+
+def legal_date(year, month, day):
+    '''Check if this is a legal date in the Julian calendar'''
+    daysinmonth = month_length(year, month)
 
     if not (0 < day <= daysinmonth):
         raise IndexError("Month {} doesn't have a day {}".format(month, day))
@@ -77,3 +86,10 @@ def from_gregorian(year, month, day):
 
 def to_gregorian(year, month, day):
     return gregorian_from_jd(to_jd(year, month, day))
+
+
+def monthcalendar(year, month):
+    start_weekday = jwday(to_jd(year, month, 1))
+    monthlen = month_length(year, month)
+
+    return monthcalendarhelper(start_weekday, monthlen)

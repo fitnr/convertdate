@@ -65,3 +65,14 @@ def n_weeks(weekday, jd, nthweek):
         j += next_weekday(weekday, jd)
 
     return j
+
+
+def monthcalendarhelper(start_weekday, month_length):
+    end_weekday = start_weekday + (month_length - 1) % 7
+
+    lpad = (start_weekday + 1) % 7
+    rpad = (5 - end_weekday % 7) % 6
+
+    days = [None] * lpad + list(range(1, 1 + month_length)) + rpad * [None]
+
+    return [days[i:i + 7] for i in range(0, len(days), 7)]

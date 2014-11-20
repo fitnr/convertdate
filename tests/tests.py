@@ -140,9 +140,11 @@ class CalTestCase(unittest.TestCase):
         assert mayan.translate_haab("Wayeb'") == 'Nameless'
 
     def test_mayan_predictions(self):
-        assert mayan.next_haab((16, "Sotz'"), self.c - 10) == self.c
-        assert mayan.next_haab((0, "Pop"), 2456849.5) == 2457114.5
-        assert mayan.next_tzolkin((4, 'Ajaw'), 2456182.5) == 2456282.5
+        assert mayan.next_haab("Sotz'", self.c) == 2266280.5
+
+        for h in mayan.HAAB_MONTHS:
+            assert mayan.to_haab(mayan.next_haab(h, self.c)) == (1, h)
+
         assert mayan.next_tzolkin_haab((13, "Ajaw"), (3, "Kumk'u"), 2456849.5) == 2463662.5
 
     def test_french_republican(self):
@@ -303,6 +305,60 @@ class CalTestCase(unittest.TestCase):
 
         assert julianday.to_datetime(self.x + 0.525) == datetime(2016, 2, 29, 12, 36, tzinfo=pytz.utc)
 
+    def test_month_length(self):
+        assert indian_civil.month_length(1922, 1) == 31
+        assert indian_civil.month_length(1923, 1) == 30
+
+        assert julian.month_length(1582, 10) == 31
+        assert julian.month_length(1977, 2) == 28
+        assert julian.month_length(1900, 2) == 29
+        assert julian.month_length(1904, 2) == 29
+
+        assert islamic.month_length(1436, 1) == 30
+        assert islamic.month_length(1436, 2) == 29
+        assert islamic.month_length(1436, 12) == 30
+
+        assert persian.month_length(1354, 12) == 30
+        assert persian.month_length(1355, 12) == 29
+
+    def test_monthcalendar(self):
+        assert indian_civil.monthcalendar(1936, 8).pop(0).pop(4) == 1
+        assert indian_civil.monthcalendar(1927, 2).pop(0).pop(4) == 1
+        assert indian_civil.monthcalendar(1922, 1).pop().pop(4) == 31
+
+        assert julian.monthcalendar(1582, 10).pop(0).pop(1) == 1
+        assert julian.monthcalendar(1582, 10).pop().pop(3) == 31
+
+        assert islamic.monthcalendar(1436, 10).pop(0).pop(6) == 1
+        assert islamic.monthcalendar(1436, 11).pop().pop(1) == 30
+
+        assert persian.monthcalendar(1393, 8).pop(0).pop(4) == 1
+        assert persian.monthcalendar(1393, 8).pop().pop(0) == 25
+
+        assert hebrew.monthcalendar(5775, 7).pop(0).pop(4) == 1
+        assert hebrew.monthcalendar(5775, 7).pop().pop(0) == 25
+
+    def test_mayan_monthcalendar(self):
+        calendar = mayan.haab_monthcalendar(13, 0, 2, 11, 13)
+        row = calendar[0]
+        square = row[-1]
+        assert type(row) == list
+        assert type(square) == tuple
+        assert row[7][0] == 1
+
+        assert mayan.to_jd(*calendar[-1][-1][-1]) == 19 + mayan.to_jd(13, 0, 2, 11, 13)
+        assert square == (6, (13, "Etz'nab'"), (13, 0, 2, 11, 18))
+
+    def test_mayan_generators(self):
+        lcg = mayan.longcount_generator(13, 0, 2, 11, 13)
+        assert next(lcg) == (13, 0, 2, 11, 13)
+        assert next(lcg) == (13, 0, 2, 11, 14)
+        assert next(lcg) == (13, 0, 2, 11, 15)
+
+        tzg = mayan.tzolkin_generator(9, "Ix")
+        self.assertEqual(next(tzg), (9, "Ix"))
+        assert next(tzg) == (10, "Men")
+        assert next(tzg) == (11, "K'ib'")
 
 if __name__ == '__main__':
     unittest.main()

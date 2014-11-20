@@ -2,6 +2,7 @@
 from math import trunc
 from .utils import amod
 from . import gregorian
+import itertools
 
 EPOCH = 584282.5
 HAAB_MONTHS = ["Pop", "Wo'", "Zip", "Sotz'", "Sek", "Xul",
@@ -111,6 +112,12 @@ def _haab_count(day, month):
     return min(i * 20, 360) + day
 
 
+def _tzolkin_from_count(count):
+    number = amod(count, 13)
+    name = TZOLKIN_NAMES[count % 20 - 1]
+    return number, name
+
+
 def _tzolkin_count(day, name):
     if day < 1 or day > 13:
         raise IndexError("Invalid day number")
@@ -126,19 +133,56 @@ def _tzolkin_count(day, name):
     return days.intersection(names).pop()
 
 
-def next_haab(haab, jd):
-    '''For a given haab day, and a julian day count, find the next occurrance of that haab after the date'''
+def tzolkin_generator(number=None, name=None):
+    '''For a given tzolkin name/number combination, return a generator
+    that gives cycle, starting with the input'''
+
+    # By default, it will start at the beginning
+    number = number or 13
+    name = name or "Ajaw"
+
+    if number > 13:
+        raise ValueError("Invalid day number")
+
+    if name not in TZOLKIN_NAMES:
+        raise ValueError("Invalid day name")
+
+    count = _tzolkin_count(number, name)
+
+    ranged = itertools.chain(range(count, 260), range(1, count))
+
+    for i in ranged:
+        yield _tzolkin_from_count(i)
+
+
+def longcount_generator(baktun, katun, tun, uinal, kin):
+    '''Generate long counts, starting with input'''
+    j = to_jd(baktun, katun, tun, uinal, kin)
+
+    while True:
+        yield from_jd(j)
+        j = j + 1
+
+
+def next_haab(month, jd):
+    '''For a given haab month and a julian day count, find the next start of that month on or after the JDC'''
     if jd < EPOCH:
         raise IndexError("Input day is before Mayan epoch.")
 
-    count1 = _haab_count(*to_haab(jd))
-    count2 = _haab_count(*haab)
+    hday, hmonth = to_haab(jd)
 
-    # Find number of days between haab of given jd and desired haab
-    add_days = (count2 - count1) % 365
+    if hmonth == month:
+        days = 1 - hday
+
+    else:
+        count1 = _haab_count(hday, hmonth)
+        count2 = _haab_count(1, month)
+
+        # Find number of days between haab of given jd and desired haab
+        days = (count2 - count1) % 365
 
     # add in the number of days and return new jd
-    return jd + add_days
+    return jd + days
 
 
 def next_tzolkin(tzolkin, jd):
@@ -154,7 +198,7 @@ def next_tzolkin(tzolkin, jd):
 
 
 def next_tzolkin_haab(tzolkin, haab, jd):
-    '''For a given haab+tzolk'in combination, and a julian day count, find the next occurrance of that haab+tzolk'in after the date'''
+    '''For a given haab-tzolk'in combination, and a Julian day count, find the next occurrance of the combination after the date'''
     # get H & T of input jd, and their place in the 18,980 day cycle
     haabcount = _haab_count(*to_haab(jd))
     haab_desired_count = _haab_count(*haab)
@@ -175,3 +219,45 @@ def next_tzolkin_haab(tzolkin, haab, jd):
         return possible_tz.intersection(possible_haab).pop() + jd
     except KeyError:
         raise IndexError("That Haab'-Tzolk'in combination isn't possible")
+
+
+def month_length(month):
+    """Not the actual length of the month, but accounts for the 5 unlucky/nameless days"""
+    if month == "Wayeb'":
+        return 5
+    else:
+        return 20
+
+
+def haab_monthcalendar(baktun=None, katun=None, tun=None, uinal=None, kin=None, jdc=None):
+    '''For a given long count, return a calender of the current haab month, divided into tzolkin "weeks"'''
+    if not jdc:
+        jdc = to_jd(baktun, katun, tun, uinal, kin)
+
+    haab_number, haab_month = to_haab(jdc)
+    first_j = jdc - haab_number + 1
+
+    tzolkin_start_number, tzolkin_start_name = to_tzolkin(first_j)
+
+    gen_longcount = longcount_generator(*from_jd(first_j))
+    gen_tzolkin = tzolkin_generator(tzolkin_start_number, tzolkin_start_name)
+
+    # 13 day long tzolkin 'weeks'
+    lpad = tzolkin_start_number - 1
+    rpad = 13 - (tzolkin_start_number + 19 % 13)
+
+    monlen = month_length(haab_month)
+
+    days = [None] * lpad + list(range(1, monlen + 1)) + rpad * [None]
+
+    def g(x, generate):
+        if x is None:
+            return None
+        return next(generate)
+
+    return [[(k, g(k, gen_tzolkin), g(k, gen_longcount)) for k in days[i:i + 13]] for i in range(0, len(days), 13)]
+
+
+def haab_monthcalendar_prospective(haabmonth, jdc):
+    '''Give the monthcalendar for the next occurance of given haab month after jdc'''
+    return haab_monthcalendar(jdc=next_haab(haabmonth, jdc))

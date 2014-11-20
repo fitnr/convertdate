@@ -1,5 +1,6 @@
 from math import trunc
 from . import gregorian
+from .utils import jwday, monthcalendarhelper
 
 EPOCH = 347995.5
 HEBREW_YEAR_OFFSET = 3760
@@ -53,6 +54,8 @@ def year_days(year):
 
 def month_days(year, month):
     '''How many days are in a given month of a given year'''
+    if month > 13:
+        raise ValueError("Incorrect month index")
 
     #//  First of all, dispose of fixed-length 29 day months
     if month in (2, 4, 6, 10, 13):
@@ -133,8 +136,16 @@ def to_jd_gregorianyear(gregorianyear, hebrew_month, hebrew_day):
     # tuple: (y, m, d)
     return (gd[0], gd[1], gd[2])
 
+
 def from_gregorian(year, month, day):
     return from_jd(gregorian.to_jd(year, month, day))
 
+
 def to_gregorian(year, month, day):
     return gregorian.from_jd(to_jd(year, month, day))
+
+
+def monthcalendar(year, month):
+    start_weekday = jwday(to_jd(year, month, 1))
+    monthlen = month_days(year, month)
+    return monthcalendarhelper(start_weekday, monthlen)

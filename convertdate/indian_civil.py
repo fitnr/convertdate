@@ -1,8 +1,38 @@
 # -*- coding: utf-8 -*-
 from math import trunc
 from . import gregorian
+from .utils import jwday, monthcalendarhelper
 
-INDIAN_CIVIL_WEEKDAYS = ("ravivara", "somavara", "mangalavara", "budhavara", "brahaspativara", "sukravara", "sanivara")
+# 0 = Sunday
+WEEKDAYS = (
+    "Ravivāra",
+    "Somavāra",
+    "Maṅgalavāra",
+    "Budhavāra",
+    "Guruvāra",
+    "Śukravāra",
+    "Śanivāra",
+)
+
+MONTHS = (
+    "Chaitra",
+    "Vaishākha",
+    "Jyēshtha",
+    "Āshādha",
+    "Shrāvana",
+    "Bhādrapada",
+    "Āshwin",
+    "Kārtika",
+    "Mārgashīrsha",
+    "Pausha",
+    "Māgha",
+    "Phālguna",
+)
+
+HAVE_31_DAYS = (2, 3, 4, 5, 6)
+HAVE_30_DAYS = (7, 8, 9, 10, 11, 12)
+
+SAKA_EPOCH = 78
 
 
 def to_jd(year, month, day):
@@ -34,18 +64,19 @@ def to_jd(year, month, day):
 
     return jd
 
+
 def from_jd(jd):
     '''Calculate Indian Civil date from Julian day
     Offset in years from Saka era to Gregorian epoch'''
 
-    Saka = 79 - 1
     start = 80
     # Day offset between Saka and Gregorian
 
     jd = trunc(jd) + 0.5
     greg = gregorian.from_jd(jd)  # Gregorian date for Julian day
     leap = gregorian.leap(greg[0])  # Is this a leap year?
-    year = greg[0] - Saka  # Tentative year in Saka era
+    # Tentative year in Saka era
+    year = greg[0] - SAKA_EPOCH
     # JD at start of Gregorian year
     greg0 = gregorian.to_jd(greg[0], 1, 1)
     yday = jd - greg0  # Day number (0 based) in Gregorian year
@@ -56,7 +87,7 @@ def from_jd(jd):
         Caitra = 30
 
     if yday < start:
-        #//  Day is at the end of the preceding Saka year
+        # Day is at the end of the preceding Saka year
         year -= 1
         yday += Caitra + (31 * 5) + (30 * 3) + 10 + start
 
@@ -76,8 +107,23 @@ def from_jd(jd):
 
     return (year, month, int(day))
 
+
 def from_gregorian(year, month, day):
     return from_jd(gregorian.to_jd(year, month, day))
 
+
 def to_gregorian(year, month, day):
     return gregorian.from_jd(to_jd(year, month, day))
+
+
+def month_length(year, month):
+    if month in HAVE_31_DAYS or (month == 1 and gregorian.leap(year - SAKA_EPOCH)):
+        return 31
+
+    return 30
+
+
+def monthcalendar(year, month):
+    start_weekday = jwday(to_jd(year, month, 1))
+    monthlen = month_length(year, month)
+    return monthcalendarhelper(start_weekday, monthlen)
