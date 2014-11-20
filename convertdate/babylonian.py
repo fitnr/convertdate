@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
-from math import ceil, floor, trunc
+from math import floor, trunc
 from itertools import chain
 from .data import babylonian_data as data
 from . import dublin, julian, gregorian
-from .utils import amod
+from .utils import amod, jwday, monthcalendarhelper
 from pkg_resources import resource_stream
 from csv import DictReader
 import ephem
@@ -599,3 +599,20 @@ def day_duration(jdc):
     end = babylon.next_setting(SUN)
 
     return dublin.to_datetime(start), dublin.to_datetime(end)
+
+
+def month_length(jd):
+    start = previous_visible_nm(dublin.from_jd(jd + 0.5))
+    end = next_visible_nm(dublin.from_jd(jd + 0.5))
+    return int(end - start)
+
+
+def monthcalendar(agyear, month):
+    jd = to_jd(agyear, month, 1)
+    start_weekday = jwday(jd)
+
+    monthlen = month_length(jd)
+
+    return monthcalendarhelper(start_weekday, monthlen)
+    
+
