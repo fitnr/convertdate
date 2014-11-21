@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import math
 
+TROPICALYEAR = 365.24219878  # Mean solar tropical year
 
 def ceil(x):
     return int(math.ceil(x))
