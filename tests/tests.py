@@ -34,27 +34,39 @@ class CalTestCase(unittest.TestCase):
         self.c = gregorian.to_jd(*self.c_greg)
         self.x = gregorian.to_jd(2016, 2, 29)
 
+        self.jdcs = range(2159677, 2488395, 2000)
+
     def test_utils(self):
         assert utils.amod(100, 4) == 4
         assert utils.ceil(1.2) == 2
         assert utils.jwday(self.jd) == self.tm[6]
 
-    def test_gregorian_present(self):
+    def reflexive(self, from_func, to_func):
+        for jd in self.jdcs:
+            self.assertEqual(jd + 0.5, to_func(*from_func(jd + 0.5)))
+
+    def test_gregorian(self):
         assert gregorian.to_jd(*self.gregoriandate) == self.jd
         assert gregorian.to_jd2(*self.gregoriandate) == self.jd
 
-    def test_gregorian_1(self):
         assert self.c == 2266295.5
         assert gregorian.to_jd(2000, 1, 1) == 2451544.5
 
-    def test_gregorian_2(self):
         assert gregorian.to_jd2(2000, 1, 1) == 2451544.5
 
-    def test_gregorian_1_ancient(self):
-        assert gregorian.to_jd(72, 6, 27) == 1747535.5
+        self.reflexive(gregorian.from_jd, gregorian.to_jd)
 
-    def test_gregorian_2_ancient(self):
+    def test_gregorian_proleptic(self):
+        assert gregorian.to_jd(72, 6, 27) == 1747535.5
         assert gregorian.to_jd2(72, 6, 27) == 1747535.5
+
+        for y in range(int(gregorian.EPOCH), int(gregorian.EPOCH) - 10000, -250):
+            assert gregorian.to_jd(*gregorian.from_jd(y)) == y - 0.5
+
+        assert gregorian.from_jd(gregorian.to_jd(-1, 3, 1)) == (-1, 3, 1)
+        assert gregorian.from_jd(gregorian.to_jd(-100, 7, 1)) == (-100, 7, 1)
+        assert gregorian.from_jd(gregorian.to_jd(-500, 12, 31)) == (-500, 12, 31)
+        assert gregorian.from_jd(gregorian.to_jd(-1000, 1, 1)) == (-1000, 1, 1)
 
     def test_gregorian_1_ma(self):
         assert gregorian.to_jd(*self.c_greg) == 2266295.5
@@ -96,17 +108,10 @@ class CalTestCase(unittest.TestCase):
         self.assertRaises(IndexError, julian.to_jd, 2014, 4, 31)
         self.assertRaises(IndexError, julian.to_jd, 2014, 5, -1)
 
-    def test_gregorian_proleptic(self):
-        for y in range(int(gregorian.EPOCH), int(gregorian.EPOCH) - 10000, -250):
-            assert gregorian.to_jd(*gregorian.from_jd(y)) == y - 0.5
-
-        assert gregorian.from_jd(gregorian.to_jd(-1, 3, 1)) == (-1, 3, 1)
-        assert gregorian.from_jd(gregorian.to_jd(-100, 7, 1)) == (-100, 7, 1)
-        assert gregorian.from_jd(gregorian.to_jd(-500, 12, 31)) == (-500, 12, 31)
-        assert gregorian.from_jd(gregorian.to_jd(-1000, 1, 1)) == (-1000, 1, 1)
-
     def test_mayan_reflexive(self):
         assert self.jd == mayan.to_jd(*mayan.from_jd(self.jd))
+
+        self.reflexive(mayan.from_jd, mayan.to_jd)
 
     def test_mayan_count(self):
         assert mayan.to_jd(13, 0, 0, 0, 0) == 2456282.5
@@ -151,13 +156,15 @@ class CalTestCase(unittest.TestCase):
     def test_french_republican(self):
         assert self.jd == fr.to_jd(*fr.from_jd(self.jd))
 
-    def test_french_republican2(self):
         assert fr.from_gregorian(2014, 6, 14) == (222, 9, 26)
 
         self.assertEqual(gregorian.to_jd(1793, 9, 22), fr.to_jd(2, 1, 1))
 
         # 9 Thermidor II
         self.assertEqual(gregorian.to_jd(1794, 7, 27), fr.to_jd(2, 11, 9))
+
+        for jd in range(2378822, 2488395, 2000):
+            self.assertEqual(jd + 0.5, gregorian.to_jd(*gregorian.from_jd(jd + 0.5)))
 
     def test_french_republican_schematic(self):
         self.assertRaises(ValueError, fr.from_jd, self.jd, method=400)
@@ -171,7 +178,6 @@ class CalTestCase(unittest.TestCase):
         assert j == fr.to_jd(*fr.from_jd(j, method=100), method=100)
         assert j == fr.to_jd(*fr.from_jd(j, method=4), method=4)
 
-
     def test_french_republican_names(self):
         self.assertEqual(fr.day_name(1, 1), u"Raisin")
         assert fr.day_name(2, 1) == u"Pomme"
@@ -182,17 +188,26 @@ class CalTestCase(unittest.TestCase):
     def test_hebrew(self):
         self.assertEqual(self.jd, hebrew.to_jd(*hebrew.from_jd(self.jd)))
 
+        self.reflexive(hebrew.from_jd, hebrew.to_jd)
+
     def test_islamic(self):
         assert self.jd == islamic.to_jd(*islamic.from_jd(self.jd))
+
+        self.reflexive(islamic.from_jd, islamic.to_jd)
 
     def test_persian(self):
         assert self.jd == persian.to_jd(*persian.from_jd(self.jd))
 
+        self.reflexive(persian.from_jd, persian.to_jd)
+
     def test_indian_civil(self):
         assert self.jd == indian_civil.to_jd(*indian_civil.from_jd(self.jd))
+        self.reflexive(indian_civil.from_jd, indian_civil.to_jd)
 
     def test_iso(self):
         assert self.jd == iso.to_jd(*iso.from_jd(self.jd))
+
+        self.reflexive(iso.from_jd, iso.to_jd)
 
     def test_from_julian(self):
         assert self.jd == julian.to_jd(*julian.from_jd(self.jd))
@@ -210,11 +225,19 @@ class CalTestCase(unittest.TestCase):
     def test_to_gregorian(self):
         assert gregorian.to_jd(2014, 11, 5) == 2456966.5
 
+    def test_julian_inverse(self):
+        self.reflexive(julian.from_jd, julian.to_jd)
+
     def test_to_julian(self):
         assert julian.to_jd(1858, 11, 5) == 2400000.5
         assert julian.to_jd(1492, 10, 12) == self.c
 
     def test_bahai(self):
+        self.reflexive(bahai.from_jd, bahai.to_jd)
+
+        self.assertEqual(bahai.from_gregorian(1844, 3, 20), (1, 1, 1))
+        self.assertEqual(bahai.to_gregorian(1, 1, 1), (1844, 3, 20))
+
         assert self.jd == bahai.to_jd(*bahai.from_jd(self.jd))
 
     def test_holidays(self):
