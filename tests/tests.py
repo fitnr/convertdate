@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 "python -m unittest convertdate.tests"
 
 import unittest
@@ -169,6 +170,14 @@ class CalTestCase(unittest.TestCase):
         assert j == fr.to_jd(*fr.from_jd(j, method=128), method=128)
         assert j == fr.to_jd(*fr.from_jd(j, method=100), method=100)
         assert j == fr.to_jd(*fr.from_jd(j, method=4), method=4)
+
+
+    def test_french_republican_names(self):
+        self.assertEqual(fr.day_name(1, 1), u"Raisin")
+        assert fr.day_name(2, 1) == u"Pomme"
+        assert fr.day_name(4, 18) == u"Pierre à chaux"
+        assert fr.day_name(12, 15) == u"Truite"
+        assert fr.day_name(13, 1) == u"La Fête de la Vertu"
 
     def test_hebrew(self):
         self.assertEqual(self.jd, hebrew.to_jd(*hebrew.from_jd(self.jd)))

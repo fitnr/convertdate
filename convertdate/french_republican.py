@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from math import trunc
 from . import dublin, gregorian
+from .data.french_republican_days import french_republican_days
 import ephem
 
 EPOCH = 2375839.5
@@ -21,7 +22,8 @@ MOIS = [
     'Prairial',
     'Messidor',
     'Thermidor',
-    'Fructidor'
+    'Fructidor',
+    'Sansculottides'
 ]
 
 LEAP_CYCLE_DAYS = 1461  # 365 * 4 + 1
@@ -214,6 +216,10 @@ def _from_jd_equinox(jd):
 
 def decade(jour):
     return trunc(jour / 10) + 1
+
+
+def day_name(month, day):
+    return french_republican_days[month][day - 1]
 
 
 def from_gregorian(year, month, day):
