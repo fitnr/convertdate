@@ -96,7 +96,7 @@ class CalTestCase(unittest.TestCase):
         self.assertRaises(IndexError, julian.to_jd, 2014, 5, -1)
 
     def test_gregorian_proleptic(self):
-        for y in range(int(gregorian.EPOCH), int(gregorian.EPOCH) - 10000, -100):
+        for y in range(int(gregorian.EPOCH), int(gregorian.EPOCH) - 10000, -250):
             assert gregorian.to_jd(*gregorian.from_jd(y)) == y - 0.5
 
         assert gregorian.from_jd(gregorian.to_jd(-1, 3, 1)) == (-1, 3, 1)
@@ -153,8 +153,22 @@ class CalTestCase(unittest.TestCase):
     def test_french_republican2(self):
         assert fr.from_gregorian(2014, 6, 14) == (222, 9, 26)
 
+        self.assertEqual(gregorian.to_jd(1793, 9, 22), fr.to_jd(2, 1, 1))
+
         # 9 Thermidor II
-        assert gregorian.to_jd(1794, 7, 27) == fr.to_jd(2, 11, 9)
+        self.assertEqual(gregorian.to_jd(1794, 7, 27), fr.to_jd(2, 11, 9))
+
+    def test_french_republican_schematic(self):
+        self.assertRaises(ValueError, fr.from_jd, self.jd, method=400)
+
+        assert self.jd == fr.to_jd(*fr.from_jd(self.jd, method=128), method=128)
+        assert self.jd == fr.to_jd(*fr.from_jd(self.jd, method=100), method=100)
+        assert self.jd == fr.to_jd(*fr.from_jd(self.jd, method=4), method=4)
+
+        j = self.jd - 265 * 150
+        assert j == fr.to_jd(*fr.from_jd(j, method=128), method=128)
+        assert j == fr.to_jd(*fr.from_jd(j, method=100), method=100)
+        assert j == fr.to_jd(*fr.from_jd(j, method=4), method=4)
 
     def test_hebrew(self):
         self.assertEqual(self.jd, hebrew.to_jd(*hebrew.from_jd(self.jd)))

@@ -8,6 +8,8 @@ J1970 = 2440587.5  # Julian date at Unix epoch: 1970-01-01
 JMJD = 2400000.5  # Epoch of Modified Julian Date system
 
 JULIAN_EPOCH = 1721423.5
+J2000 = 2451545.0  # Julian day of J2000 epoch
+JULIANCENTURY = 36525.0  # Days in Julian century
 
 HAVE_30_DAYS = (4, 6, 9, 11)
 HAVE_31_DAYS = (1, 3, 5, 7, 8, 10, 12)
