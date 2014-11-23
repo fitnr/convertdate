@@ -7,6 +7,7 @@
 #    The essential reference for computational positional astronomy.
 #
 
+__version__ = "2.0.3"
 
 __all__ = [
     'holidays', 'astro', 'utils', 'bahai',
