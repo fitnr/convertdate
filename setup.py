@@ -17,7 +17,10 @@ setup(
 
     url="https://github.com/fitnr/convertdate",
 
-    packages=["convertdate"],
+    packages=[
+        "convertdate",
+        "convertdate.data"
+    ],
 
     classifiers=[
         'Programming Language :: Python',
@@ -31,4 +34,8 @@ setup(
         'License :: OSI Approved :: MIT License'
 
     ],
+
+    install_requires=[
+        'ephem>=3.7.5.3'
+    ]
 )
