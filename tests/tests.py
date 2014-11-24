@@ -235,8 +235,8 @@ class CalTestCase(unittest.TestCase):
     def test_bahai(self):
         self.reflexive(bahai.from_jd, bahai.to_jd)
 
-        self.assertEqual(bahai.from_gregorian(1844, 3, 20), (1, 1, 1))
-        self.assertEqual(bahai.to_gregorian(1, 1, 1), (1844, 3, 20))
+        self.assertEqual(bahai.from_gregorian(1844, 3, 21), (1, 1, 1))
+        self.assertEqual(bahai.to_gregorian(1, 1, 1), (1844, 3, 21))
 
         assert self.jd == bahai.to_jd(*bahai.from_jd(self.jd))
 
