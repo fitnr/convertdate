@@ -15,6 +15,8 @@ Available calendars:
 * Mayan
 * Persian
 * Mayan
+* ISO
+* Ordinal (day of year)
 * Dublin day count
 * Julian day count
 

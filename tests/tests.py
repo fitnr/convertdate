@@ -18,7 +18,7 @@ from convertdate import julian
 from convertdate import julianday
 from convertdate import mayan
 from convertdate import persian
-
+from convertdate import ordinal
 from convertdate import holidays
 
 
@@ -205,9 +205,19 @@ class CalTestCase(unittest.TestCase):
         self.reflexive(indian_civil.from_jd, indian_civil.to_jd)
 
     def test_iso(self):
-        assert self.jd == iso.to_jd(*iso.from_jd(self.jd))
+        self.assertEqual(iso.from_gregorian(2005, 1, 1), (2004, 53, 6))
+        self.assertEqual(iso.to_gregorian(2004, 53, 6), (2005, 1, 1))
 
+        self.assertEqual(self.jd, iso.to_jd(*iso.from_jd(self.jd)))
         self.reflexive(iso.from_jd, iso.to_jd)
+
+    def test_ordinal(self):
+        self.assertEqual(ordinal.from_gregorian(2013, 1, 1), (2013, 1))
+        self.assertEqual(ordinal.from_gregorian(2013, 2, 1), (2013, 32))
+        self.assertEqual(ordinal.from_gregorian(2013, 3, 1), (2013, 60))
+        self.assertEqual(ordinal.from_gregorian(2013, 4, 15), (2013, 105))
+
+        self.reflexive(ordinal.from_jd, ordinal.to_jd)
 
     def test_from_julian(self):
         assert self.jd == julian.to_jd(*julian.from_jd(self.jd))
