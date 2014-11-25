@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from math import trunc
 from . import gregorian
+from .utils import monthcalendarhelper, jwday
 
 EPOCH = 2394646.5
 EPOCH_GREGORIAN_YEAR = 1844
@@ -65,3 +66,20 @@ def from_gregorian(year, month, day):
 
 def to_gregorian(year, month, day):
     return gregorian.from_jd(to_jd(year, month, day))
+
+
+def month_length(year, month):
+    if month == 19:
+        if gregorian.leap(year + EPOCH_GREGORIAN_YEAR):
+            return 5
+        else:
+            return 4
+
+    else:
+        return 19
+
+
+def monthcalendar(year, month):
+    start_weekday = jwday(to_jd(year, month, 1))
+    monthlen = month_length(year, month)
+    return monthcalendarhelper(start_weekday, monthlen)
