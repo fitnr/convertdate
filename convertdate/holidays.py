@@ -257,6 +257,9 @@ class Holidays(object):
     def set_year(self, year):
         self.year = year
 
+    def __repr__(self):
+        return 'Holidays({})'.format(self.year)
+
     # the holidays...
     @property
     def christmas(self):
@@ -356,6 +359,22 @@ class Holidays(object):
     @property
     def passover(self, eve=None):
         return passover(self.year, eve)
+
+    @property
+    def dia_constitucion(self, observed=True):
+        return dia_constitucion(self.year)
+
+    @property
+    def natalicio_benito_juarez(self, observed=True):
+        return natalicio_benito_juarez(self.year)
+
+    @property
+    def dia_independencia(self):
+        return dia_independencia(self.year)
+
+    @property
+    def dia_revolucion(self):
+        return dia_revolucion(self.year)
 
 
 if __name__ == '__main__':
