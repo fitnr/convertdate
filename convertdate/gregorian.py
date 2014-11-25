@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-from .utils import floor
-from calendar import isleap as leap
+from .utils import floor, monthcalendarhelper, jwday
+from calendar import isleap as leap, monthrange
+
 
 EPOCH = 1721425.5
 
@@ -104,3 +105,14 @@ def from_jd(jd):
     day = int(wjd - to_jd(year, month, 1)) + 1
 
     return (year, month, day)
+
+
+def month_length(year, month):
+    return monthrange(year, month)[1]
+
+
+def monthcalendar(year, month):
+    start_weekday = jwday(to_jd(year, month, 1))
+    monthlen = month_length(year, month)
+
+    return monthcalendarhelper(start_weekday, monthlen)
