@@ -16,6 +16,7 @@ LEAP_CYCLE_DAYS = 1461
 HAVE_30_DAYS = (4, 6, 9, 11)
 HAVE_31_DAYS = (1, 3, 5, 7, 8, 10, 12)
 
+
 def legal_date(year, month, day):
     '''Check if this is a legal date in the Gregorian calendar'''
     if month == 2:
@@ -27,6 +28,7 @@ def legal_date(year, month, day):
         raise IndexError("Month {} doesn't have a day {}".format(month, day))
 
     return True
+
 
 def to_jd2(year, month, day):
     '''Gregorian to Julian Day Count for years between 1801-2099'''
@@ -47,7 +49,6 @@ def to_jd2(year, month, day):
 
 
 def to_jd(year, month, day):
-
     legal_date(year, month, day)
 
     if month <= 2:
@@ -90,9 +91,11 @@ def from_jd(jd):
 
     yearday = wjd - to_jd(year, 1, 1)
 
-    if wjd < to_jd(year, 3, 1):
+    isleap = leap(year)
+
+    if yearday < 58 + isleap:
         leap_adj = 0
-    elif leap(year):
+    elif isleap:
         leap_adj = 1
     else:
         leap_adj = 2
@@ -101,4 +104,3 @@ def from_jd(jd):
     day = int(wjd - to_jd(year, month, 1)) + 1
 
     return (year, month, day)
-

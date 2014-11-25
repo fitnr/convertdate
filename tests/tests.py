@@ -235,6 +235,15 @@ class CalTestCase(unittest.TestCase):
     def test_to_gregorian(self):
         assert gregorian.to_jd(2014, 11, 5) == 2456966.5
 
+        assert gregorian.to_jd(2012, 3, 1) == 1 + gregorian.to_jd(2012, 2, 29)
+
+        assert gregorian.from_jd(gregorian.to_jd(2012, 2, 29) + 1) == (2012, 3, 1)
+        assert gregorian.from_jd(gregorian.to_jd(2011, 2, 28) + 1) == (2011, 3, 1)
+
+        assert gregorian.from_jd(gregorian.to_jd(2012, 3, 2) - 2) == (2012, 2, 29)
+        assert gregorian.from_jd(gregorian.to_jd(2011, 3, 2) - 2) == (2011, 2, 28)
+
+
     def test_julian_inverse(self):
         self.reflexive(julian.from_jd, julian.to_jd)
 
