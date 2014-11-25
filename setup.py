@@ -1,13 +1,20 @@
 from setuptools import setup
 
+readme = open('README.rst').read()
+history = open('HISTORY.rst').read()
+
+long_desc = readme + "\n\n" + history
+
 setup(
     name="convertdate",
 
     version="2.0.3.1",
 
-    description="Convert dates across calendar systems",
+    description=("Converts between Gregorian dates and other calendar systems."
+                 "Calendars included: Baha'i, French Republican, Hebrew, "
+                 "Indian Civil, Islamic, ISO, Julian, Mayan and Persian."),
 
-    long_description="Converts between Gregorian dates and other calendar systems. Calendars included: Baha'i, French Republican, Hebrew, Indian Civil, Islamic, Julian, Mayan and Persian.",
+    long_description=long_desc,
 
     author="Neil Freeman",
 
