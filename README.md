@@ -41,8 +41,32 @@ french_republican.from_gregorian(2014, 10, 31)
 
 hebrew.from_gregorian(2014, 10, 31)
 # (5775, 8, 7)
-# convertdate assumes you mean the middle of the day.
-# Keep in mind that for some systems, the day begins at sundown
+````
+
+Note that in some calendar systems, the day begins at sundown. Convertdate gives the conversion for noon of the day in question.
+
+
+Each module includes a monthcalendar function, which will generate a calender-like nested list for a year and month (each list of dates runs from Sunday to Saturday)
+
+````python
+hebrew.monthcalendar(5775, 8)
+# [
+#     [None, None, None, None, None, None, 1],
+#     [2, 3, 4, 5, 6, 7, 8],
+#     [9, 10, 11, 12, 13, 14, 15],
+#     [16, 17, 18, 19, 20, 21, 22],
+#     [23, 24, 25, 26, 27, 28, 29]
+# ]
+
+julian.monthcalendar(2015, 1)
+# [
+#    [None, None, None, 1, 2, 3, 4],
+#    [5, 6, 7, 8, 9, 10, 11],
+#    [12, 13, 14, 15, 16, 17, 18],
+#    [19, 20, 21, 22, 23, 24, 25],
+#    [26, 27, 28, 29, 30, 31, None]
+# ]
+
 ````
 
 Before the Common Era
@@ -78,6 +102,13 @@ holidays.thanksgiving(2014)
 # But there is a Canadian option for some holidays
 holidays.thanksgiving(2014, 'canada')
 # (2014, 10, 13)
+
+# Mexican national holidays
+holidays.natalicio_benito_juarez(2016)
+# (2016, 3, 21)
+
+holidays.dia_revolucion(2016)
+# (2016, 11, 21)
 
 # Some Jewish holidays are included
 holidays.rosh_hashanah(2014)
@@ -121,9 +152,9 @@ from convertdate import gregorian
 SUN = 6
 
 day = gregorian.to_jd(2014, 4, 17)
-next = utils.next_weekday(SUN, day)
+nextsunday = utils.next_weekday(SUN, day)
 
-gregorian.from_jd(next)
+gregorian.from_jd(nextsunday)
 # (2014, 4, 20)
 ````
 

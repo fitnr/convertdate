@@ -7,7 +7,7 @@ History
 Features:
 * Add `ordinal` module, for counting the day of year
 * Added Mexican national holidays
-* Add `monthcalendar` function to Bahai
+* Add `monthcalendar` functions
 
 Other changes:
 * Simplified logic in `ISO` module
