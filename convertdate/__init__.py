@@ -22,6 +22,7 @@ from . import dublin
 from . import french_republican
 from . import gregorian
 from . import hebrew
+from . import holidays
 from . import indian_civil
 from . import islamic
 from . import julian

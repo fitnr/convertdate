@@ -1,4 +1,5 @@
 from math import trunc
+from calendar import isleap
 from . import gregorian
 
 
@@ -17,7 +18,7 @@ def from_gregorian(year, month, day):
     if m <= 3:
         m = m + 12
 
-    leap = gregorian.leap(year)
+    leap = isleap(year)
 
     t = (trunc(30.6 * m) + day - 122 + 59 + leap) % (365 + leap)
 
@@ -25,7 +26,7 @@ def from_gregorian(year, month, day):
 
 
 def to_gregorian(year, dayofyear):
-    leap = gregorian.leap(year)
+    leap = isleap(year)
 
     if dayofyear > 59 + leap:
         leap_adj = 0

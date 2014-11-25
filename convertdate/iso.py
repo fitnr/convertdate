@@ -1,6 +1,7 @@
 from math import trunc
 from .utils import jwday, n_weeks
 from . import gregorian, ordinal
+from calendar import isleap
 
 MON = 0
 TUE = 1
@@ -42,7 +43,7 @@ def weeks_per_year(year):
     # 53 weeks: any year starting on Thursday and any leap year starting on Wednesday
     jan1 = jwday(gregorian.to_jd(year, 1, 1))
 
-    if jan1 == THU or (jan1 == WED and gregorian.leap(year)):
+    if jan1 == THU or (jan1 == WED and isleap(year)):
         return 53
     else:
         return 52
