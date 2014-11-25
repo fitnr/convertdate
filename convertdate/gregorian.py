@@ -4,6 +4,15 @@ from calendar import isleap as leap
 
 EPOCH = 1721425.5
 
+INTERCALATION_CYCLE_YEARS = 400
+INTERCALATION_CYCLE_DAYS = 146097
+
+LEAP_SUPPRESSION_YEARS = 100
+LEAP_SUPPRESSION_DAYS = 36524
+
+LEAP_CYCLE_YEARS = 4
+LEAP_CYCLE_DAYS = 1461
+
 HAVE_30_DAYS = (4, 6, 9, 11)
 HAVE_31_DAYS = (1, 3, 5, 7, 8, 10, 12)
 
@@ -59,14 +68,22 @@ def from_jd(jd):
     '''Return Gregorian date in a (Y, M, D) tuple'''
     wjd = floor(jd - 0.5) + 0.5
     depoch = wjd - EPOCH
-    quadricent = floor(depoch / 146097)
-    dqc = depoch % 146097
-    cent = floor(dqc / 36524)
-    dcent = dqc % 36524
-    quad = floor(dcent / 1461)
-    dquad = dcent % 1461
+
+    quadricent = floor(depoch / INTERCALATION_CYCLE_DAYS)
+    dqc = depoch % INTERCALATION_CYCLE_DAYS
+
+    cent = floor(dqc / LEAP_SUPPRESSION_DAYS)
+    dcent = dqc % LEAP_SUPPRESSION_DAYS
+
+    quad = floor(dcent / LEAP_CYCLE_DAYS)
+    dquad = dcent % LEAP_CYCLE_DAYS
+
     yindex = floor(dquad / 365)
-    year = (quadricent * 400) + (cent * 100) + (quad * 4) + yindex
+    year = (
+        quadricent * INTERCALATION_CYCLE_YEARS +
+        cent * LEAP_SUPPRESSION_YEARS +
+        quad * LEAP_CYCLE_YEARS + yindex
+    )
 
     if not (cent == 4 or yindex == 4):
         year += 1
