@@ -195,21 +195,21 @@ def new_years_eve(year):
 # without the option, the (secular) day is returned
 
 
-def hanukkah(year, eve=False):
+def hanukkah(year, eve=None):
     year, month, day = hebrew.to_jd_gregorianyear(year, hebrew.KISLEV, 25)
     if eve:
         day = day - 1
     return year, month, day
 
 
-def rosh_hashanah(year, eve=False):
+def rosh_hashanah(year, eve=None):
     year, month, day = hebrew.to_jd_gregorianyear(year, hebrew.TISHRI, 1)
     if eve:
         day = day - 1
     return year, month, day
 
 
-def yom_kippur(year, eve=False):
+def yom_kippur(year, eve=None):
     year, month, day = hebrew.to_jd_gregorianyear(year, TISHRI, 10)
     if eve:
         day = day - 1
@@ -217,12 +217,36 @@ def yom_kippur(year, eve=False):
     return year, month, day
 
 
-def passover(year, eve=False):
+def passover(year, eve=None):
     year, month, day = hebrew.to_jd_gregorianyear(year, hebrew.NISAN, 15)
     if eve:
         day = day - 1
 
     return year, month, day
+
+# Mexican holidays
+
+
+def dia_constitucion(year, observed=True):
+    if observed:
+        return nth_day_of_month(1, MON, FEB, year)
+    else:
+        return (year, FEB, 5)
+
+
+def natalicio_benito_juarez(year, observed=True):
+    if observed:
+        return nth_day_of_month(3, MON, MAR, year)
+    else:
+        return (year, MAR, 21)
+
+
+def dia_independencia(year):
+    return year, SEP, 16
+
+
+def dia_revolucion(year):
+    return nth_day_of_month(3, MON, NOV, year)
 
 
 class Holidays(object):

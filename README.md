@@ -18,7 +18,7 @@ Available calendars:
 * Dublin day count
 * Julian day count
 
-The `holidays` module also provides some useful holiday-calculation, with a focus on American and Jewish holidays.
+The `holidays` module also provides some useful holiday-calculation, with a focus on North American and Jewish holidays.
 
 Installing
 -------
