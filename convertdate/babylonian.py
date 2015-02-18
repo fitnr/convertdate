@@ -445,7 +445,7 @@ def _to_jd_analeptic(year, month, day, era):
     jyear = year + epoch
 
     # cycle number
-    m = metonic_number(year)
+    m = metonic_number(jyear)
 
     metonicstart = jyear - m
 
@@ -569,6 +569,7 @@ def _from_jd_analeptic(jdc, era=None, plain=None):
     # Make sure we're at midnight
     jdc = int(jdc) + 0.5
     era = era or 'AG'
+
     # Calcuate the dublin day count, used in ephem
     dublincount = dublin.from_jd(jdc)
 
@@ -578,7 +579,8 @@ def _from_jd_analeptic(jdc, era=None, plain=None):
 
     # We're now at the start of the metonic cycle that contains
     # the year we're in. Call this M0
-    metonicstart = metonic_start(monthstart.datetime().year)
+    julianyear, _, _ = julian.from_gregorian(*monthstart.triple())
+    metonicstart = metonic_start(julianyear)
 
     # This is a list of all the months in this cycle
     month_iter = iterate_metonic_months(metonicstart, plain)
