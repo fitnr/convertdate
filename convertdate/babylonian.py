@@ -152,8 +152,12 @@ def metonic_start(julianyear):
     return julianyear - metonic_number(julianyear)
 
 
-def intercalate(julianyear, plain=None):
+def intercalate(julianyear, plain=None, era=None):
     '''For a Julian year, use the intercalation pattern to return a dict of the months'''
+    era = era or 'julian'
+    if era.lower() == 'ag':
+        return ag_intercalate(julianyear, plain=plain)
+
     number = metonic_number(julianyear)
     start = metonic_start(julianyear)
     return intercalation(number, start, plain)
@@ -296,20 +300,25 @@ def _set_epoch(era=None):
         return data.SELEUCID_EPOCH
 
 
-def _numeral_month(agyear, month):
-    '''Return the numeral of a Babylonian month'''
+def _numeral_month(year, month, era=None):
+    '''Return the numeral of a Babylonian month. Month is either a digit or a string (babylonian month name)'''
+
+    era = era or 'julian'
+
+    if era.lower() not in ('julian', 'ag'):
+        raise ValueError("Epoch must be 'julian' or 'ag' (alexanderian)")
 
     # easy cases
     if type(month) == float:
         month = int(month)
 
-    months = ag_intercalate(agyear)
+    months = intercalate(year, era=era)
 
     if type(month) == int:
         if month <= len(months):
             return month
         else:
-            raise ValueError("Invalid month")
+            raise ValueError("Invalid month: {}. Wanted value <= {}. year: {}, era: {}".format(month, len(months), year, era))
 
     # Flip it around to get the month
     inverted = dict((v, k) for k, v in list(months.items()))
@@ -317,7 +326,8 @@ def _numeral_month(agyear, month):
     try:
         month = inverted[month]
     except KeyError:
-        months = ag_intercalate(agyear, plain=1)
+
+        months = ag_intercalate(year, era=era, plain=1)
         inverted = dict((v, k) for k, v in list(months.items()))
 
         month = inverted[month]
@@ -405,7 +415,7 @@ def to_jd(year, month, day, era=None, ruler=None):
     # our julian year and month.
     parkerdub = load_parker_dubberstein()
 
-    month = _numeral_month(jyear, month)
+    month = _numeral_month(jyear, month, era='julian')
 
     try:
         pdentry = parkerdub[jyear]['months'][month]
@@ -422,13 +432,13 @@ def _to_jd_analeptic(year, month, day, era):
     if era.lower() not in ['arsacid', 'nabonassar', 'seleucid']:
         era = 'seleucid'
 
-    month = _numeral_month(year, month)
+    month = _numeral_month(year, month, era='ag')
 
     epoch = _set_epoch(era)
     jyear = year + epoch
 
     # cycle number
-    m = ag_metonic_number(year)
+    m = metonic_number(year)
 
     metonicstart = jyear - m
 
