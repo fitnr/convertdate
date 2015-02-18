@@ -234,7 +234,8 @@ class test_babylon_cal(unittest.TestCase):
         assert parkerdub[-554]['regnalyear'] == '1'
 
     def test_year_lengths_analeptic(self):
-        for year in range(2000, 2190, 2):
+        es = []
+        for year in range(1990, 2090, 2):
             start = bab.to_jd(year, 'Nisannu', 1)
 
             gyear = gregorian.from_jd(start)[0]
@@ -245,12 +246,21 @@ class test_babylon_cal(unittest.TestCase):
             try:
                 self.assertLess(end - start, m * 30)
                 self.assertGreater(end - start, m * 29)
+
             except AssertionError as e:
-                print('year (AG, CE)', year, gyear)
-                print('start', gregorian.from_jd(start))
-                print('end', gregorian.from_jd(end))
-                print('months', m)
-                raise e
+                es.append(
+                    'Error in test_year_lengths_analeptic: {e}\n\t'
+                    'year (AG: {year}, CE: {gyear})\n\t'
+                    'period: {start} to {end}, months: {months}'.format(
+                        e=e, months=m, year=year, gyear=gyear,
+                        start=gregorian.from_jd(start), end=gregorian.from_jd(end)
+                    )
+                )
+
+            finally:
+                if es:
+                    raise AssertionError(('{} ' * len(es)).strip().format(*es))
+
 
     def test_metonic_cycle(self):
         dc = dublin.from_gregorian(1900, 3, 19)
@@ -324,8 +334,10 @@ class test_babylon_cal(unittest.TestCase):
                 assert z + x == bab.to_jd(*bab.from_jd(z + x))
 
             except AssertionError:
-                raise AssertionError("{} != {}, Baby: {}".format(
-                    gregorian.from_jd(z + x), gregorian.from_jd(bab.to_jd(*bab.from_jd(z + x))), bab.from_jd(z + x)))
+                raise AssertionError("'{} != {}, Baby: {}, JD: {}".format(
+                    gregorian.from_jd(z + x), gregorian.from_jd(bab.to_jd(*bab.from_jd(z + x))), bab.from_jd(z + x), z + x
+                ))
+                    
 
             except (StopIteration, IndexError) as e:
                 print(z + x, gregorian.from_jd(z + x))
