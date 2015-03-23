@@ -82,6 +82,19 @@ class CalTestCase(unittest.TestCase):
 
         self.reflexive(ordinal.from_jd, ordinal.to_jd)
 
+    def test_ordinal_to_gregorian(self):
+        self.assertEqual(ordinal.to_gregorian(2013, 1), (2013, 1, 1))
+        self.assertEqual(ordinal.to_gregorian(2013, 105), (2013, 4, 15))
+        self.assertEqual(ordinal.to_gregorian(2013, 32), (2013, 2, 1))
+        self.assertEqual(ordinal.to_gregorian(2012, 1), (2012, 1, 1))
+        self.assertEqual(ordinal.to_gregorian(2012, 31), (2012, 1, 31))
+        self.assertEqual(ordinal.to_gregorian(2012, 32), (2012, 2, 1))
+        self.assertEqual(ordinal.to_gregorian(2012, 52), (2012, 2, 21))
+        self.assertEqual(ordinal.to_gregorian(2012, 59), (2012, 2, 28))
+        self.assertEqual(ordinal.to_gregorian(2012, 60), (2012, 2, 29))
+        self.assertEqual(ordinal.to_gregorian(2012, 61), (2012, 3, 1))
+
+
     def test_from_julian(self):
         assert self.jd == julian.to_jd(*julian.from_jd(self.jd))
         assert julian.from_jd(self.c) == (1492, 10, 12)

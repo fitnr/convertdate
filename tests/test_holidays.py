@@ -17,6 +17,19 @@ class TestHolidays(unittest.TestCase):
         assert h.thanksgiving == (2014, 11, 27)
         assert h.columbus_day == (2014, 10, 13)
 
+    def test_events(self):
+
+        assert holidays.new_years(2013) == (2013, 1, 1)
+        assert holidays.martin_luther_king_day(2015) == (2015, 1, 19)
+
+        assert holidays.lincolns_birthday(2015) == (2015, 2, 12)
+        assert holidays.valentines_day(2015) == (2015, 2, 14)
+        assert holidays.washingtons_birthday(2015) == (2015, 2, 22)
+        assert holidays.presidents_day(2015) == (2015, 2, 16)
+
+        assert holidays.independence_day(2015) == (2015, 7, 4)
+        assert holidays.independence_day(2015, True) == (2015, 7, 3)
+
     def test_thanksgiving(self):
         assert holidays.thanksgiving(2013) == (2013, 11, 28)
         assert holidays.thanksgiving(1939) == (1939, 11, 23)
@@ -90,6 +103,13 @@ class TestHolidays(unittest.TestCase):
         ]
         for y, m, d in rosh_hashanahs:
             self.assertEqual(holidays.rosh_hashanah(y, eve=1), (y, m, d))
+
+        self.assertEqual(holidays.hanukkah(2015, True), (2015, 12, 6))
+        self.assertEqual(holidays.hanukkah(2015), (2015, 12, 7))
+
+    def test_mexican_holidays(self):
+        self.assertEqual(holidays.natalicio_benito_juarez(2015, False), (2015, 3, 21))
+        self.assertEqual(holidays.natalicio_benito_juarez(2015), (2015, 3, 16))
 
 if __name__ == '__main__':
     unittest.main()
