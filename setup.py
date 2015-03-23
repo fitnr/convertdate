@@ -1,9 +1,6 @@
 from setuptools import setup
 
 readme = open('README.rst').read()
-history = open('HISTORY.rst').read()
-
-long_desc = readme + "\n\n" + history
 
 setup(
     name="convertdate",
@@ -14,7 +11,7 @@ setup(
                  "Calendars included: Baha'i, French Republican, Hebrew, "
                  "Indian Civil, Islamic, ISO, Julian, Mayan and Persian."),
 
-    long_description=long_desc,
+    long_description=readme,
 
     author="Neil Freeman",
 
