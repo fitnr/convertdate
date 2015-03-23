@@ -29,6 +29,8 @@ setup(
         "convertdate.data"
     ],
 
+    test_suite='tests',
+
     classifiers=[
         'Programming Language :: Python',
         'Programming Language :: Python :: 2',
