@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# pylint: disable=W0212, R0201, R0904
 from __future__ import print_function
 from copy import copy
 import unittest
@@ -9,7 +10,6 @@ from convertdate import babylonian as bab
 from convertdate.data import babylonian_data as data
 import ephem
 from random import randint
-# from math import trunc
 
 
 class test_babylon_cal(unittest.TestCase):
@@ -153,10 +153,10 @@ class test_babylon_cal(unittest.TestCase):
         self.assertEqual(bab.from_jd(1721142.5), bab.from_julian(0, 3, 26))
 
     def test_setting_epoch(self):
-        assert bab._set_epoch('seleucid') == data.SELEUCID_EPOCH
-        assert bab._set_epoch('arsacid') == data.ARSACID_EPOCH
-        assert bab._set_epoch('nabonassar') == data.NABONASSAR_EPOCH
-        assert bab._set_epoch('nabopolassar') == data.NABOPOLASSAR_EPOCH
+        self.assertEqual(bab._set_epoch('seleucid'), data.SELEUCID_EPOCH)
+        self.assertEqual(bab._set_epoch('arsacid'), data.ARSACID_EPOCH)
+        self.assertEqual(bab._set_epoch('nabonassar'), data.NABONASSAR_EPOCH)
+        self.assertEqual(bab._set_epoch('nabopolassar'), data.NABOPOLASSAR_EPOCH)
 
     def test_babylon_from_jd_seleucid(self):
         self.assertEqual(bab.from_julian(1, 4, 14, 'AG'), (312, u'Nisannu', 1, 'AG'))
@@ -213,11 +213,10 @@ class test_babylon_cal(unittest.TestCase):
         assert bab.from_julian(46, 3, 28) == (357, 'Nisannu', 1, 'AG')
 
     def test_load_parker_dubberstein(self):
-        bab.load_parker_dubberstein()
-        parkerdub = bab.PARKER_DUBBERSTEIN
+        parkerdub = bab.load_parker_dubberstein()
 
         assert parkerdub[-603].get('months')
-        assert parkerdub[-580].get('months').get(6) == julian.to_jd(-580, 9, 12)
+        self.assertEqual(parkerdub[-580].get('months').get(6), julian.to_jd(-580, 9, 12))
 
     def test_year_lengths_parker_dubberstein(self):
         parkerdub = bab.PARKER_DUBBERSTEIN
@@ -229,6 +228,10 @@ class test_babylon_cal(unittest.TestCase):
 
             self.assertGreater(diy, monlen * 29)
             self.assertLess(diy, monlen * 30)
+
+        assert len(parkerdub[-554]['months']) == 13
+        self.assertEqual(parkerdub[-554]['ruler'], 'NABUNAID')
+        assert parkerdub[-554]['regnalyear'] == '1'
 
     def test_year_lengths_analeptic(self):
         for year in range(2000, 2190, 2):
@@ -254,7 +257,7 @@ class test_babylon_cal(unittest.TestCase):
         nve = ephem.next_vernal_equinox(dc)
         metonic_months = count_pattern(nve)
 
-        assert len(metonic_months) == 19
+        self.assertEqual(len(metonic_months), 19)
         assert sum(metonic_months) == 235
 
     def test_bab_to_julian_seleucid(self):
@@ -277,8 +280,23 @@ class test_babylon_cal(unittest.TestCase):
 
     def test_bab_to_julian_regnal(self):
         self.assertRaises(ValueError, bab.to_julian, 1, 1, 1, era='regnal')
+
+        assert bab.to_julian(1, 1, 1, era='regnal', ruler='Nabunaid') == (-554, 3, 31)
+        assert bab.to_julian(1, 2, 1, era='regnal', ruler='Nabunaid') == (-554, 4, 30)
+        assert bab.to_julian(1, 3, 1, era='regnal', ruler='Nabunaid') == (-554, 5, 30)
+        assert bab.to_julian(1, 4, 1, era='regnal', ruler='Nabunaid') == (-554, 6, 28)
+
+        assert bab.to_julian(1, 6, 1, era='regnal', ruler='Nabunaid') == (-554, 8, 26)
+        assert bab.to_julian(1, 10, 1, era='regnal', ruler='Nabunaid') == (-554, 12, 22)
+        assert bab.to_julian(1, 11, 1, era='regnal', ruler='Nabunaid') == (-553, 1, 20)
+        assert bab.to_julian(1, 12, 1, era='regnal', ruler='Nabunaid') == (-553, 2, 19)
+        self.assertEqual(bab.to_julian(1, 12, 11, era='regnal', ruler='Nabunaid'), (-553, 3, 1))
+        self.assertEqual(bab.to_julian(1, 12, 21, era='regnal', ruler='Nabunaid'), (-553, 3, 11))
+        self.assertEqual(bab.to_julian(1, 12, 26, era='regnal', ruler='Nabunaid'), (-553, 3, 16))
+        self.assertEqual(bab.to_julian(1, 12, 28, era='regnal', ruler='Nabunaid'), (-553, 3, 18))
         self.assertEqual(bab.to_julian(1, 13, 1, era='regnal', ruler='Nabunaid'), (-553, 3, 20))
         assert bab.to_julian(1, 13, 10, era='regnal', ruler='Nabunaid') == (-553, 3, 29)
+        assert bab.to_julian(2, 1, 1, era='regnal', ruler='Nabunaid') == (-553, 4, 19)
 
         assert bab.to_julian(3, 12, 1, era='regnal', ruler='Cyrus') == (-534, 2, 19)
 
@@ -295,7 +313,7 @@ class test_babylon_cal(unittest.TestCase):
         d1 = ephem.Date('2014/11/1')
 
         assert bab.moons_between_dates(d1, ephem.Date('2014/12/1')) == 1
-        assert bab.moons_between_dates(d1, d1 + 1) == 0
+        self.assertEqual(bab.moons_between_dates(d1, d1 + 1), 0)
         assert bab.moons_between_dates(ephem.Date('2014/11/20'), ephem.Date('2014/11/25')) == 1
 
     def test_bab_to_jd(self):
@@ -432,10 +450,10 @@ def compare_lunisolar_metonic(start):
     start = bab.metonic_start(start)
     ve = ephem.next_vernal_equinox(dublin.from_gregorian(start, 1, 1))
     nm = ephem.next_new_moon(ve)
-    for x in range(0, 19):
+    for _ in range(0, 19):
         ve = ephem.next_vernal_equinox(ve)
 
-    for y in range(0, 235):
+    for _ in range(0, 235):
         nm = ephem.next_new_moon(nm)
 
     print("{}\t{}".format(start, round(nm - ve, 1)))
@@ -518,7 +536,7 @@ def _analeptic_days_in_year(gyear):
     month = len(bab.intercalate(gyear))
     firstmoon = moon = bab._nvnm_after_pve(ephem.Date(str(gyear) + '/5/1'))
 
-    for x in range(1, 1 + month):
+    for _ in range(1, 1 + month):
         # print x, moon
         moon = ephem.next_new_moon(moon)
 
@@ -554,7 +572,7 @@ def count_pattern(startingve):
 
     metonic = {}
 
-    for x in range(19):
+    for _ in range(19):
         ve = ephem.next_vernal_equinox(ve)
         metonic[ve] = []
 

@@ -87,6 +87,7 @@ def load_parker_dubberstein():
 
 
 def observer(date=None):
+    '''Create a new ephem.Observer object for Babylon as the given date'''
     BABYLON = ephem.Observer()
     # OMFG I can't believe ephem uses d:mm:ss, wtf
     BABYLON.lat = '32:32:11'
@@ -116,6 +117,7 @@ def metonic_number(julianyear):
 
 
 def ag_metonic_number(ag_year):
+    '''Returns the metonic number of the given year (AG)'''
     # The special years, outside of the cycle
     if ag_year > 0 and ag_year % 687 in [0, 685, 686]:
         return 21 - 687 + amod(ag_year, 687)
@@ -180,6 +182,7 @@ def intercalation(mnumber, mstart=0, plain=None):
 
 
 def intercalation_pattern(key, plain=None):
+    '''Return the list of months for a given intercalation type (U or A)'''
     if plain:
         base_list = data.ASCII_MONTHS
     else:
@@ -309,7 +312,7 @@ def _numeral_month(agyear, month):
         if month <= len(months):
             return month
         else:
-            raise ValueError("Invalid month")
+            raise ValueError("Invalid month: {} in AG year {}".format(month, agyear))
 
     # Flip it around to get the month
     inverted = dict((v, k) for k, v in list(months.items()))
@@ -380,6 +383,7 @@ def from_jd(cjdn, era=None, plain=None):
 
 
 def to_jd(year, month, day, era=None, ruler=None):
+    '''Convert Babylonian date to Julian Day Count'''
     if day < 1 or (type(month) in [int, float] and month < 1):
         raise ValueError("Month and day must be at least 1")
 
@@ -517,11 +521,13 @@ def next_visible_nm(dc):
 
 
 def _nvnm_after_pve(dc):
+    '''Next visible new moon after the previous vernal equinox'''
     prev_equinox = ephem.previous_vernal_equinox(dc)
     return next_visible_nm(prev_equinox)
 
 
 def _nvnm_after_nve(ephemdate):
+    '''Next visible new moon after the next vernal equinox'''
     next_equinox = ephem.next_vernal_equinox(ephemdate)
     return next_visible_nm(next_equinox)
 
@@ -602,12 +608,14 @@ def day_duration(jdc):
 
 
 def month_length(jd):
+    '''Get the length (in days) of the Babylonian month that jd falls in'''
     start = previous_visible_nm(dublin.from_jd(jd + 0.5))
     end = next_visible_nm(dublin.from_jd(jd + 0.5))
     return int(end - start)
 
 
 def monthcalendar(agyear, month):
+    '''Produce a list of lists that reflects a calendar for the given year (AG) and month'''
     jd = to_jd(agyear, month, 1)
     start_weekday = jwday(jd)
 
