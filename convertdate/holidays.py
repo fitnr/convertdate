@@ -111,7 +111,7 @@ def flag_day(year):
     return (year, JUN, 14)
 
 
-def indepedence_day(year, observed=None):
+def independence_day(year, observed=None):
     '''July 4th'''
     day = 4
 
