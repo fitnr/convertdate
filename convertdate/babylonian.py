@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import division
+from __future__ import division, unicode_literals
 from math import floor, trunc
 from itertools import chain
 from .data import babylonian_data as data

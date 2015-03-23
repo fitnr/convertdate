@@ -1,28 +1,29 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 
 # Months and years
 # Month names from Parker & Dubberstein "Babylonian Chronology" (1924)
 # and Sacha Stern "Calenders in Antiquity" 2012
 MONTHS = [
-    u"Nisannu",
-    u"Aiaru",
-    u"Simanu",
-    u"Duzu",
-    u'Abu',
-    u"Ululu",
-    u"Tashritu",
-    u"Araḥsamnu",
-    u"Kislimu",
-    u"Ṭebetu",
-    u"Shabaṭu",
-    u"Addaru",
+    "Nisannu",
+    "Aiaru",
+    "Simanu",
+    "Duzu",
+    'Abu',
+    "Ululu",
+    "Tashritu",
+    "Araḥsamnu",
+    "Kislimu",
+    "Ṭebetu",
+    "Shabaṭu",
+    "Addaru",
 ]
 
 INTERCALARIES = {
-    'U': (u"Ululu II", 6),
-    'u': (u"Ululu II", 6),
-    'A': (u"Addaru II", 12),
-    'a': (u"Addaru II", 12),
+    'U': ("Ululu II", 6),
+    'u': ("Ululu II", 6),
+    'A': ("Addaru II", 12),
+    'a': ("Addaru II", 12),
 }
 
 ASCII_MONTHS = [
@@ -55,90 +56,90 @@ JDC_START_OF_REGNAL = 1492870.5
 rulers = {
     # No calendar information for these dudes
     # # IX
-    # -746: u'Nabonassar',
-    # -733: u'Nabu-nadin-zeri',
+    # -746: 'Nabonassar',
+    # -733: 'Nabu-nadin-zeri',
 
     # # X
-    # -731: u'Nabu-mukin-zeri',
-    # -728: u'Tiglath-Pileser III',
-    # -726: u'Salmanassar V',
-    # -721: u'Marduk-apal-iddina',
-    # -709: u'Sargon II',
-    # -704: u'Sennacherib',
-    # -702: u'Bel-ibni',
-    # -699: u'Aššur-nadim-šum',
-    # -693: u'Nergal-ušezib',
-    # -692: u'Mušezib-Marduk',
+    # -731: 'Nabu-mukin-zeri',
+    # -728: 'Tiglath-Pileser III',
+    # -726: 'Salmanassar V',
+    # -721: 'Marduk-apal-iddina',
+    # -709: 'Sargon II',
+    # -704: 'Sennacherib',
+    # -702: 'Bel-ibni',
+    # -699: 'Aššur-nadim-šum',
+    # -693: 'Nergal-ušezib',
+    # -692: 'Mušezib-Marduk',
 
     # # Sack of babylon
-    # -688: u'Sennacherib (II)',
-    # -680: u'Asarhaddon',
-    # -667: u'Šamaš-šum-ukin',
-    # -647: u'Kandalānu',
-    # -625: u'interregnum',
+    # -688: 'Sennacherib (II)',
+    # -680: 'Asarhaddon',
+    # -667: 'Šamaš-šum-ukin',
+    # -647: 'Kandalānu',
+    # -625: 'interregnum',
 
     # XI
     # Nabopolassar has a year 0
-    -625: u'Nabopolassar',
-    -603: u'Nebuchadnezzar II',
-    -560: u'Amēl-Marduk',
-    -558: u'Nergal-šar-usur', # Labashi-Marduk=year,4 of Nergal-shar-usur
-    -554: u'Nabunaid',
-    -537: u'Cyrus',
+    -625: 'Nabopolassar',
+    -603: 'Nebuchadnezzar II',
+    -560: 'Amēl-Marduk',
+    -558: 'Nergal-šar-usur', # Labashi-Marduk=year,4 of Nergal-shar-usur
+    -554: 'Nabunaid',
+    -537: 'Cyrus',
 
     # Achaemaenid
-    -528: u'Cambyses',
+    -528: 'Cambyses',
     # Bardiya = year 8 of Cambyses
     # Nebuchadnezzar III=year 8 of Cambyses
 
-    -520: u'Darius I', # Nebuchadnezzar IV=year 1 of Darius I
-    -484: u'Xerxes',
-    -463: u'Artaxerxes I',
-    -422: u'Darius II',
-    -403: u'Artaxerxes II Memnon',
-    -357: u'Artaxerxes III Ochus',
-    -336: u'Artaxerxes IV Arses',
-    -334: u'Darius III',
+    -520: 'Darius I', # Nebuchadnezzar IV=year 1 of Darius I
+    -484: 'Xerxes',
+    -463: 'Artaxerxes I',
+    -422: 'Darius II',
+    -403: 'Artaxerxes II Memnon',
+    -357: 'Artaxerxes III Ochus',
+    -336: 'Artaxerxes IV Arses',
+    -334: 'Darius III',
 
     # Seleucid Dynasty
-    -329: u'Alexander the Great', # Year 6 of Alexander = year 5 of Darius III
-    -321: u'Philip III Arrhidaeus', # Year 1 of Philip = year 14 of Alexander
+    -329: 'Alexander the Great', # Year 6 of Alexander = year 5 of Darius III
+    -321: 'Philip III Arrhidaeus', # Year 1 of Philip = year 14 of Alexander
 
     # Year 1 of Alexander = year 8 of Philip
-    -314: u'Alexander IV Aegus',
+    -314: 'Alexander IV Aegus',
     # Years 6-10 of Alexander IV = years 1-5 of Seleucid Era
-    -310: u'Seleucus I Nicator',
-    -280: u'Antiochus I Soter',
-    -260: u'Antiochus II Theos',
+    -310: 'Seleucus I Nicator',
+    -280: 'Antiochus I Soter',
+    -260: 'Antiochus II Theos',
 
     # Year 65 Seleucid era = year 1 Arsacid era
-    -245: u'Seleucus II Callinicus',
-    -224: u'Seleucus III Soter',
-    -221: u'Antiochus the Great',
-    -186: u'Seleucus IV Philopater',
-    -174: u'Antiochus IV Epiphanes',
-    -163: u'Antiochus V Eupator',
-    -159: u'Demetrius I Soter',
-    -148: u'Alexander Balas',
-    # : u'Demetrius II Nicator',
-    # : u'Antiochus VI Dionysus',
-    # : u'Diodotus Tryphon',
-    # : u'Antiochus VII Sidetes',
-    # : u'Demetrius II Nicator (II',
-    # : u'Alexander II Zabinas',
-    # : u'Seleucus V Philometor',
-    # : u'Cleopatra Thea',
-    # : u'Antiochus VIII Grypus',
-    # : u'Antiochus IX Cyzicenus',
-    # -95: u'Antiochus X Eusebes Philopator',
-    # -95: u'Demetrius III Eucaerus',
-    # -95: u'Disputed: Demetrius III Eucaerus, Antiochus X Eusebes Philopator ',
-    # -92: u'',
-    # -92: u'Philip I Philadelphus',
-    # -87: u'Antiochus XII Dionysus',
-    # -83: u'Tigranes of Armenia',
-    # -69: u'Antiochus XIII Asiaticus',
-    # -65: u'Philip II Philoromaeus'
+    -245: 'Seleucus II Callinicus',
+    -224: 'Seleucus III Soter',
+    -221: 'Antiochus the Great',
+    -186: 'Seleucus IV Philopater',
+    -174: 'Antiochus IV Epiphanes',
+    -163: 'Antiochus V Eupator',
+    -159: 'Demetrius I Soter',
+    -148: 'Alexander Balas',
+    # : 'Demetrius II Nicator',
+    # : 'Antiochus VI Dionysus',
+    # : 'Diodotus Tryphon',
+    # : 'Antiochus VII Sidetes',
+    # : 'Demetrius II Nicator (II',
+    # : 'Alexander II Zabinas',
+    # : 'Seleucus V Philometor',
+    # : 'Cleopatra Thea',
+    # : 'Antiochus VIII Grypus',
+    # : 'Antiochus IX Cyzicenus',
+    # -95: 'Antiochus X Eusebes Philopator',
+    # -95: 'Demetrius III Eucaerus',
+    # -95: 'Disputed: Demetrius III Eucaerus, Antiochus X Eusebes Philopator ',
+    # -92: '',
+    # -92: 'Philip I Philadelphus',
+    # -87: 'Antiochus XII Dionysus',
+    # -83: 'Tigranes of Armenia',
+    # -69: 'Antiochus XIII Asiaticus',
+    # -65: 'Philip II Philoromaeus'
 }
 
 
