@@ -8,7 +8,7 @@ except IOError:
 setup(
     name="convertdate",
 
-    version="2.0.4",
+    version="2.1.0b2",
 
     description=("Converts between Gregorian dates and other calendar systems."
                  "Calendars included: Baha'i, French Republican, Hebrew, "
