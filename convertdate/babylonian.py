@@ -266,6 +266,9 @@ def regnalyear(julianyear):
 def _regnal_epoch(ruler):
     '''Return the year that a ruler's epoch began'''
 
+    if ruler.lower() in data.rulers_alt_names:
+        ruler = data.rulers_alt_names[ruler.lower()]
+
     invert = dict((v, k) for k, v in list(data.rulers.items()))
     epoch = invert[ruler] - 1
 
