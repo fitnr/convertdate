@@ -521,8 +521,8 @@ def _nvnm_after_pve(dc):
     return next_visible_nm(prev_equinox)
 
 
-def _nvnm_after_nve(dc):
-    next_equinox = ephem.next_vernal_equinox(dc)
+def _nvnm_after_nve(ephemdate):
+    next_equinox = ephem.next_vernal_equinox(ephemdate)
     return next_visible_nm(next_equinox)
 
 
@@ -565,7 +565,7 @@ def _from_jd_analeptic(jdc, era=None, plain=None):
     past_months = []
 
     # Start of the BY that begins in JY M0
-    moon = _nvnm_after_nve('{}/1/1'.format(metonicstart))
+    moon = _nvnm_after_nve((metonicstart, 1, 1))
 
     # Loop through NMs until we arrive at close to monthstart
     # 3 is a fudge factor to make sure we don't fall between NM and visibility
