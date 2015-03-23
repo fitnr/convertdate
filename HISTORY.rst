@@ -1,6 +1,16 @@
 History
 -------
 
+2.0.4
+-----
+
+Bug fixes:
+* Typo in name of holidays.independence_day method
+* Fix major bug in ordinal.from_gregorian
+
+Other changes:
+* Expand and organized tests
+
 2.0.3.1
 -------
 
