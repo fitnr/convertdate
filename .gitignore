@@ -1,6 +1,8 @@
 build
 dist
 *.egg-info
+*.egg
 *.pyc
+.tox
 .coverage
 htmlcov

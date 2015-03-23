@@ -7,20 +7,22 @@
 #    The essential reference for computational positional astronomy.
 #
 
+__version__ = "2.0.3.1"
 
 __all__ = [
-    'holidays', 'babylonian', 'utils', 'bahai', 'dublin',
+    'holidays', 'astro', 'babylonian', 'utils', 'bahai', 'dublin',
     'french_republican', 'gregorian', 'hebrew',
     'indian_civil', 'islamic', 'iso', 'julianday',
-    'julian', 'mayan', 'persian', 'mayan'
+    'julian', 'mayan', 'persian', 'mayan',
+    'ordinal',
 ]
 
 from . import bahai
-from . import babylonian
 from . import dublin
 from . import french_republican
 from . import gregorian
 from . import hebrew
+from . import holidays
 from . import indian_civil
 from . import islamic
 from . import julian
@@ -28,3 +30,5 @@ from . import julianday
 from . import mayan
 from . import persian
 from . import mayan
+from . import ordinal
+

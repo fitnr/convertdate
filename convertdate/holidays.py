@@ -1,15 +1,9 @@
 # -*- coding: utf-8 -*-
 import time
 from math import trunc
+from .utils import nth_day_of_month
 import calendar
 from . import hebrew
-
-
-# time tuple/list index
-YEAR = 0
-MONTH = 1
-DAY = 2
-WEEKDAY = 6
 
 # weekdays
 MON = 0
@@ -33,63 +27,6 @@ SEP = 9
 OCT = 10
 NOV = 11
 DEC = 12
-
-# Hebrew months
-NISAN = 1
-IYYAR = 2
-SIVAN = 3
-TAMMUZ = 4
-AV = 5
-ELUL = 6
-TISHRI = 7
-HESHVAN = 8
-KISLEV = 9
-TEVETH = 10
-SHEVAT = 11
-ADAR = 12
-VEADAR = 13
-
-
-def adjust_date(timelist):
-    '''after a date calculation, this method will coerce the list members to ensure
-       that they are within the correct bounds. That is, a date of Oct 32
-       becomes Nov 1, etc'''
-    tm = (timelist[YEAR], timelist[
-        MONTH], timelist[DAY], 0, 0, 0, 0, 0, -1)
-    e = time.mktime(tm)
-    tm = time.localtime(e)
-    timelist[MONTH] = tm[MONTH]
-    timelist[DAY] = tm[DAY]
-
-    return timelist
-
-
-def nth_day_of_month(n, weekday, month, year):
-    '''Return (year, month, day) tuple that represents nth weekday of month in year. If n==0, returns last weekday of month'''
-    if not (0 <= n <= 5):
-        raise IndexError("Nth day of month must be 0-5. Received: {}".format(n))
-
-    if not (0 <= weekday <= 6):
-        raise IndexError("Weekday must be 0-6")
-
-    firstday, daysinmonth = calendar.monthrange(year, month)
-
-    # Get first WEEKDAY of month
-    first_weekday_of_kind = 1 + (weekday - firstday) % 7
-
-    if n == 0:
-        # find last weekday of kind, which is 5 if these conditions are met, else 4
-        if first_weekday_of_kind in [1, 2, 3] and first_weekday_of_kind + 28 < daysinmonth:
-            n = 5
-        else:
-            n = 4
-
-    day = first_weekday_of_kind + ((n - 1) * 7)
-
-    if day > daysinmonth:
-        raise IndexError("No {}th day of month {}".format(n, month))
-
-    return (year, month, day)
 
 
 def new_years(year):
@@ -174,7 +111,7 @@ def flag_day(year):
     return (year, JUN, 14)
 
 
-def indepedence_day(year, observed=None):
+def independence_day(year, observed=None):
     '''July 4th'''
     day = 4
 
@@ -258,21 +195,21 @@ def new_years_eve(year):
 # without the option, the (secular) day is returned
 
 
-def hanukkah(year, eve=False):
-    year, month, day = hebrew.to_jd_gregorianyear(year, KISLEV, 25)
+def hanukkah(year, eve=None):
+    year, month, day = hebrew.to_jd_gregorianyear(year, hebrew.KISLEV, 25)
     if eve:
         day = day - 1
     return year, month, day
 
 
-def rosh_hashanah(year, eve=False):
-    year, month, day = hebrew.to_jd_gregorianyear(year, TISHRI, 1)
+def rosh_hashanah(year, eve=None):
+    year, month, day = hebrew.to_jd_gregorianyear(year, hebrew.TISHRI, 1)
     if eve:
         day = day - 1
     return year, month, day
 
 
-def yom_kippur(year, eve=False):
+def yom_kippur(year, eve=None):
     year, month, day = hebrew.to_jd_gregorianyear(year, TISHRI, 10)
     if eve:
         day = day - 1
@@ -280,12 +217,36 @@ def yom_kippur(year, eve=False):
     return year, month, day
 
 
-def passover(year, eve=False):
-    year, month, day = hebrew.to_jd_gregorianyear(year, NISAN, 15)
+def passover(year, eve=None):
+    year, month, day = hebrew.to_jd_gregorianyear(year, hebrew.NISAN, 15)
     if eve:
         day = day - 1
 
     return year, month, day
+
+# Mexican holidays
+
+
+def dia_constitucion(year, observed=True):
+    if observed:
+        return nth_day_of_month(1, MON, FEB, year)
+    else:
+        return (year, FEB, 5)
+
+
+def natalicio_benito_juarez(year, observed=True):
+    if observed:
+        return nth_day_of_month(3, MON, MAR, year)
+    else:
+        return (year, MAR, 21)
+
+
+def dia_independencia(year):
+    return year, SEP, 16
+
+
+def dia_revolucion(year):
+    return nth_day_of_month(3, MON, NOV, year)
 
 
 class Holidays(object):
@@ -295,6 +256,9 @@ class Holidays(object):
 
     def set_year(self, year):
         self.year = year
+
+    def __repr__(self):
+        return 'Holidays({})'.format(self.year)
 
     # the holidays...
     @property
@@ -395,6 +359,22 @@ class Holidays(object):
     @property
     def passover(self, eve=None):
         return passover(self.year, eve)
+
+    @property
+    def dia_constitucion(self, observed=True):
+        return dia_constitucion(self.year)
+
+    @property
+    def natalicio_benito_juarez(self, observed=True):
+        return natalicio_benito_juarez(self.year)
+
+    @property
+    def dia_independencia(self):
+        return dia_independencia(self.year)
+
+    @property
+    def dia_revolucion(self):
+        return dia_revolucion(self.year)
 
 
 if __name__ == '__main__':

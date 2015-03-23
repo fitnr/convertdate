@@ -1,13 +1,20 @@
 from setuptools import setup
 
+try:
+    readme = open('README.rst').read()
+except IOError:
+    readme = open('README.md').read()
+
 setup(
     name="convertdate",
 
-    version="2.1.0",
+    version="2.0.4",
 
-    description="Convert dates across calendar systems",
+    description=("Converts between Gregorian dates and other calendar systems."
+                 "Calendars included: Baha'i, French Republican, Hebrew, "
+                 "Indian Civil, Islamic, ISO, Julian, Mayan and Persian."),
 
-    long_description="Converts between Gregorian dates and other calendar systems. Calendars included: Baha'i, French Republican, Hebrew, Indian Civil, Islamic, Julian, Mayan and Persian.",
+    long_description=readme,
 
     author="Neil Freeman",
 
@@ -17,7 +24,12 @@ setup(
 
     url="https://github.com/fitnr/convertdate",
 
-    packages=["convertdate", 'convertdate.data'],
+    packages=[
+        "convertdate",
+        "convertdate.data"
+    ],
+
+    test_suite='tests',
 
     package_data={
         'convertdate': ['data/*.csv'],
@@ -36,6 +48,6 @@ setup(
 
     ],
     install_requires=[
-        'ephem>=3.7.5.3'
+        'ephem>=3.7.5.3, <3.8'
     ]
 )
