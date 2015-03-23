@@ -28,7 +28,7 @@ def from_gregorian(year, month, day):
 def to_gregorian(year, dayofyear):
     leap = isleap(year)
 
-    if dayofyear > 59 + leap:
+    if dayofyear < 59 + leap:
         leap_adj = 0
     elif leap:
         leap_adj = 1
