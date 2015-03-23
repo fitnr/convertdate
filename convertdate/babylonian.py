@@ -11,38 +11,34 @@ import ephem
 import codecs
 
 MOON = ephem.Moon()
-SUN = ephem.Sun()
-
-# At JDC 1000.0, it was 1000.125 in Babylon
-# AST = Babylon's time zone
-AST_ADJUSTMENT = 0.125
-
-# todo:
-# from_jd (seleucid, arascid, regnal year)
+SUN = ephem.Sun() # pylint: disable=E1101
 
 PARKER_DUBBERSTEIN = dict()
 
-# Example row:
-# -604: {
-#   'ruler': 'NABOPOLASSAR',
-#   'year': -604,
-#   'regnalyear': '21',
-#   'months': {
-#       1: 1500913.5,
-#       2: 1500942.5,
-#       3: 1500972.5,
-#       4: 1501001.5,
-#       5: 1501031.5,
-#       6: 1501061.5,
-#       7: 1501090.5,
-#       8: 1501120.5,
-#       9: 1501149.5,
-#       10: 1500814.5,
-#       11: 1500843.5,
-#       12: 1500873.5,
-#   },
-# }
-
+"""
+PARKER_DUBBERSTEIN is a record of month starts
+in the Babylonian-Seleucid calendar
+Example row:
+-604: { # A Julian year
+  'ruler': 'NABOPOLASSAR',
+  'year': -604,
+  'regnalyear': '21',
+  'months': {
+      1: 1500913.5,
+      2: 1500942.5,
+      3: 1500972.5,
+      4: 1501001.5,
+      5: 1501031.5,
+      6: 1501061.5,
+      7: 1501090.5,
+      8: 1501120.5,
+      9: 1501149.5,
+      10: 1500814.5,
+      11: 1500843.5,
+      12: 1500873.5,
+  },
+}
+"""
 
 def load_parker_dubberstein():
     '''Read the P-D "Table for the Restatement of Babylonian
@@ -573,7 +569,7 @@ def _from_jd_analeptic(jdc, era=None, plain=None):
     # Calcuate the dublin day count, used in ephem
     dublincount = dublin.from_jd(jdc)
 
-    # Start of the current month
+    # Get the start of the current month.
     monthstart = previous_visible_nm(dublincount)
     monthstart = _correct_handoff(monthstart)
 
@@ -602,12 +598,11 @@ def _from_jd_analeptic(jdc, era=None, plain=None):
     # set year with month name and epoch
     cycleyear = month_count_to_cycle_year(len(past_months) + 1)
 
-    year = metonicstart + cycleyear
-    epoch = _set_epoch(era)
+    year = metonicstart + cycleyear - _set_epoch(era)
 
     day_count = int(dublincount - monthstart) + 1
 
-    return year - epoch, month_name, day_count, era
+    return year, month_name, day_count, era
 
 
 def day_duration(jdc):
