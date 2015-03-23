@@ -547,8 +547,9 @@ def moons_between_dates(start, end):
 
 
 def _correct_handoff(dublin_monthstart):
+    '''Correct the handoff between Parker-Dubberstein records and the proleptic calendar'''
     if dublin_monthstart < dublin.from_julian(46, 3, 1):
-        return ephem.Date('46/2/26')
+        return ephem.Date((46, 2, 26))
     else:
         return dublin_monthstart
 
