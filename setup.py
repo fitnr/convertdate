@@ -24,10 +24,11 @@ setup(
 
     url="https://github.com/fitnr/convertdate",
 
-    packages=[
-        "convertdate",
-        "convertdate.data"
-    ],
+    packages=["convertdate", 'convertdate.data'],
+
+    package_data={
+        'convertdate': ['data/*.csv'],
+    },
 
     classifiers=[
         'Programming Language :: Python',
@@ -41,7 +42,6 @@ setup(
         'License :: OSI Approved :: MIT License'
 
     ],
-
     install_requires=[
         'ephem>=3.7.5.3'
     ]
