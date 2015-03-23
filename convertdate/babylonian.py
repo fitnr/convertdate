@@ -385,7 +385,7 @@ def to_jd(year, month, day, era=None, ruler=None):
 
     era = era or ''
 
-    if era.lower() not in ['arsacid', 'seleucid', 'ag', 'regnal'] or era.lower == 'ag':
+    if era.lower() not in ('arsacid', 'seleucid', 'ag', 'regnal') or era.lower == 'ag':
         era = 'AG'
 
     if era == 'regnal':
@@ -396,7 +396,7 @@ def to_jd(year, month, day, era=None, ruler=None):
     else:
         epoch = _set_epoch(era)
 
-    if era.lower() in ['ag', 'seleucid'] and year > 356:
+    if era.lower() in ('ag', 'seleucid') and year > 356:
         return _to_jd_analeptic(year, month, day, era=era)
 
     jyear = year + epoch
@@ -419,7 +419,7 @@ def _to_jd_analeptic(year, month, day, era):
     if era == 'regnal':
         raise ValueError('Regnal era not valid for this date')
 
-    if era.lower() not in ['arsacid', 'nabonassar', 'seleucid']:
+    if era.lower() not in ('arsacid', 'nabonassar', 'seleucid'):
         era = 'seleucid'
 
     month = _numeral_month(year, month)
@@ -437,7 +437,7 @@ def _to_jd_analeptic(year, month, day, era):
     # Number of months we're into the current cycle
     months = month + sum(data.YEAR_LENGTH_LIST[0:m])
 
-    for x in range(1, months):
+    for _ in range(1, months):
         moon = ephem.next_new_moon(moon)
 
     vnm = _moon_visibility(moon)
@@ -614,5 +614,4 @@ def monthcalendar(agyear, month):
     monthlen = month_length(jd)
 
     return monthcalendarhelper(start_weekday, monthlen)
-    
 
