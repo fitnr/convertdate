@@ -411,8 +411,8 @@ def to_jd(year, month, day, era=None, ruler=None):
     # Find the row in parker-dubberstein's table that matches
     # our julian year and month.
     parkerdub = load_parker_dubberstein()
-
-    month = _numeral_month(jyear, month)
+    if type(month) == str:
+        month = _numeral_month(jyear, month)
 
     try:
         pdentry = parkerdub[jyear]['months'][month]
