@@ -28,6 +28,8 @@ setup(
 
     test_suite='tests',
 
+    zip_safe=True,
+
     classifiers=[
         'Programming Language :: Python',
         'Programming Language :: Python :: 2',
