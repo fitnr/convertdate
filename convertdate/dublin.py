@@ -1,38 +1,22 @@
 '''Convert to and from the Dublin day count'''
-from .gregorian import from_jd as greg_from_jd, to_jd as greg_to_jd
-from .julian import from_jd as jul_from_jd, to_jd as jul_to_jd
-from . import julianday
+from . import daycount
 
 EPOCH = 2415020  # Julian Day Count for Dublin Count 0
 
+_dublin = daycount.DayCount(EPOCH)
 
-def to_gregorian(dc):
-    return greg_from_jd(to_jd(dc))
+to_gregorian = _dublin.to_gregorian
 
+from_gregorian = _dublin.from_gregorian
 
-def from_gregorian(year, month, day):
-    return from_jd(greg_to_jd(year, month, day))
+to_jd = _dublin.to_jd
 
+from_jd = _dublin.from_jd
 
-def to_jd(dc):
-    return dc + EPOCH
+from_julian = _dublin.from_julian
 
+to_julian = _dublin.to_julian
 
-def from_jd(jdc):
-    return jdc - EPOCH
+to_datetime = _dublin.to_datetime
 
-
-def from_julian(year, month, day):
-    return from_jd(jul_to_jd(year, month, day))
-
-
-def to_julian(dc):
-    return jul_from_jd(to_jd(dc))
-
-
-def to_datetime(dc):
-    return julianday.to_datetime(to_jd(dc))
-
-
-def from_datetime(dt):
-    return from_jd(julianday.from_datetime(dt))
+from_datetime = _dublin.from_datetime
