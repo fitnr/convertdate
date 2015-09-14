@@ -1,6 +1,11 @@
 History
 -------
 
+2.0.5
+-----
+Bug fixes:
+* Fix Yom Kippur error in holidays.py (issue #3)
+
 2.0.4
 -----
 
