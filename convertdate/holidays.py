@@ -210,7 +210,7 @@ def rosh_hashanah(year, eve=None):
 
 
 def yom_kippur(year, eve=None):
-    year, month, day = hebrew.to_jd_gregorianyear(year, TISHRI, 10)
+    year, month, day = hebrew.to_jd_gregorianyear(year, hebrew.TISHRI, 10)
     if eve:
         day = day - 1
 
@@ -282,8 +282,8 @@ class Holidays(object):
         return new_years_eve(self.year)
 
     @property
-    def indepedence_day(self, observed=None):
-        return indepedence_day(self.year, observed)
+    def independence_day(self, observed=None):
+        return independence_day(self.year, observed)
 
     @property
     def flag_day(self):

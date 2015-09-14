@@ -17,6 +17,8 @@ class TestHolidays(unittest.TestCase):
         assert h.thanksgiving == (2014, 11, 27)
         assert h.columbus_day == (2014, 10, 13)
 
+        assert h.independence_day == (2014, 7, 4)
+
     def test_events(self):
 
         assert holidays.new_years(2013) == (2013, 1, 1)
@@ -106,6 +108,9 @@ class TestHolidays(unittest.TestCase):
 
         self.assertEqual(holidays.hanukkah(2015, True), (2015, 12, 6))
         self.assertEqual(holidays.hanukkah(2015), (2015, 12, 7))
+
+        self.assertEqual(holidays.yom_kippur(2015), (2015, 9, 23))
+        self.assertEqual(holidays.yom_kippur(2015, True), (2015, 9, 22))
 
     def test_mexican_holidays(self):
         self.assertEqual(holidays.natalicio_benito_juarez(2015, False), (2015, 3, 21))
