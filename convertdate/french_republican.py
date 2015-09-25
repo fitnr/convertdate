@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 from math import trunc
 from . import dublin, gregorian
 from .data.french_republican_days import french_republican_days
