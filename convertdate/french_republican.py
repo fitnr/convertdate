@@ -37,9 +37,11 @@ LEAP_CYCLE_YEARS = 4
 # equinox: [default] use calculation of the equinox to determine date, never returns a leap year
 
 
-def leap(year, method=100):
+def leap(year, method=None):
     '''Determine if this is a leap year in the FR calendar using one of three methods: 4, 100, 128
     (every 4th years, every 4th or 400th but not 100th, every 4th but not 128th)'''
+
+    method = method or 'equinox'
 
     if year in (3, 7, 11, 15):
         return True
@@ -55,8 +57,15 @@ def leap(year, method=100):
     elif method == 128:
         return year % 4 == 0 and year % 128 != 0
 
-    return False
+    elif method == 'equinox':
+        # Is equinox on 366th day after (year, 1, 1)
+        startjd = to_jd(year, 1, 1, method='equinox')
+        if premier_da_la_annee(startjd + 367) - startjd == 366.0:
+            return True
+    else:
+        raise ValueError("Unknown leap year method. Try: 4, 100, 128 or 'equinox'")
 
+    return False
 
 def premier_da_la_annee(jd):
     '''Determine the year in the French revolutionary calendar in which a given Julian day falls.
@@ -77,6 +86,12 @@ def premier_da_la_annee(jd):
 def to_jd(year, month, day, method=None):
     '''Obtain Julian day from a given French Revolutionary calendar date.'''
     method = method or 'equinox'
+
+    if month > 13:
+        raise ValueError("Invalid month for this calendar")
+
+    if month == 13 and day > 5 + leap(year, method=method):
+        raise ValueError("Invalid day for this month in this calendar")
 
     if method == 'equinox':
         return _to_jd_equinox(year, month, day,)
