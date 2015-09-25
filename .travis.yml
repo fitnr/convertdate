@@ -1,0 +1,15 @@
+language: python
+
+python:
+ - pypy
+ - pypy3
+ - 2.7
+ - 3.3
+ - 3.4
+ - 3.5
+
+# Use container-based infrastructure
+sudo: false
+
+script:
+ - python setup.py test
