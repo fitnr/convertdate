@@ -36,7 +36,7 @@ Or download the package and run ``python setup.py install``.
 Using
 -----
 
-.. code:: python
+::
 
     from convertdate import french_republican
     from convertdate import hebrew
@@ -54,7 +54,7 @@ Each module includes a monthcalendar function, which will generate a
 calender-like nested list for a year and month (each list of dates runs
 from Sunday to Saturday)
 
-.. code:: python
+::
 
     hebrew.monthcalendar(5775, 8)
     # [
@@ -88,7 +88,8 @@ Leap year calculations in the French Republican calendar are a matter of dispute
 
 You can specify any of these three methods with the method keyword argument in ``french_republican`` conversion functions.
 
-.. code:: python
+::
+
     from convertdate import french_republican
 
     # Romme's method
@@ -124,7 +125,7 @@ Holidays
 North American holidays are the current focus of the ``holidays``
 module, but pull requests are welcome.
 
-.. code:: python
+::
 
     from convertdate import holidays
 
@@ -162,7 +163,7 @@ Utils
 Convertdate includes some utilities for manipulating and calculating
 dates.
 
-.. code:: python
+::
 
     from convertdate import utils
 
@@ -183,7 +184,7 @@ dates.
 
 Note that when calculating weekdays, convertdate uses the convention of the `calendar` and `time` modules: Monday is 0, Sunday is 6.
 
-.. code:: python
+::
 
     from convertdate import gregorian
 
