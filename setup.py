@@ -1,6 +1,12 @@
+import sys
 from setuptools import setup
 
 readme = open('README.rst').read()
+
+if sys.version_info[0] > 2:
+    pytz_version = '>=2014.10, <2015'
+else:
+    pytz_version = '==2011c'
 
 setup(
     name="convertdate",
@@ -44,6 +50,7 @@ setup(
     ],
 
     install_requires=[
-        'ephem>=3.7.5.3, <3.8'
+        'ephem>=3.7.5.3, <3.8',
+        'pytz' + pytz_version
     ]
 )
