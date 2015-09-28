@@ -74,6 +74,37 @@ from Sunday to Saturday)
     #    [26, 27, 28, 29, 30, 31, None]
     # ]
 
+Special Options
+---------------
+
+French Republican
+~~~~~~~~~~~~~~~~~
+
+Leap year calculations in the French Republican calendar are a matter of dispute. By default, ``convertdate`` calculates leap years using the autumnal equinox. You can also use one of three more systematic methods proposed over the years.
+
+* Romme, a co-creator of the calendar, proposed leap years in years divisible by four, except for years divisible by 100.
+* Some concordances were drawn up in the 19th century that gave leap years every 4 years, in years that give a remainder of three when divided by four (19, 23, 27, etc...).
+* Von Mädler proposed leap years in years divisible by four, except for years divisible by 128.
+
+You can specify any of these three methods with the method keyword argument in ``french_republican`` conversion functions.
+
+.. code:: python
+    from convertdate import french_republican
+
+    # Romme's method
+    french_republican.to_gregorian(20, 1, 1), method='romme')
+    # (1811, 9, 23)
+
+    # continuous method
+    french_republican.to_gregorian(20, 1, 1), method='continuous')
+    # (1811, 9, 24)
+
+    # von Mädler's method
+    french_republican.to_gregorian(20, 1, 1), method='madler')
+    # (1811, 9, 23)
+
+All the conversion methods correctly assign the leap years implemented while calendar was in use (3, 7, 11).
+
 Before the Common Era
 ---------------------
 
