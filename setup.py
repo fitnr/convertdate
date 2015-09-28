@@ -1,3 +1,4 @@
+import sys
 from setuptools import setup
 
 try:
@@ -50,6 +51,7 @@ setup(
 
     ],
     install_requires=[
-        'ephem>=3.7.5.3, <3.8'
+        'ephem>=3.7.5.3, <3.8',
+        'pytz >= 2014.10, <2016'
     ]
 )

@@ -61,6 +61,9 @@ class CalTestCase(unittest.TestCase):
 
     def test_persian(self):
         assert self.jd == persian.to_jd(*persian.from_jd(self.jd))
+
+        assert persian.leap(-101) == False
+
         self.reflexive(persian.from_jd, persian.to_jd)
 
     def test_indian_civil(self):
@@ -113,6 +116,11 @@ class CalTestCase(unittest.TestCase):
 
         self.assertEqual(bahai.from_gregorian(1844, 3, 21), (1, 1, 1))
         self.assertEqual(bahai.to_gregorian(1, 1, 1), (1844, 3, 21))
+
+        assert bahai.month_length(1, 3) == 19
+        assert bahai.month_length(1, 1) == 19
+        assert bahai.month_length(4, 19) == 5
+        assert bahai.month_length(5, 19) == 4
 
         assert self.jd == bahai.to_jd(*bahai.from_jd(self.jd))
 

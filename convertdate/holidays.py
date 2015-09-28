@@ -210,7 +210,7 @@ def rosh_hashanah(year, eve=None):
 
 
 def yom_kippur(year, eve=None):
-    year, month, day = hebrew.to_jd_gregorianyear(year, TISHRI, 10)
+    year, month, day = hebrew.to_jd_gregorianyear(year, hebrew.TISHRI, 10)
     if eve:
         day = day - 1
 
@@ -282,8 +282,8 @@ class Holidays(object):
         return new_years_eve(self.year)
 
     @property
-    def indepedence_day(self, observed=None):
-        return indepedence_day(self.year, observed)
+    def independence_day(self):
+        return independence_day(self.year, observed=True)
 
     @property
     def flag_day(self):
@@ -333,8 +333,13 @@ class Holidays(object):
     def mothers_day(self):
         return mothers_day(self.year)
 
+    @property
     def fathers_day(self):
         return fathers_day(self.year)
+
+    @property
+    def pulaski_day(self):
+        return pulaski_day(self.year)
 
     @property
     def easter(self):
@@ -345,28 +350,28 @@ class Holidays(object):
         return martin_luther_king_day(self.year)
 
     @property
-    def hanukkah(self, eve=None):
-        return hanukkah(self.year, eve)
+    def hanukkah(self):
+        return hanukkah(self.year, eve=False)
 
     @property
-    def rosh_hashanah(self, eve=None):
-        return rosh_hashanah(self.year, eve)
+    def rosh_hashanah(self):
+        return rosh_hashanah(self.year, eve=False)
 
     @property
-    def yom_kippur(self, eve=None):
-        return yom_kippur(self.year, eve)
+    def yom_kippur(self):
+        return yom_kippur(self.year, eve=False)
 
     @property
-    def passover(self, eve=None):
-        return passover(self.year, eve)
+    def passover(self):
+        return passover(self.year, eve=False)
 
     @property
-    def dia_constitucion(self, observed=True):
-        return dia_constitucion(self.year)
+    def dia_constitucion(self):
+        return dia_constitucion(self.year, observed=True)
 
     @property
-    def natalicio_benito_juarez(self, observed=True):
-        return natalicio_benito_juarez(self.year)
+    def natalicio_benito_juarez(self):
+        return natalicio_benito_juarez(self.year, observed=True)
 
     @property
     def dia_independencia(self):
@@ -378,4 +383,4 @@ class Holidays(object):
 
 
 if __name__ == '__main__':
-    holiday = Holidays(2014)
+    holiday = Holidays(time.localtime().tm_year)
