@@ -1,7 +1,11 @@
 import unittest
+from datetime import datetime
 from convertdate import holidays
 
 class TestHolidays(unittest.TestCase):
+
+    def setUp(self):
+        self.h = holidays.Holidays(2015)
 
     def test_nth_day_of_month(self):
         assert holidays.nth_day_of_month(4, 2, 4, 2014) == (2014, 4, 23)
@@ -19,8 +23,27 @@ class TestHolidays(unittest.TestCase):
 
         assert h.independence_day == (2014, 7, 4)
 
-    def test_events(self):
+        assert self.h.christmas == (2015, 12, 25)
+        assert self.h.christmas_eve == (2015, 12, 24)
+        assert self.h.new_years == (2015, 1, 1)
+        assert self.h.new_years_eve == (2015, 12, 31)
+        assert self.h.valentines_day == (2015, 2, 14)
+        assert self.h.halloween == (2015, 10, 31)
+        assert self.h.mothers_day == (2015, 5, 10)
+        self.assertEqual(self.h.fathers_day, (2015, 6, 21))
 
+
+    def test_class(self):
+
+        H = holidays.Holidays()
+        assert H.year == datetime.now().year
+        assert str(self.h) == 'Holidays(2015)'
+
+        H.set_year(2010)
+
+        assert H.year == 2010
+
+    def test_events(self):
         assert holidays.new_years(2013) == (2013, 1, 1)
         assert holidays.martin_luther_king_day(2015) == (2015, 1, 19)
 
@@ -29,6 +52,13 @@ class TestHolidays(unittest.TestCase):
         assert holidays.washingtons_birthday(2015) == (2015, 2, 22)
         assert holidays.presidents_day(2015) == (2015, 2, 16)
 
+        assert holidays.pulaski_day(2015) == (2015, 3, 2)
+        assert self.h.pulaski_day == (2015, 3, 2)
+
+        assert holidays.may_day(2015) == (2015, 5, 1)
+
+        assert holidays.columbus_day(2015, 'canada') == (2015, 10, 12)
+
         assert holidays.independence_day(2015) == (2015, 7, 4)
         assert holidays.independence_day(2015, True) == (2015, 7, 3)
 
@@ -36,6 +66,10 @@ class TestHolidays(unittest.TestCase):
         assert holidays.thanksgiving(2013) == (2013, 11, 28)
         assert holidays.thanksgiving(1939) == (1939, 11, 23)
         self.assertEqual(holidays.thanksgiving(1941), (1941, 11, 20))
+
+        assert self.h.thanksgiving == (2015, 11, 26)
+
+        assert holidays.thanksgiving(2015, 'canada') == (2015, 10, 12)
 
     def test_easter(self):
         easters = [
@@ -84,6 +118,8 @@ class TestHolidays(unittest.TestCase):
         for y, m, d in easters:
             self.assertEqual(holidays.easter(y), (y, m, d))
 
+        self.assertEqual(self.h.easter, (2015, 4, 5))
+
     def test_jewish_holidays(self):
         # http://www.chabad.org/holidays/passover/pesach_cdo/aid/671901/jewish/When-is-Passover-in-2013-2014-2015-2016-and-2017.htm
         # the date here is the start of the holiday, so the eve=1 option is used
@@ -112,9 +148,32 @@ class TestHolidays(unittest.TestCase):
         self.assertEqual(holidays.yom_kippur(2015), (2015, 9, 23))
         self.assertEqual(holidays.yom_kippur(2015, True), (2015, 9, 22))
 
+        assert self.h.hanukkah == (2015, 12, 7)
+        assert self.h.rosh_hashanah == (2015, 9, 14)
+        assert self.h.yom_kippur == (2015, 9, 23)
+        assert self.h.passover == (2015, 4, 4)
+
     def test_mexican_holidays(self):
         self.assertEqual(holidays.natalicio_benito_juarez(2015, False), (2015, 3, 21))
         self.assertEqual(holidays.natalicio_benito_juarez(2015), (2015, 3, 16))
+
+        assert self.h.dia_constitucion == (2015, 2, 2)
+        assert self.h.natalicio_benito_juarez == (2015, 3, 16)
+        assert self.h.dia_independencia == (2015, 9, 16)
+        assert self.h.dia_revolucion == (2015, 11, 16)
+
+    def test_usa_holidays(self):
+        assert self.h.independence_day == (2015, 7, 3)
+        assert self.h.flag_day == (2015, 6, 14)
+        assert self.h.election_day == (2015, 11, 3)
+        assert self.h.presidents_day == (2015, 2, 16)
+        assert self.h.washingtons_birthday == (2015, 2, 22)
+        assert self.h.lincolns_birthday == (2015, 2, 12)
+        assert self.h.memorial_day == (2015, 5, 25)
+        assert self.h.labor_day == (2015, 9, 7)
+        assert self.h.columbus_day == (2015, 10, 12)
+        assert self.h.veterans_day == (2015, 11, 11)
+        assert self.h.martin_luther_king_day == (2015, 1, 19)
 
 if __name__ == '__main__':
     unittest.main()
