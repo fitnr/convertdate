@@ -1,7 +1,9 @@
-import sys
 from setuptools import setup
 
-readme = open('README.rst').read()
+try:
+    readme = open('README.rst').read()
+except IOError:
+    readme = ''
 
 setup(
     name="convertdate",
