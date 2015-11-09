@@ -31,6 +31,4 @@ from . import julian
 from . import julianday
 from . import mayan
 from . import persian
-from . import mayan
 from . import ordinal
-
