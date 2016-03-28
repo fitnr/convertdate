@@ -1,17 +1,18 @@
 # -*- coding: utf-8 -*-
 from __future__ import division, unicode_literals
+import codecs
 from math import floor, trunc
 from itertools import chain
+from csv import DictReader
+from pkg_resources import resource_stream
+import ephem
 from .data import babylonian_data as data
 from . import dublin, julian, gregorian
 from .utils import amod, jwday, monthcalendarhelper
-from pkg_resources import resource_stream
-from csv import DictReader
-import ephem
-import codecs
+
 
 MOON = ephem.Moon()
-SUN = ephem.Sun() # pylint: disable=E1101
+SUN = ephem.Sun()  # pylint: disable=E1101
 
 PARKER_DUBBERSTEIN = dict()
 
@@ -39,6 +40,7 @@ Example row:
   },
 }
 """
+
 
 def load_parker_dubberstein():
     '''Read the P-D "Table for the Restatement of Babylonian
@@ -311,12 +313,12 @@ def _numeral_month(year, month, era=None):
         raise ValueError("Epoch must be 'julian' or 'ag' (alexanderian)")
 
     # easy cases
-    if type(month) == float:
+    if isinstance(month, float):
         month = int(month)
 
     months = intercalate(year, era=era)
 
-    if type(month) == int:
+    if isinstance(month, int):
         if month <= len(months):
             return month
         else:
@@ -393,7 +395,7 @@ def from_jd(cjdn, era=None, plain=None):
 
 def to_jd(year, month, day, era=None, ruler=None):
     '''Convert Babylonian date to Julian Day Count'''
-    if day < 1 or (type(month) in [int, float] and month < 1):
+    if day < 1 or ((isinstance(month, int) or isinstance(month, float)) and month < 1):
         raise ValueError("Month and day must be at least 1")
 
     era = era or ''
@@ -633,4 +635,3 @@ def monthcalendar(agyear, month):
     monthlen = month_length(jd)
 
     return monthcalendarhelper(start_weekday, monthlen)
-
