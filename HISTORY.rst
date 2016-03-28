@@ -1,6 +1,13 @@
 History
 -------
 
+2.0.7
+-----
+
+* Better Python 2/3 compatibility
+* Improve tests
+* bump pytz requirement
+
 2.0.6
 -----
 
