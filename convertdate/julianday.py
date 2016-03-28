@@ -7,7 +7,7 @@
 # Licensed under the GPL-v3.0 license:
 # http://opensource.org/licenses/MIT
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
-from __future__ import division
+
 from datetime import datetime
 from . import gregorian
 from . import julian
@@ -48,10 +48,10 @@ def from_datetime(dt):
 
     jdc = gregorian.to_jd(dt.year, dt.month, dt.day)
 
-    hfrac = dt.hour / 24
-    mfrac = round(dt.minute / (24 * 60), 5)
-    sfrac = round(dt.second / (24 * 60 * 60), 5)
-    msfrac = dt.microsecond / (24 * 60 * 60 * 1000)
+    hfrac = dt.hour / 24.
+    mfrac = round(dt.minute / (24. * 60), 5)
+    sfrac = round(dt.second / (24. * 60 * 60), 5)
+    msfrac = dt.microsecond / (24. * 60 * 60 * 1000)
 
     return jdc + hfrac + mfrac + sfrac + msfrac
 

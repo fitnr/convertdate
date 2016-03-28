@@ -158,7 +158,7 @@ def tzolkin_generator(number=None, name=None):
 
     count = _tzolkin_count(number, name)
 
-    ranged = itertools.chain(range(count, 260), range(1, count))
+    ranged = itertools.chain(list(range(count, 260)), list(range(1, count)))
 
     for i in ranged:
         yield _tzolkin_from_count(i)
