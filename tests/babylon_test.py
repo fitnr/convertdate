@@ -3,13 +3,10 @@
 from __future__ import print_function
 from copy import copy
 import unittest
-from convertdate import dublin
-from convertdate import julian
-from convertdate import gregorian
-from convertdate import babylonian as bab
-from convertdate.data import babylonian_data as data
-import ephem
 from random import randint
+import ephem
+from convertdate import babylonian as bab, dublin, julian, gregorian
+from convertdate.data import babylonian_data as data
 
 
 class test_babylon_cal(unittest.TestCase):
@@ -261,6 +258,10 @@ class test_babylon_cal(unittest.TestCase):
                 if es:
                     raise AssertionError(('{} ' * len(es)).strip().format(*es))
 
+    def test_month_calendar(self):
+        mc = bab.monthcalendar(1000, 12)
+        assert len(mc) == 5
+        assert len(mc[0]) == 7
 
     def test_metonic_cycle(self):
         dc = dublin.from_gregorian(1900, 3, 19)
@@ -335,9 +336,9 @@ class test_babylon_cal(unittest.TestCase):
 
             except AssertionError:
                 raise AssertionError("'{} != {}, Baby: {}, JD: {}".format(
-                    gregorian.from_jd(z + x), gregorian.from_jd(bab.to_jd(*bab.from_jd(z + x))), bab.from_jd(z + x), z + x
+                    gregorian.from_jd(
+                        z + x), gregorian.from_jd(bab.to_jd(*bab.from_jd(z + x))), bab.from_jd(z + x), z + x
                 ))
-                    
 
             except (StopIteration, IndexError) as e:
                 print(z + x, gregorian.from_jd(z + x))
@@ -347,52 +348,6 @@ class test_babylon_cal(unittest.TestCase):
 
         self.assertRaises(ValueError, bab.to_jd, 1900, 'Addaru', -1)
         self.assertRaises(ValueError, bab.to_jd, 1900, -1, 1)
-
-    # def test_limits_of_metonic(self):
-    #     print('test_limits_of_metonic')
-    #     for y in list(range(-595, 0, 38)) + list(range(14, 4000, 38)):
-    #         vnm = bab._nvnm_after_pve(ephem.Date(str(y) + '/6/1'))
-    #         print('*', y, round(vnm - ephem.previous_vernal_equinox(str(y) + '/6/1')), bab.from_gregorian(y, vnm.datetime().month, vnm.datetime().day))
-
-    #     moon = ephem.next_new_moon('128/4/15')
-    #     for x in range(1, 237):
-    #         pve = ephem.previous_vernal_equinox(moon)
-    #         if moon - pve < 29.5:
-    #             v = pve
-    #         else:
-    #             v = ''
-
-    #         m = bab.metonic_number(moon.datetime().year)
-
-    #         if moon.datetime().year > pve.datetime().year:
-    #             m -= 1
-
-    #         print("{}\t{}\t{}\t{}".format(x, m, moon, v))
-    #         moon = ephem.next_new_moon(moon)
-
-    # def test_na1(self):
-    #     for u, v in d:
-    #         print u, v
-
-    #     print('nvnm', bab.next_visible_nm(ephem.Date('2014/3/19')))
-
-    #     babylon = bab.observer()
-    #     sun = ephem.Sun()
-    #     moon = ephem.Moon()
-    #     print('moons NA1')
-    #     nnm = ephem.next_new_moon(1)
-
-    #     print('x, moon.alt, sun.alt')
-    #     for x in range(1, 100):
-    #         babylon.date = nnm = ephem.next_new_moon(nnm)
-    #         babylon.date = babylon.next_setting(sun)
-    #         moon.compute(babylon)
-
-    #         if moon.alt < 0:
-    #             babylon.date = babylon.next_setting(sun)
-    #             print('moon alt %s' % round(moon.alt * 57.2957795))
-
-    #     print("{}\t{}\t{}".format(x, round(moon.alt * 57.2957795), round(sun.az * 57.2957795)))
 
     def test_glitchy_1700s(self):
         for y in range(1691 - 19, 1730, 19):
@@ -445,10 +400,6 @@ class test_babylon_cal(unittest.TestCase):
             print('one', one)
             print('two', two)
             raise e
-
-    # def test_comparse_lunisolar(self):
-    #     track_lunisolar_metonic(1900)
-    #     track_lunisolar_metonic(45+19)
 
     def test_metonic_lag(self):
         for x in range(-518, 59 + (19 * 100), 114):
