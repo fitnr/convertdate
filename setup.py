@@ -14,10 +14,13 @@ try:
 except IOError:
     readme = ''
 
+with open('convertdate/__init__.py') as i:
+    version = next(r for r in i.readlines() if '__version__' in r).split('=')[1].strip('"\' \n')
+
 setup(
     name="convertdate",
 
-    version="2.0.6",
+    version=version,
 
     description=("Converts between Gregorian dates and other calendar systems."
                  "Calendars included: Baha'i, French Republican, Hebrew, "

@@ -32,7 +32,7 @@ from . import mayan
 from . import persian
 from . import ordinal
 
-__version__ = "2.0.3.1"
+__version__ = '2.0.6'
 
 __all__ = [
     'holidays', 'bahai', 'dublin',
