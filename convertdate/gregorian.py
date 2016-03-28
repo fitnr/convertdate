@@ -1,7 +1,14 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from .utils import floor, monthcalendarhelper, jwday
-from calendar import isleap as leap, monthrange
 
+# This file is part of convertdate.
+# http://github.com/fitnr/convertdate
+
+# Licensed under the GPL-v3.0 license:
+# http://opensource.org/licenses/MIT
+# Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
+from calendar import isleap as leap, monthrange
+from .utils import floor, monthcalendarhelper, jwday
 
 EPOCH = 1721425.5
 
