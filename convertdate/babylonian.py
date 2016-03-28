@@ -331,7 +331,10 @@ def _numeral_month(year, month, era=None):
         month = inverted[month]
     except KeyError:
 
-        months = ag_intercalate(year, era=era, plain=1)
+        if era == 'julian':
+            year = _agyear(year)
+
+        months = ag_intercalate(year, plain=1)
         inverted = dict((v, k) for k, v in list(months.items()))
 
         month = inverted[month]
