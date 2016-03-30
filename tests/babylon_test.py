@@ -122,9 +122,9 @@ class test_babylon_cal(unittest.TestCase):
         assert len(bab.intercalate(47)) == 12
 
     def test_valid_regnal(self):
-        assert bab._valid_regnal(-500)
-        assert bab._valid_regnal(-627) == False
-        assert bab._valid_regnal(-144) == False
+        assert bab._valid_regnal(-500) is True
+        assert bab._valid_regnal(-627) is False
+        assert bab._valid_regnal(-144) is False
 
     def test_valid_epoch(self):
         assert bab._valid_epoch('Nabunaid') is True
@@ -138,8 +138,8 @@ class test_babylon_cal(unittest.TestCase):
         assert bab.regnalyear(-328) == (8, u'Alexander the Great')
         assert bab.regnalyear(-626) == (False, False)
 
-        assert bab.regnalyear(-625) == (0, u'Nabopolassar')
-        assert bab.regnalyear(-624) == (1, u'Nabopolassar')
+        self.assertSequenceEqual(bab.regnalyear(-625), (0, u'Nabopolassar'))
+        self.assertSequenceEqual(bab.regnalyear(-624), (1, u'Nabopolassar'))
         assert bab.regnalyear(-623) == (2, u'Nabopolassar')
         assert bab.regnalyear(-622) == (3, u'Nabopolassar')
         assert bab.regnalyear(-621) == (4, u'Nabopolassar')
@@ -147,8 +147,13 @@ class test_babylon_cal(unittest.TestCase):
 
         assert bab.regnalyear(-333) == (2, u'Darius III')
 
+    def test_regnal_epoch(self):
+        self.assertEqual(bab._regnal_epoch('Nabonassar'), data.NABONASSAR_EPOCH)
+        self.assertEqual(bab._regnal_epoch('Nabunaid'), data.rulers['Nabunaid']-1)
+        assert bab._regnal_epoch('nabunaid') == data.rulers['Nabunaid']-1
+
     def test_babylon_from_jd_regnal(self):
-        assert bab.from_jd(1492870.5, 'regnal') == (0, u"Nisannu", 1, u'Nabopolassar')
+        self.assertEqual(bab.from_jd(1492870.5, 'regnal'), (0, u"Nisannu", 1, u'Nabopolassar'))
         assert bab.from_julian(-329, 7, 30, 'regnal') == (7, u'Abu', 1, u'Alexander the Great')
 
         self.assertRaises(IndexError, bab.from_julian, -626, 4, 1)
@@ -160,7 +165,7 @@ class test_babylon_cal(unittest.TestCase):
         self.assertEqual(bab._set_epoch('seleucid'), data.SELEUCID_EPOCH)
         self.assertEqual(bab._set_epoch('arsacid'), data.ARSACID_EPOCH)
         self.assertEqual(bab._set_epoch('nabonassar'), data.NABONASSAR_EPOCH)
-        self.assertEqual(bab._set_epoch('nabopolassar'), data.NABOPOLASSAR_EPOCH)
+        self.assertEqual(bab._set_epoch('nabopolassar'), -625)
 
     def test_babylon_from_jd_seleucid(self):
         self.assertEqual(bab.from_julian(1, 4, 14, 'AG'), (312, u'Nisannu', 1, 'AG'))

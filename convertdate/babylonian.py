@@ -260,7 +260,7 @@ def regnalyear(julianyear):
         rulername, key = rulers[0]
         ryear = julianyear - key + 1
 
-    # Doesn't follow the rules, this guy.
+    # Doesn't follow the rules, these guys.
     if rulername == 'Nabopolassar':
         ryear = ryear - 1
 
@@ -317,6 +317,7 @@ def _set_epoch(era=None):
 
     if era == 'arsacid':
         return data.ARSACID_EPOCH
+
     elif era == 'nabonassar':
         return data.NABONASSAR_EPOCH
 
@@ -345,7 +346,9 @@ def _numeral_month(year, month, era=None):
         if month <= len(months):
             return month
         else:
-            raise ValueError("Invalid month: {}. Wanted value <= {}. year: {}, era: {}".format(month, len(months), year, era))
+            raise ValueError(
+                "Invalid month: {}. Wanted value <= {}. year: {}, era: {}".format(month, len(months), year, era)
+            )
 
     # Flip it around to get the month
     inverted = dict((v, k) for k, v in list(months.items()))
@@ -368,7 +371,17 @@ def _numeral_month(year, month, era=None):
 
 
 def from_jd(cjdn, era=None, plain=None):
-    '''Calculate Babylonian date from Julian Day Count'''
+    '''
+    Calculate Babylonian date from Julian Day Count.
+
+    Args:
+        cjdn (float): Julian day count
+        era (string): epoch name
+        plain (bool): If true, return ascii strings for month names
+
+    Returns:
+        tuple: (year, month, day, era)
+    '''
 
     era = era or 'AG'
 
@@ -420,11 +433,22 @@ def from_jd(cjdn, era=None, plain=None):
 
 
 def to_jd(year, month, day, era=None):
+    '''
+    Convert Babylonian date to Julian Day Count.
+
+    Args:
+        year (int): year in the given epoch
+        month (string/int): month name or 1-based index
+        day (int): day of month
+        era (string/None): Epoch (Arascid, Seleucid) or ruler name. Defaults to Seleucid.
+
+    Returns:
+        tuple: (year, month, day)
+    '''
     if day < 1 or ((isinstance(month, int) or isinstance(month, float)) and month < 1):
         raise ValueError("Month and day must be at least 1")
 
     era = era or ''
-
 
     if not _valid_epoch(era):
         era = 'AG'
@@ -483,18 +507,68 @@ def _to_jd_analeptic(year, month, day, era):
 
 
 def to_julian(year, month, day, era=None):
+    '''
+    Convert Babylonian date to the Julian calendar.
+
+    Args:
+        year (int): Babylonian year
+        month (string/int): month name or 1-based index
+        day (int): day
+        era (string/None): the epoch or ruler era to use.
+
+    Returns:
+        tuple: year, month, day
+    '''
     return julian.from_jd(to_jd(year, month, day, era))
 
 
 def to_gregorian(year, month, day, era=None):
+    '''
+    Convert Babylonian date to the Gregorian calendar.
+
+    Args:
+        year (int): Babylonian year
+        month (string/int): month name or 1-based index
+        day (int): day
+        era (string/None): the epoch or ruler era to use.
+
+    Returns:
+        tuple: year, month, day
+    '''
     return gregorian.from_jd(to_jd(year, month, day, era=era))
 
 
 def from_julian(y, m, d, era=None, plain=None):
+    '''
+    Convert a Julian date to the Babylonian calendar.
+
+    Args:
+        y (int): Julian year
+        m (int): Julian month
+        d (int): Julian day
+        era (string/None): the epoch or ruler era to use
+        plain (boolean): Returns month names with ASCII characters
+
+    Returns:
+        tuple: (year, month, day, epoch)
+    '''
     return from_jd(julian.to_jd(y, m, d), era, plain=plain)
 
 
 def from_gregorian(y, m, d, era=None, plain=None):
+    '''
+    Convert a Gregorian date to the Babylonian calendar.
+
+    Args:
+        y (int): Gregorian year
+        m (int): Gregorian month
+        d (int): Gregorian day
+        era (string/None): the epoch or ruler era to use
+        plain (boolean): Returns month names with ASCII characters
+
+    Returns:
+        tuple: (year, month, day, epoch)
+    '''
     return from_jd(gregorian.to_jd(y, m, d), era, plain=plain)
 
 
