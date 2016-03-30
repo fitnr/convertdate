@@ -299,6 +299,14 @@ def _regnal_epoch(ruler):
     return epoch
 
 
+def _valid_epoch(era):
+    return (
+        era.lower() in ('arsacid', 'seleucid', 'ag', 'nabonassar') or
+        era.lower() in data.rulers_alt_names.keys() or
+        era.lower() in set(v.lower() for v in data.rulers_alt_names.values())
+    )
+
+
 def _set_epoch(era=None):
     era = era or ''
     era = era.lower()
@@ -405,23 +413,17 @@ def from_jd(cjdn, era=None, plain=None):
     return (by, month_name, int(bday), era)
 
 
-def to_jd(year, month, day, era=None, ruler=None):
-    '''Convert Babylonian date to Julian Day Count'''
+def to_jd(year, month, day, era=None):
     if day < 1 or ((isinstance(month, int) or isinstance(month, float)) and month < 1):
         raise ValueError("Month and day must be at least 1")
 
     era = era or ''
 
-    if era.lower() not in ('arsacid', 'seleucid', 'ag', 'regnal') or era.lower == 'ag':
+
+    if not _valid_epoch(era):
         era = 'AG'
 
-    if era == 'regnal':
-        if not ruler:
-            raise ValueError("Missing argument for 'ruler'")
-        epoch = _regnal_epoch(ruler)
-
-    else:
-        epoch = _set_epoch(era)
+    epoch = _set_epoch(era)
 
     if era.lower() in ('ag', 'seleucid') and year > 356:
         return _to_jd_analeptic(year, month, day, era=era)
@@ -474,12 +476,12 @@ def _to_jd_analeptic(year, month, day, era):
     return dublin.to_jd(outdc)
 
 
-def to_julian(year, month, day, era=None, ruler=None):
-    return julian.from_jd(to_jd(year, month, day, era, ruler))
+def to_julian(year, month, day, era=None):
+    return julian.from_jd(to_jd(year, month, day, era))
 
 
-def to_gregorian(year, month, day, era=None, ruler=None):
-    return gregorian.from_jd(to_jd(year, month, day, era=era, ruler=ruler))
+def to_gregorian(year, month, day, era=None):
+    return gregorian.from_jd(to_jd(year, month, day, era=era))
 
 
 def from_julian(y, m, d, era=None, plain=None):

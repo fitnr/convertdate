@@ -126,6 +126,13 @@ class test_babylon_cal(unittest.TestCase):
         assert bab._valid_regnal(-627) == False
         assert bab._valid_regnal(-144) == False
 
+    def test_valid_epoch(self):
+        assert bab._valid_epoch('Nabunaid') is True
+        assert bab._valid_epoch('nabunaid') is True
+        assert bab._valid_epoch('Nabopolassar') is True
+        assert bab._valid_epoch('Seleucus VII Kybiosaktes') is True
+        assert bab._valid_epoch('sdfjlkjs') is False
+
     def test_bab_regnal_year(self):
         assert bab.regnalyear(-603) == (1, u'Nebuchadnezzar II')
         assert bab.regnalyear(-328) == (8, u'Alexander the Great')
@@ -290,35 +297,33 @@ class test_babylon_cal(unittest.TestCase):
         assert bab.to_julian(263, 1, 1, era='arsacid') == (16, 3, 29)
 
     def test_bab_to_julian_regnal(self):
-        self.assertRaises(ValueError, bab.to_julian, 1, 1, 1, era='regnal')
+        self.assertSequenceEqual(bab.to_julian(1, 1, 1, era='Nabunaid'), (-554, 3, 31))
+        assert bab.to_julian(1, 2, 1, era='Nabunaid') == (-554, 4, 30)
+        assert bab.to_julian(1, 3, 1, era='Nabunaid') == (-554, 5, 30)
+        assert bab.to_julian(1, 4, 1, era='Nabunaid') == (-554, 6, 28)
 
-        assert bab.to_julian(1, 1, 1, era='regnal', ruler='Nabunaid') == (-554, 3, 31)
-        assert bab.to_julian(1, 2, 1, era='regnal', ruler='Nabunaid') == (-554, 4, 30)
-        assert bab.to_julian(1, 3, 1, era='regnal', ruler='Nabunaid') == (-554, 5, 30)
-        assert bab.to_julian(1, 4, 1, era='regnal', ruler='Nabunaid') == (-554, 6, 28)
+        assert bab.to_julian(1, 6, 1, era='Nabunaid') == (-554, 8, 26)
+        assert bab.to_julian(1, 10, 1, era='Nabunaid') == (-554, 12, 22)
+        assert bab.to_julian(1, 11, 1, era='Nabunaid') == (-553, 1, 20)
+        assert bab.to_julian(1, 12, 1, era='Nabunaid') == (-553, 2, 19)
+        self.assertEqual(bab.to_julian(1, 12, 11, era='Nabunaid'), (-553, 3, 1))
+        self.assertEqual(bab.to_julian(1, 12, 21, era='Nabunaid'), (-553, 3, 11))
+        self.assertEqual(bab.to_julian(1, 12, 26, era='Nabunaid'), (-553, 3, 16))
+        self.assertEqual(bab.to_julian(1, 12, 28, era='Nabunaid'), (-553, 3, 18))
+        self.assertEqual(bab.to_julian(1, 13, 1, era='Nabunaid'), (-553, 3, 20))
+        assert bab.to_julian(1, 13, 10, era='Nabunaid') == (-553, 3, 29)
+        assert bab.to_julian(2, 1, 1, era='Nabunaid') == (-553, 4, 19)
 
-        assert bab.to_julian(1, 6, 1, era='regnal', ruler='Nabunaid') == (-554, 8, 26)
-        assert bab.to_julian(1, 10, 1, era='regnal', ruler='Nabunaid') == (-554, 12, 22)
-        assert bab.to_julian(1, 11, 1, era='regnal', ruler='Nabunaid') == (-553, 1, 20)
-        assert bab.to_julian(1, 12, 1, era='regnal', ruler='Nabunaid') == (-553, 2, 19)
-        self.assertEqual(bab.to_julian(1, 12, 11, era='regnal', ruler='Nabunaid'), (-553, 3, 1))
-        self.assertEqual(bab.to_julian(1, 12, 21, era='regnal', ruler='Nabunaid'), (-553, 3, 11))
-        self.assertEqual(bab.to_julian(1, 12, 26, era='regnal', ruler='Nabunaid'), (-553, 3, 16))
-        self.assertEqual(bab.to_julian(1, 12, 28, era='regnal', ruler='Nabunaid'), (-553, 3, 18))
-        self.assertEqual(bab.to_julian(1, 13, 1, era='regnal', ruler='Nabunaid'), (-553, 3, 20))
-        assert bab.to_julian(1, 13, 10, era='regnal', ruler='Nabunaid') == (-553, 3, 29)
-        assert bab.to_julian(2, 1, 1, era='regnal', ruler='Nabunaid') == (-553, 4, 19)
+        assert bab.to_julian(3, 12, 1, era='Cyrus') == (-534, 2, 19)
 
-        assert bab.to_julian(3, 12, 1, era='regnal', ruler='Cyrus') == (-534, 2, 19)
+        assert bab.to_julian(4, 13, 1, era='Nebuchadnezzar II') == (-599, 3, 18)
 
-        assert bab.to_julian(4, 13, 1, era='regnal', ruler='Nebuchadnezzar II') == (-599, 3, 18)
+        self.assertSequenceEqual(bab.to_julian(0, 1, 1, era='Nabopolassar'), (-625, 4, 5))
 
-        assert bab.to_julian(0, 1, 1, era='regnal', ruler='Nabopolassar') == (-625, 4, 5)
+        self.assertEqual(bab.to_julian(1, 1, 1, era='Nabopolassar'), (-624, 3, 24))
+        self.assertEqual(bab.to_julian(0, 1, 1, era='Nabopolassar'), (-625, 4, 5))
 
-        self.assertEqual(bab.to_julian(1, 1, 1, era='regnal', ruler='Nabopolassar'), (-624, 3, 24))
-        self.assertEqual(bab.to_julian(0, 1, 1, era='regnal', ruler='Nabopolassar'), (-625, 4, 5))
-
-        assert bab.to_julian(21, 10, 1, era='regnal', ruler='Nabopolassar') == (-603, 1, 3)
+        assert bab.to_julian(21, 10, 1, era='Nabopolassar') == (-603, 1, 3)
 
     def test_moons_between_dates(self):
         d1 = ephem.Date('2014/11/1')
