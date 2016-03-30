@@ -250,13 +250,15 @@ def regnalyear(julianyear):
     else:
         return (False, False)
 
-    if julianyear in list(data.rulers.keys()):
-        rulername = data.rulers[julianyear]
+    if julianyear in data.rulers.values():
+        rulername = dict(zip(data.rulers.values(), data.rulers.keys())).get(julianyear)
         ryear = 1
+
     else:
-        key = max([r for r in data.rulers if r <= julianyear])
+        rulers = [(k, v) for k, v in data.rulers.items() if v <= julianyear]
+        rulers.sort(key=lambda x: x[1], reverse=True)
+        rulername, key = rulers[0]
         ryear = julianyear - key + 1
-        rulername = data.rulers[key]
 
     # Doesn't follow the rules, this guy.
     if rulername == 'Nabopolassar':
@@ -280,8 +282,10 @@ def _regnal_epoch(ruler):
     if ruler.lower() in data.rulers_alt_names:
         ruler = data.rulers_alt_names[ruler.lower()]
 
-    invert = dict((v, k) for k, v in list(data.rulers.items()))
-    epoch = invert[ruler] - 1
+    if ruler == 'Nabonassar':
+        return data.NABONASSAR_EPOCH
+
+    epoch = data.rulers[ruler] - 1
 
     # Doesn't follow the rules, these guys
     if ruler == 'Nabopolassar':
@@ -315,8 +319,10 @@ def _set_epoch(era=None):
         return data.ARSACID_EPOCH
     elif era == 'nabonassar':
         return data.NABONASSAR_EPOCH
-    elif era == 'nabopolassar':
-        return data.NABOPOLASSAR_EPOCH
+
+    elif era in data.rulers_alt_names:
+        return _regnal_epoch(era)
+
     else:
         return data.SELEUCID_EPOCH
 

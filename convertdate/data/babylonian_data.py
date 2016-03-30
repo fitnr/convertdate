@@ -53,91 +53,93 @@ JDC_START_OF_REGNAL = 1492870.5
 # key: year reign began
 # value: name of ruler
 rulers = {
-    # No calendar information for these dudes
+    # # No calendar information for these dudes
+    # 'Hammurabi': -1791,
+
     # # IX
-    # -746: 'Nabonassar',
-    # -733: 'Nabu-nadin-zeri',
+    # 'Nabonassar': -746,
+    # 'Nabu-nadin-zeri': -733,
 
     # # X
-    # -731: 'Nabu-mukin-zeri',
-    # -728: 'Tiglath-Pileser III',
-    # -726: 'Salmanassar V',
-    # -721: 'Marduk-apal-iddina',
-    # -709: 'Sargon II',
-    # -704: 'Sennacherib',
-    # -702: 'Bel-ibni',
-    # -699: 'Aššur-nadim-šum',
-    # -693: 'Nergal-ušezib',
-    # -692: 'Mušezib-Marduk',
+    # 'Nabu-mukin-zeri': -731,
+    # 'Tiglath-Pileser III': -728,
+    # 'Salmanassar V': -726,
+    # 'Marduk-apal-iddina': -721,
+    # 'Sargon II': -709,
+    # 'Sennacherib': -704,
+    # 'Bel-ibni': -702,
+    # 'Aššur-nadim-šum': -699,
+    # 'Nergal-ušezib': -693,
+    # 'Mušezib-Marduk': -692,
 
-    # # Sack of babylon
+    # Sack of babylon
     # -688: 'Sennacherib (II)',
-    # -680: 'Asarhaddon',
-    # -667: 'Šamaš-šum-ukin',
-    # -647: 'Kandalānu',
-    # -625: 'interregnum',
+    # 'Asarhaddon': -680,
+    # 'Šamaš-šum-ukin': -667,
+    # 'Kandalānu': -647,
+    # 'interregnum': -625,
 
-    # XI
+    # # XI
     # Nabopolassar has a year 0
-    -625: 'Nabopolassar',
-    -603: 'Nebuchadnezzar II',
-    -560: 'Amēl-Marduk',
-    -558: 'Nergal-šar-usur', # Labashi-Marduk=year,4 of Nergal-shar-usur
-    -554: 'Nabunaid',
-    -537: 'Cyrus',
+    'Nabopolassar': -625,
+    'Nebuchadnezzar II': -603,
+    'Amēl-Marduk': -560,
+    'Nergal-šar-usur': -558,  # Labashi-Marduk=year,4 of Nergal-shar-usur
+    'Nabunaid': -554,
+    'Cyrus': -537,
 
     # Achaemaenid
-    -528: 'Cambyses',
+    'Cambyses': -528,
     # Bardiya = year 8 of Cambyses
     # Nebuchadnezzar III=year 8 of Cambyses
 
-    -520: 'Darius I', # Nebuchadnezzar IV=year 1 of Darius I
-    -484: 'Xerxes',
-    -463: 'Artaxerxes I',
-    -422: 'Darius II',
-    -403: 'Artaxerxes II Memnon',
-    -357: 'Artaxerxes III Ochus',
-    -336: 'Artaxerxes IV Arses',
-    -334: 'Darius III',
+    'Darius I': -520,  # Nebuchadnezzar IV=year 1 of Darius I
+    'Xerxes': -484,
+    'Artaxerxes I': -463,
+    'Darius II': -422,
+    'Artaxerxes II Memnon': -403,
+    'Artaxerxes III Ochus': -357,
+    'Artaxerxes IV Arses': -336,
+    'Darius III': -334,
 
     # Seleucid Dynasty
-    -329: 'Alexander the Great', # Year 6 of Alexander = year 5 of Darius III
-    -321: 'Philip III Arrhidaeus', # Year 1 of Philip = year 14 of Alexander
+    'Alexander the Great': -329,  # Year 6 of Alexander = year 5 of Darius III
+    'Philip III Arrhidaeus': -321,  # Year 1 of Philip = year 14 of Alexander
 
     # Year 1 of Alexander = year 8 of Philip
-    -314: 'Alexander IV Aegus',
+    'Alexander IV Aegus': -314,
     # Years 6-10 of Alexander IV = years 1-5 of Seleucid Era
-    -310: 'Seleucus I Nicator',
-    -280: 'Antiochus I Soter',
-    -260: 'Antiochus II Theos',
+    'Seleucus I Nicator': -310,
+    'Antiochus I Soter': -280,
+    'Antiochus II Theos': -260,
 
     # Year 65 Seleucid era = year 1 Arsacid era
-    -245: 'Seleucus II Callinicus',
-    -224: 'Seleucus III Soter',
-    -221: 'Antiochus the Great',
-    -186: 'Seleucus IV Philopater',
-    -174: 'Antiochus IV Epiphanes',
-    -163: 'Antiochus V Eupator',
-    -159: 'Demetrius I Soter',
-    -148: 'Alexander Balas',
-    # : 'Demetrius II Nicator',
-    # : 'Antiochus VI Dionysus',
-    # : 'Diodotus Tryphon',
-    # : 'Antiochus VII Sidetes',
-    # : 'Demetrius II Nicator (II',
-    # : 'Alexander II Zabinas',
-    # : 'Seleucus V Philometor',
-    # : 'Cleopatra Thea',
-    # : 'Antiochus VIII Grypus',
-    # : 'Antiochus IX Cyzicenus',
-    # -95: 'Antiochus X Eusebes Philopator',
-    # -95: 'Demetrius III Eucaerus',
-    # -95: 'Disputed: Demetrius III Eucaerus, Antiochus X Eusebes Philopator ',
-    # -92: '',
-    # -92: 'Philip I Philadelphus',
-    # -87: 'Antiochus XII Dionysus',
-    # -83: 'Tigranes of Armenia',
-    # -69: 'Antiochus XIII Asiaticus',
+    'Seleucus II Callinicus': -245,
+    'Seleucus III Soter': -224,
+    'Antiochus the Great': -221,
+    'Seleucus IV Philopater': -186,
+    'Antiochus IV Epiphanes': -174,
+    'Antiochus V Eupator': -163,
+    'Demetrius I Soter': -159,
+    'Alexander Balas': -148,
+    # 'Demetrius II Nicator',
+    # 'Antiochus VI Dionysus',
+    # 'Diodotus Tryphon',
+    # 'Antiochus VII Sidetes',
+    # 'Demetrius II Nicator (II',
+    # 'Alexander II Zabinas',
+    # 'Seleucus V Philometor',
+    # 'Cleopatra Thea',
+    # 'Antiochus VIII Grypus',
+    # 'Antiochus IX Cyzicenus',
+    # 'Antiochus X Eusebes Philopator': -95,
+    # 'Demetrius III Eucaerus': -95,
+    # 'Disputed: Demetrius III Eucaerus, Antiochus X Eusebes Philopator': -95,
+    #  N/A: -92,
+    # 'Philip I Philadelphus': -92,
+    # 'Antiochus XII Dionysus': -87,
+    # 'Tigranes of Armenia': -83,
+    # 'Antiochus XIII Asiaticus': -69,
     # -65: 'Philip II Philoromaeus'
 }
 
