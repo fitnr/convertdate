@@ -12,9 +12,9 @@ from .utils import ceil, jwday, monthcalendarhelper
 from . import gregorian
 
 EPOCH = 1948320.5
-WEEKDAYS = ("Yekshanbeh", "Doshanbeh",
+WEEKDAYS = ("Doshanbeh",
             "Seshhanbeh", "Chaharshanbeh",
-            "Panjshanbeh", "Jomeh", "Shanbeh")
+            "Panjshanbeh", "Jomeh", "Shanbeh", "Yekshanbeh")
 
 HAS_31_DAYS = (1, 2, 3, 4, 5, 6)
 HAS_30_DAYS = (7, 8, 9, 10, 11)
