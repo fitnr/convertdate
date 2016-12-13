@@ -1,6 +1,11 @@
 History
 -------
 
+2.0.8
+-----
+
+* Fix Persian weekday order (thanks, @meyt)
+
 2.0.7
 -----
 
