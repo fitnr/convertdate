@@ -60,6 +60,6 @@ setup(
 
     install_requires=[
         'ephem>=3.7.5.3, <3.8',
-        'pytz >= 2014.10, <2016'
+        'pytz>=2014.10, <2018'
     ]
 )
