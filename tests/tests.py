@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import unittest
 import time
-import pytz
 from datetime import datetime
+import pytz
 from convertdate import utils
 from convertdate import bahai
 from convertdate import dublin
@@ -43,13 +43,13 @@ class CalTestCase(unittest.TestCase):
     def test_julian_legal_date(self):
         try:
             julian.to_jd(1900, 2, 29)
-        except IndexError:
-            self.fail('Unexpected IndexError: "julian.to_jd(1900, 2, 29)"')
+        except ValueError:
+            self.fail('Unexpected ValueError: "julian.to_jd(1900, 2, 29)"')
 
-        self.assertRaises(IndexError, julian.to_jd, 2014, 2, 29)
-        self.assertRaises(IndexError, julian.to_jd, 2014, 3, 32)
-        self.assertRaises(IndexError, julian.to_jd, 2014, 4, 31)
-        self.assertRaises(IndexError, julian.to_jd, 2014, 5, -1)
+        self.assertRaises(ValueError, julian.to_jd, 2014, 2, 29)
+        self.assertRaises(ValueError, julian.to_jd, 2014, 3, 32)
+        self.assertRaises(ValueError, julian.to_jd, 2014, 4, 31)
+        self.assertRaises(ValueError, julian.to_jd, 2014, 5, -1)
 
     def test_hebrew(self):
         self.assertEqual(self.jd, hebrew.to_jd(*hebrew.from_jd(self.jd)))

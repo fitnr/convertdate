@@ -21,7 +21,6 @@ class TestGregorian(unittest.TestCase):
 
         self.jdcs = range(2159677, 2488395, 2000)
 
-
     def test_gregorian(self):
         assert gregorian.to_jd(*self.gregoriandate) == self.jd
         assert gregorian.to_jd2(*self.gregoriandate) == self.jd
@@ -87,8 +86,12 @@ class TestGregorian(unittest.TestCase):
         self.assertEqual(gregorian.from_jd(gregorian.to_jd(1, 1, 1) - 1), (0, 12, 31))
 
     def test_legal_date(self):
-        self.assertRaises(IndexError, gregorian.to_jd, 1900, 2, 29)
-        self.assertRaises(IndexError, gregorian.to_jd, 2014, 2, 29)
-        self.assertRaises(IndexError, gregorian.to_jd, 2014, 3, 32)
-        self.assertRaises(IndexError, gregorian.to_jd, 2014, 4, 31)
-        self.assertRaises(IndexError, gregorian.to_jd, 2014, 5, -1)
+        self.assertRaises(ValueError, gregorian.to_jd, 1900, 2, 29)
+        self.assertRaises(ValueError, gregorian.to_jd, 2014, 2, 29)
+        self.assertRaises(ValueError, gregorian.to_jd, 2014, 3, 32)
+        self.assertRaises(ValueError, gregorian.to_jd, 2014, 4, 31)
+        self.assertRaises(ValueError, gregorian.to_jd, 2014, 5, -1)
+
+
+if __name__ == '__main__':
+    unittest.main()

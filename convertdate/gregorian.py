@@ -33,7 +33,7 @@ def legal_date(year, month, day):
         daysinmonth = 30 if month in HAVE_30_DAYS else 31
 
     if not (0 < day <= daysinmonth):
-        raise IndexError("Month {} doesn't have a day {}".format(month, day))
+        raise ValueError("Month {} doesn't have a day {}".format(month, day))
 
     return True
 

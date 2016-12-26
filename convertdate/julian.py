@@ -44,7 +44,7 @@ def legal_date(year, month, day):
     daysinmonth = month_length(year, month)
 
     if not (0 < day <= daysinmonth):
-        raise IndexError("Month {} doesn't have a day {}".format(month, day))
+        raise ValueError("Month {} doesn't have a day {}".format(month, day))
 
     return True
 
