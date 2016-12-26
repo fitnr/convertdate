@@ -8,6 +8,7 @@
 # http://opensource.org/licenses/MIT
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
 from math import trunc
+from calendar import isleap
 from . import gregorian
 from .utils import jwday, monthcalendarhelper
 
@@ -47,7 +48,7 @@ def to_jd(year, month, day):
     '''Obtain Julian day for Indian Civil date'''
 
     gyear = year + 78
-    leap = gregorian.leap(gyear)
+    leap = isleap(gyear)
     # // Is this a leap year ?
 
     # 22 - leap = 21 if leap, 22 non-leap
@@ -82,7 +83,7 @@ def from_jd(jd):
 
     jd = trunc(jd) + 0.5
     greg = gregorian.from_jd(jd)  # Gregorian date for Julian day
-    leap = gregorian.leap(greg[0])  # Is this a leap year?
+    leap = isleap(greg[0])  # Is this a leap year?
     # Tentative year in Saka era
     year = greg[0] - SAKA_EPOCH
     # JD at start of Gregorian year
@@ -125,9 +126,8 @@ def to_gregorian(year, month, day):
 
 
 def month_length(year, month):
-    if month in HAVE_31_DAYS or (month == 1 and gregorian.leap(year - SAKA_EPOCH)):
+    if month in HAVE_31_DAYS or (month == 1 and isleap(year - SAKA_EPOCH)):
         return 31
-
     return 30
 
 

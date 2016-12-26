@@ -7,7 +7,7 @@
 # Licensed under the GPL-v3.0 license:
 # http://opensource.org/licenses/MIT
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
-from calendar import isleap as leap, monthrange
+from calendar import isleap, monthrange
 from .utils import floor, monthcalendarhelper, jwday
 
 EPOCH = 1721425.5
@@ -28,7 +28,7 @@ HAVE_31_DAYS = (1, 3, 5, 7, 8, 10, 12)
 def legal_date(year, month, day):
     '''Check if this is a legal date in the Gregorian calendar'''
     if month == 2:
-        daysinmonth = 29 if leap(year) else 28
+        daysinmonth = 29 if isleap(year) else 28
     else:
         daysinmonth = 30 if month in HAVE_30_DAYS else 31
 
@@ -61,7 +61,7 @@ def to_jd(year, month, day):
 
     if month <= 2:
         leap_adj = 0
-    elif leap(year):
+    elif isleap(year):
         leap_adj = -1
     else:
         leap_adj = -2
@@ -99,11 +99,11 @@ def from_jd(jd):
 
     yearday = wjd - to_jd(year, 1, 1)
 
-    isleap = leap(year)
+    leap = isleap(year)
 
-    if yearday < 58 + isleap:
+    if yearday < 58 + leap:
         leap_adj = 0
-    elif isleap:
+    elif leap:
         leap_adj = 1
     else:
         leap_adj = 2
