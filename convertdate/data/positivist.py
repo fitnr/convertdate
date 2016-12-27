@@ -366,8 +366,8 @@ day_names = (
     "Lamarck",
     "Broussais",
     "Gall",
-    "Festival of the Dead",
-    "Fête générale des SAINTES FEMMES"
+    "the Dead",
+    "Sainted Women"
 )
 
 leap_day_replacements = {
@@ -608,6 +608,6 @@ festivals = {
     (13, 14): "emotional labor",
     (13, 21): "meditation",
     (13, 28): "passive labor",
-    (14, 1): "the dead",
-    (14, 2): "holy women",
+    (14, 1): "the Dead",
+    (14, 2): "Sainted Women",
 }

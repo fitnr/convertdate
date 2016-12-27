@@ -135,6 +135,14 @@ def dayname(year, month, day):
     return MONTHS[month - 1], dname
 
 
+def weekday(day):
+    '''
+        Gives the weekday (0=Monday) of a positivist month and day.
+        Note that the festival month does not have a day.
+    '''
+    return (day % 7) - 1
+
+
 def festival(month, day):
     '''
     Gives the festival day for a month and day.
