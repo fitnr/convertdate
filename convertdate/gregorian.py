@@ -21,6 +21,8 @@ LEAP_SUPPRESSION_DAYS = 36524
 LEAP_CYCLE_YEARS = 4
 LEAP_CYCLE_DAYS = 1461
 
+YEAR_DAYS = 365
+
 HAVE_30_DAYS = (4, 6, 9, 11)
 HAVE_31_DAYS = (1, 3, 5, 7, 8, 10, 12)
 
@@ -67,9 +69,11 @@ def to_jd(year, month, day):
         leap_adj = -2
 
     return (
-        EPOCH - 1 + (365 * (year - 1)) +
-        floor((year - 1) / 4) + (-floor((year - 1) / 100)) +
-        floor((year - 1) / 400) + floor((((367 * month) - 362) / 12) + leap_adj + day)
+        EPOCH - 1 + (YEAR_DAYS * (year - 1)) +
+        floor((year - 1) / LEAP_CYCLE_YEARS) +
+        (-floor((year - 1) / LEAP_SUPPRESSION_YEARS)) +
+        floor((year - 1) / INTERCALATION_CYCLE_YEARS) +
+        floor((((367 * month) - 362) / 12) + leap_adj + day)
     )
 
 
@@ -87,7 +91,7 @@ def from_jd(jd):
     quad = floor(dcent / LEAP_CYCLE_DAYS)
     dquad = dcent % LEAP_CYCLE_DAYS
 
-    yindex = floor(dquad / 365)
+    yindex = floor(dquad / YEAR_DAYS)
     year = (
         quadricent * INTERCALATION_CYCLE_YEARS +
         cent * LEAP_SUPPRESSION_YEARS +

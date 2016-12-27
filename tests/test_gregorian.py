@@ -4,6 +4,7 @@ import time
 from convertdate import gregorian
 from convertdate import julian
 
+
 class TestGregorian(unittest.TestCase):
 
     def reflexive(self, from_func, to_func):
@@ -45,10 +46,10 @@ class TestGregorian(unittest.TestCase):
         assert gregorian.from_jd(gregorian.to_jd(-1000, 1, 1)) == (-1000, 1, 1)
 
     def test_from_gregorian_20thc(self):
-        assert gregorian.from_jd(2418934.0) == (1910, 9, 19)
-        assert gregorian.from_jd(2433360.0) == (1950, 3, 19)
-        assert gregorian.from_jd(2437970.0) == (1962, 11, 1)
-        assert gregorian.from_jd(2447970.0) == (1990, 3, 19)
+        self.assertEqual(gregorian.from_jd(2418934.0), (1910, 9, 19))
+        self.assertEqual(gregorian.from_jd(2433360.0), (1950, 3, 19))
+        self.assertEqual(gregorian.from_jd(2437970.0), (1962, 11, 1))
+        self.assertEqual(gregorian.from_jd(2447970.0), (1990, 3, 19))
         self.assertEqual(gregorian.from_jd(2456967.5), (2014, 11, 6))
 
     def test_to_gregorian(self):
