@@ -17,6 +17,7 @@ Available calendars:
 -  Julian
 -  Mayan
 -  Persian
+-  Positivist
 -  Mayan
 -  ISO
 -  Ordinal (day of year)
