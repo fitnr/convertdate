@@ -1,6 +1,13 @@
 History
 -------
 
+2.1.0
+-----
+
+* Change Exception thrown on illegal dates to ValueError.
+* Add Comte's Positivist calendar.
+* Bump requirement versions.
+
 2.0.8
 -----
 
