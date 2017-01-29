@@ -382,7 +382,6 @@ def from_jd(cjdn, era=None, plain=None):
     Returns:
         tuple: (year, month, day, era)
     '''
-
     era = era or 'AG'
 
     if era.lower() == 'seleucid':
@@ -672,6 +671,12 @@ def _from_jd_analeptic(jdc, era=None, plain=None):
     # We're now at the start of the metonic cycle that contains
     # the year we're in. Call this M0
     julianyear, _, _ = julian.from_gregorian(*monthstart.triple())
+    nve = ephem.next_vernal_equinox(dublincount)
+
+    # Adjust for vernal equinox
+    if julianyear == nve.triple()[0]:
+        julianyear = julianyear - 1
+
     metonicstart = metonic_start(julianyear)
 
     # This is a list of all the months in this cycle
