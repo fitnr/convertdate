@@ -1,8 +1,17 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
+# This file is part of convertdate.
+# http://github.com/fitnr/convertdate
+
+# Licensed under the GPL-v3.0 license:
+# http://opensource.org/licenses/MIT
+# Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
 from math import trunc
+import itertools
 from .utils import amod
 from . import gregorian
-import itertools
+
 
 EPOCH = 584282.5
 HAAB_MONTHS = ["Pop", "Wo'", "Zip", "Sotz'", "Sek", "Xul",
@@ -149,7 +158,7 @@ def tzolkin_generator(number=None, name=None):
 
     count = _tzolkin_count(number, name)
 
-    ranged = itertools.chain(range(count, 260), range(1, count))
+    ranged = itertools.chain(list(range(count, 260)), list(range(1, count)))
 
     for i in ranged:
         yield _tzolkin_from_count(i)

@@ -17,6 +17,7 @@ Available calendars:
 -  Julian
 -  Mayan
 -  Persian
+-  Positivist
 -  Mayan
 -  ISO
 -  Ordinal (day of year)
@@ -51,12 +52,7 @@ Babylonian:
     babylonian.from_gregorian(2014, 10, 31, plain=True)
     # (2325, 'Arahsamnu', 7)
 
-    babylonian.from_julian(-326, 4, 2, era='regnal')
-    # ((10, u'Alexander the Great'), u'Addaru II', 14)
-
-French Republican:
-
-..
+::
 
     from convertdate import french_republican
 
@@ -79,7 +75,7 @@ Each module includes a monthcalendar function, which will generate a
 calender-like nested list for a year and month (each list of dates runs
 from Sunday to Saturday)
 
-..
+::
 
     hebrew.monthcalendar(5775, 8)
     # [
@@ -98,6 +94,38 @@ from Sunday to Saturday)
     #    [19, 20, 21, 22, 23, 24, 25],
     #    [26, 27, 28, 29, 30, 31, None]
     # ]
+
+Special Options
+---------------
+
+French Republican
+~~~~~~~~~~~~~~~~~
+
+Leap year calculations in the French Republican calendar are a matter of dispute. By default, ``convertdate`` calculates leap years using the autumnal equinox. You can also use one of three more systematic methods proposed over the years.
+
+* Romme, a co-creator of the calendar, proposed leap years in years divisible by four, except for years divisible by 100.
+* Some concordances were drawn up in the 19th century that gave leap years every 4 years, in years that give a remainder of three when divided by four (19, 23, 27, etc...).
+* Von Mädler proposed leap years in years divisible by four, except for years divisible by 128.
+
+You can specify any of these three methods with the method keyword argument in ``french_republican`` conversion functions.
+
+::
+
+    from convertdate import french_republican
+
+    # Romme's method
+    french_republican.to_gregorian(20, 1, 1), method='romme')
+    # (1811, 9, 23)
+
+    # continuous method
+    french_republican.to_gregorian(20, 1, 1), method='continuous')
+    # (1811, 9, 24)
+
+    # von Mädler's method
+    french_republican.to_gregorian(20, 1, 1), method='madler')
+    # (1811, 9, 23)
+
+All the conversion methods correctly assign the leap years implemented while calendar was in use (3, 7, 11).
 
 Before the Common Era
 ---------------------
@@ -123,7 +151,7 @@ Holidays
 North American holidays are the current focus of the ``holidays``
 module, but pull requests are welcome.
 
-..
+::
 
     from convertdate import holidays
 
@@ -201,7 +229,7 @@ Utils
 Convertdate includes some utilities for manipulating and calculating
 dates.
 
-..
+::
 
     from convertdate import utils
 
@@ -223,7 +251,7 @@ dates.
 Note that when calculating weekdays, convertdate uses the convention of
 the calendar and time modules: Monday is 0, Sunday is 6.
 
-..
+::
 
     from convertdate import gregorian
 

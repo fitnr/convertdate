@@ -1,8 +1,16 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
+# This file is part of convertdate.
+# http://github.com/fitnr/convertdate
+
+# Licensed under the GPL-v3.0 license:
+# http://opensource.org/licenses/MIT
+# Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
 import time
+import calendar
 from math import trunc
 from .utils import nth_day_of_month
-import calendar
 from . import hebrew
 
 # weekdays

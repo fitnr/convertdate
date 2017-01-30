@@ -1,7 +1,14 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from .utils import floor, monthcalendarhelper, jwday
-from calendar import isleap as leap, monthrange
 
+# This file is part of convertdate.
+# http://github.com/fitnr/convertdate
+
+# Licensed under the GPL-v3.0 license:
+# http://opensource.org/licenses/MIT
+# Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
+from calendar import isleap, monthrange
+from .utils import floor, monthcalendarhelper, jwday
 
 EPOCH = 1721425.5
 
@@ -14,6 +21,8 @@ LEAP_SUPPRESSION_DAYS = 36524
 LEAP_CYCLE_YEARS = 4
 LEAP_CYCLE_DAYS = 1461
 
+YEAR_DAYS = 365
+
 HAVE_30_DAYS = (4, 6, 9, 11)
 HAVE_31_DAYS = (1, 3, 5, 7, 8, 10, 12)
 
@@ -21,12 +30,12 @@ HAVE_31_DAYS = (1, 3, 5, 7, 8, 10, 12)
 def legal_date(year, month, day):
     '''Check if this is a legal date in the Gregorian calendar'''
     if month == 2:
-        daysinmonth = 29 if leap(year) else 28
+        daysinmonth = 29 if isleap(year) else 28
     else:
         daysinmonth = 30 if month in HAVE_30_DAYS else 31
 
     if not (0 < day <= daysinmonth):
-        raise IndexError("Month {} doesn't have a day {}".format(month, day))
+        raise ValueError("Month {} doesn't have a day {}".format(month, day))
 
     return True
 
@@ -54,15 +63,17 @@ def to_jd(year, month, day):
 
     if month <= 2:
         leap_adj = 0
-    elif leap(year):
+    elif isleap(year):
         leap_adj = -1
     else:
         leap_adj = -2
 
     return (
-        EPOCH - 1 + (365 * (year - 1)) +
-        floor((year - 1) / 4) + (-floor((year - 1) / 100)) +
-        floor((year - 1) / 400) + floor((((367 * month) - 362) / 12) + leap_adj + day)
+        EPOCH - 1 + (YEAR_DAYS * (year - 1)) +
+        floor((year - 1) / LEAP_CYCLE_YEARS) +
+        (-floor((year - 1) / LEAP_SUPPRESSION_YEARS)) +
+        floor((year - 1) / INTERCALATION_CYCLE_YEARS) +
+        floor((((367 * month) - 362) / 12) + leap_adj + day)
     )
 
 
@@ -80,7 +91,7 @@ def from_jd(jd):
     quad = floor(dcent / LEAP_CYCLE_DAYS)
     dquad = dcent % LEAP_CYCLE_DAYS
 
-    yindex = floor(dquad / 365)
+    yindex = floor(dquad / YEAR_DAYS)
     year = (
         quadricent * INTERCALATION_CYCLE_YEARS +
         cent * LEAP_SUPPRESSION_YEARS +
@@ -92,11 +103,11 @@ def from_jd(jd):
 
     yearday = wjd - to_jd(year, 1, 1)
 
-    isleap = leap(year)
+    leap = isleap(year)
 
-    if yearday < 58 + isleap:
+    if yearday < 58 + leap:
         leap_adj = 0
-    elif isleap:
+    elif leap:
         leap_adj = 1
     else:
         leap_adj = 2

@@ -72,8 +72,8 @@ class TestMayan(unittest.TestCase):
         calendar = mayan.haab_monthcalendar(13, 0, 2, 11, 13)
         row = calendar[0]
         square = row[-1]
-        assert type(row) == list
-        assert type(square) == tuple
+        assert isinstance(row, list)
+        assert isinstance(square, tuple)
         assert row[7][0] == 1
 
         assert mayan.to_jd(*calendar[-1][-1][-1]) == 19 + mayan.to_jd(13, 0, 2, 11, 13)

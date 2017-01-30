@@ -1,14 +1,26 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+# This file is part of convertdate.
+# http://github.com/fitnr/convertdate
+
+# Licensed under the MIT license:
+# http://opensource.org/licenses/MIT
+# Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
 from setuptools import setup
 
 try:
     readme = open('README.rst').read()
 except IOError:
-    readme = open('README.md').read()
+    readme = ''
+
+with open('convertdate/__init__.py') as i:
+    version = next(r for r in i.readlines() if '__version__' in r).split('=')[1].strip('"\' \n')
 
 setup(
     name="convertdate",
 
-    version="2.1.0b6",
+    version=version,
 
     description=("Converts between Gregorian dates and other calendar systems. "
                  "Calendars included: Baha'i, analeptic Babylonian, "
@@ -51,6 +63,6 @@ setup(
     ],
     install_requires=[
         'ephem>=3.7.5.3, <3.8',
-        'pytz >= 2014.10, <2016'
+        'pytz>=2014.10, <2018'
     ]
 )

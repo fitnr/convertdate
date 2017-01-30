@@ -1,6 +1,25 @@
 History
 -------
 
+2.1.0
+-----
+
+* Change Exception thrown on illegal dates to ValueError.
+* Add Comte's Positivist calendar.
+* Bump requirement versions.
+
+2.0.8
+-----
+
+* Fix Persian weekday order (thanks, @meyt)
+
+2.0.7
+-----
+
+* Better Python 2/3 compatibility
+* Improve tests
+* bump pytz requirement
+
 2.0.6
 -----
 

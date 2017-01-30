@@ -1,4 +1,15 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+# This file is part of convertdate.
+# http://github.com/fitnr/convertdate
+
+# Licensed under the GPL-v3.0 license:
+# http://opensource.org/licenses/MIT
+# Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
+
 '''Convert to and from the Dublin day count'''
+
 from . import daycount
 
 EPOCH = 2415020  # Julian Day Count for Dublin Count 0

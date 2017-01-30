@@ -1,5 +1,14 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
+# This file is part of convertdate.
+# http://github.com/fitnr/convertdate
+
+# Licensed under the MIT license:
+# http://opensource.org/licenses/MIT
+# Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
 from math import trunc
+from calendar import isleap
 from . import gregorian
 from .utils import monthcalendarhelper, jwday
 
@@ -24,7 +33,7 @@ def to_jd(year, month, day):
     if month != 20:
         m = 0
     else:
-        if gregorian.leap(gy + 1):
+        if isleap(gy + 1):
             m = -14
         else:
             m = -15
@@ -70,7 +79,7 @@ def to_gregorian(year, month, day):
 
 def month_length(year, month):
     if month == 19:
-        if gregorian.leap(year + EPOCH_GREGORIAN_YEAR):
+        if isleap(year + EPOCH_GREGORIAN_YEAR):
             return 5
         else:
             return 4

@@ -1,11 +1,20 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+# This file is part of convertdate.
+# http://github.com/fitnr/convertdate
+
+# Licensed under the GPL-v3.0 license:
+# http://opensource.org/licenses/MIT
+# Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
 from math import trunc
 from .utils import ceil, jwday, monthcalendarhelper
 from . import gregorian
 
 EPOCH = 1948320.5
-WEEKDAYS = ("Yekshanbeh", "Doshanbeh",
-            "Seshhanbeh", "Chaharshanbeh",
-            "Panjshanbeh", "Jomeh", "Shanbeh")
+WEEKDAYS = ("Doshanbeh", "Seshhanbeh",
+            "Chaharshanbeh", "Panjshanbeh",
+            "Jomeh", "Shanbeh", "Yekshanbeh")
 
 HAS_31_DAYS = (1, 2, 3, 4, 5, 6)
 HAS_30_DAYS = (7, 8, 9, 10, 11)

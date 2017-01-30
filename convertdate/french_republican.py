@@ -1,5 +1,13 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, division
+
+# This file is part of convertdate.
+# http://github.com/fitnr/convertdate
+
+# Licensed under the GPL-v3.0 license:
+# http://opensource.org/licenses/MIT
+# Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
+
 from math import trunc
 from . import dublin, gregorian
 from .data.french_republican_days import french_republican_days
@@ -8,28 +16,28 @@ import ephem
 # julian day (1792, 9, 22)
 EPOCH = 2375839.5
 
-YEAR_EPOCH = 1791
+YEAR_EPOCH = 1791.
 
-DAYS_IN_YEAR = 365
+DAYS_IN_YEAR = 365.
 
 MOIS = [
-    'Vendémiaire',
-    'Brumaire',
-    'Frimaire',
-    'Nivôse',
-    'Pluviôse',
-    'Ventôse',
-    'Germinal',
-    'Floréal',
-    'Prairial',
-    'Messidor',
-    'Thermidor',
-    'Fructidor',
-    'Sansculottides'
+    u'Vendémiaire',
+    u'Brumaire',
+    u'Frimaire',
+    u'Nivôse',
+    u'Pluviôse',
+    u'Ventôse',
+    u'Germinal',
+    u'Floréal',
+    u'Prairial',
+    u'Messidor',
+    u'Thermidor',
+    u'Fructidor',
+    u'Sansculottides'
 ]
 
-LEAP_CYCLE_DAYS = 1461  # 365 * 4 + 1
-LEAP_CYCLE_YEARS = 4
+LEAP_CYCLE_DAYS = 1461.  # 365 * 4 + 1
+LEAP_CYCLE_YEARS = 4.
 
 # methods:
 # 4 (concordance rule): leap every four years: 3, 7, 11, 15, ... etc
@@ -39,8 +47,10 @@ LEAP_CYCLE_YEARS = 4
 
 
 def leap(year, method=None):
-    '''Determine if this is a leap year in the FR calendar using one of three methods: 4, 100, 128
-    (every 4th years, every 4th or 400th but not 100th, every 4th but not 128th)'''
+    '''
+    Determine if this is a leap year in the FR calendar using one of three methods: 4, 100, 128
+    (every 4th years, every 4th or 400th but not 100th, every 4th but not 128th)
+    '''
 
     method = method or 'equinox'
 
@@ -126,13 +136,13 @@ def _to_jd_schematic(year, month, day, method):
         year = year - 13
         y5 = DAYS_IN_YEAR * 12 + 3
 
-        leap_suppression_yrs = 100
+        leap_suppression_yrs = 100.
         leap_suppression_days = 36524  # leap_cycle_days * 25 - 1
 
-        intercal_cycle_yrs = 400
+        intercal_cycle_yrs = 400.
         intercal_cycle_days = 146097  # leap_suppression_days * 4 + 1
 
-        over_cycle_yrs = 4000
+        over_cycle_yrs = 4000.
         over_cycle_days = 1460969  # intercal_cycle_days * 10 - 1
 
     elif method in (128, 'madler'):
@@ -221,13 +231,13 @@ def _from_jd_schematic(jd, method):
         y5 = 12
         J = J - DAYS_IN_YEAR * 12 - 3
 
-        leap_suppression_yrs = 100
+        leap_suppression_yrs = 100.
         leap_suppression_days = 36524  # LEAP_CYCLE_DAYS * 25 - 1
 
-        intercal_cycle_yrs = 400
+        intercal_cycle_yrs = 400.
         intercal_cycle_days = 146097  # leap_suppression_days * 4 + 1
 
-        over_cycle_yrs = 4000
+        over_cycle_yrs = 4000.
         over_cycle_days = 1460969  # intercal_cycle_days * 10 - 1
 
     elif method in (128, 'madler'):
@@ -273,7 +283,7 @@ def _from_jd_schematic(jd, method):
 
     year = y0 + y1 + y2 + y3 + y4 + y5
 
-    month = trunc(J / 30)
+    month = trunc(J / 30.)
     J = J - month * 30
 
     return year + 1, month + 1, trunc(J) + 1
@@ -285,14 +295,14 @@ def _from_jd_equinox(jd):
     equinoxe = premier_da_la_annee(jd)
 
     an = gregorian.from_jd(equinoxe)[0] - YEAR_EPOCH
-    mois = trunc((jd - equinoxe) / 30) + 1
+    mois = trunc((jd - equinoxe) / 30.) + 1
     jour = int((jd - equinoxe) % 30) + 1
 
     return (an, mois, jour)
 
 
 def decade(jour):
-    return trunc(jour / 10) + 1
+    return trunc(jour / 100.) + 1
 
 
 def day_name(month, day):
