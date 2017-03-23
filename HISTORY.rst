@@ -1,6 +1,11 @@
 History
 -------
 
+2.1.1
+-----
+* Add Coptic (Alexandrian) calendar converter.
+* Add explicit support for Python 3.6.
+
 2.1.0
 -----
 
