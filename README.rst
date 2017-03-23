@@ -1,9 +1,9 @@
 convertdate
 ===========
 
-The convertdate package was originally developed as "`Python Date
-Utils <http://sourceforge.net/projects/pythondateutil/>`__\ " by Phil
-Schwartz. It had been significantly updated and expanded.
+The convertdate package was originally developed as “`Python Date
+Utils`_” by Phil Schwartz. It had been significantly updated and
+expanded.
 
 Available calendars:
 
@@ -136,13 +136,11 @@ astronomical notation: 1 BC is recorded as 0, 2 BC is -1, etc. This
 makes arithmatic much easier at the expense of ignoring custom.
 
 Note that for dates before 4 CE, ``convertdate`` uses the `proleptic
-Julian
-calendar <https://en.wikipedia.org/wiki/Proleptic_Julian_calendar>`__.
+Julian calendar`__.
 The Julian Calendar was in use from 45 BC to 4 CE, but with an irregular
 leap year pattern.
 
-The `proleptic Gregorian
-calendar <https://en.wikipedia.org/wiki/Proleptic_Gregorian_calendar>`__
+The `proleptic Gregorian calendar`__
 is used for dates before 1582 CE, the year of the Gregorian calendar
 reform.
 
@@ -249,8 +247,7 @@ dates.
     utils.nth_day_of_month(0, THUR, APRIL, 2014)
     # (2014, 4, 24)
 
-Note that when calculating weekdays, convertdate uses the convention of
-the calendar and time modules: Monday is 0, Sunday is 6.
+Note that when calculating weekdays, convertdate uses the convention of the calendar and time modules: Monday is 0, Sunday is 6.
 
 ::
 
@@ -271,3 +268,6 @@ Other utility functions:
 -  utils.previous\_weekday
 -  utils.previous\_or\_current\_weekday
 
+.. _Python Date Utils: http://sourceforge.net/projects/pythondateutil/
+.. _proleptic Julian calendar: https://en.wikipedia.org/wiki/Proleptic_Julian_calendar
+.. _proleptic Gregorian calendar: https://en.wikipedia.org/wiki/Proleptic_Gregorian_calendar

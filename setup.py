@@ -23,7 +23,7 @@ setup(
     version=version,
 
     description=("Converts between Gregorian dates and other calendar systems. "
-                 "Calendars included: Baha'i, analeptic Babylonian, "
+                 "Calendars included: Baha'i, analeptic Babylonian, Coptic, "
                  "French Republican, Hebrew, Indian Civil, "
                  "Islamic, ISO, Julian, Mayan, Persian, Ordinal, "
                  "Julian Day Count, and Dublin Day Count."),
@@ -45,6 +45,8 @@ setup(
 
     test_suite='tests',
 
+    zip_safe=True,
+
     package_data={
         'convertdate': ['data/*.csv'],
     },
@@ -62,6 +64,7 @@ setup(
         'Operating System :: OS Independent',
         'License :: OSI Approved :: MIT License'
     ],
+
     install_requires=[
         'ephem>=3.7.5.3, <3.8',
         'pytz>=2014.10, <2018'
