@@ -4,10 +4,9 @@
 # This file is part of convertdate.
 # http://github.com/fitnr/convertdate
 
-# Licensed under the GPL-v3.0 license:
+# Licensed under the MIT license:
 # http://opensource.org/licenses/MIT
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
-
 from math import trunc
 from . import dublin, gregorian
 from .data.french_republican_days import french_republican_days

@@ -4,10 +4,9 @@
 # This file is part of convertdate.
 # http://github.com/fitnr/convertdate
 
-# Licensed under the GPL-v3.0 license:
+# Licensed under the MIT license:
 # http://opensource.org/licenses/MIT
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
-
 from datetime import datetime
 from . import gregorian
 from . import julian

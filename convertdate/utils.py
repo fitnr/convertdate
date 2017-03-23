@@ -4,7 +4,7 @@
 # This file is part of convertdate.
 # http://github.com/fitnr/convertdate
 
-# Licensed under the GPL-v3.0 license:
+# Licensed under the MIT license:
 # http://opensource.org/licenses/MIT
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
 import math
@@ -91,7 +91,10 @@ def monthcalendarhelper(start_weekday, month_length):
 
 
 def nth_day_of_month(n, weekday, month, year):
-    '''Return (year, month, day) tuple that represents nth weekday of month in year. If n==0, returns last weekday of month. Weekdays: Monday=0'''
+    """
+    Return (year, month, day) tuple that represents nth weekday of month in year.
+    If n==0, returns last weekday of month. Weekdays: Monday=0
+    """
     if not (0 <= n <= 5):
         raise IndexError("Nth day of month must be 0-5. Received: {}".format(n))
 
