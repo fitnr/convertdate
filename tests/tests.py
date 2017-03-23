@@ -5,6 +5,7 @@ from datetime import datetime
 import pytz
 from convertdate import utils
 from convertdate import bahai
+from convertdate import coptic
 from convertdate import dublin
 from convertdate import gregorian
 from convertdate import hebrew
@@ -61,9 +62,7 @@ class CalTestCase(unittest.TestCase):
 
     def test_persian(self):
         self.assertEqual(self.jd, persian.to_jd(*persian.from_jd(self.jd)))
-
         self.assertEqual(persian.leap(-101), False)
-
         self.reflexive(persian.from_jd, persian.to_jd)
 
     def test_indian_civil(self):
@@ -82,7 +81,6 @@ class CalTestCase(unittest.TestCase):
         self.assertEqual(ordinal.from_gregorian(2013, 2, 1), (2013, 32))
         self.assertEqual(ordinal.from_gregorian(2013, 3, 1), (2013, 60))
         self.assertEqual(ordinal.from_gregorian(2013, 4, 15), (2013, 105))
-
         self.reflexive(ordinal.from_jd, ordinal.to_jd)
 
     def test_ordinal_to_gregorian(self):
@@ -112,16 +110,24 @@ class CalTestCase(unittest.TestCase):
 
     def test_bahai(self):
         self.reflexive(bahai.from_jd, bahai.to_jd)
-
         self.assertEqual(bahai.from_gregorian(1844, 3, 21), (1, 1, 1))
         self.assertEqual(bahai.to_gregorian(1, 1, 1), (1844, 3, 21))
-
         self.assertEqual(bahai.month_length(1, 3), 19)
         self.assertEqual(bahai.month_length(1, 1), 19)
         self.assertEqual(bahai.month_length(4, 19), 5)
         self.assertEqual(bahai.month_length(5, 19), 4)
-
         self.assertEqual(self.jd, bahai.to_jd(*bahai.from_jd(self.jd)))
+
+    def test_coptic(self):
+        self.assertEqual(coptic.to_jd(1000, 1, 1), 2189914.5)
+        self.assertEqual(coptic.to_jd(1666, 6, 1), 2433320.5)
+        self.assertEqual(coptic.to_jd(1, 1, 1), 1825029.5)
+        self.assertEqual(coptic.from_jd(2437970.5), (1679, 2, 23))
+        self.assertEqual(coptic.to_jd(1259, 13, 6), 2284878.5)
+        self.assertEqual(coptic.from_jd(2284878.5), (1259, 13, 6))
+        self.reflexive(coptic.from_jd, coptic.to_jd)
+        self.assertEqual(coptic.from_gregorian(2017, 1, 7), (1733, 4, 29))
+        self.assertEqual(coptic.to_gregorian(1727, 11, 11), (2011, 7, 18))
 
     def test_dublin_dc(self):
         self.assertEqual(dublin.from_gregorian(1900, 1, 1), 0.5)

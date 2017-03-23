@@ -9,6 +9,7 @@ expanded.
 Available calendars:
 
 -  Bahai
+-  Coptic (Alexandrian)
 -  French Republican
 -  Gregorian
 -  Hebrew

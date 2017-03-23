@@ -17,6 +17,7 @@
 #    The essential reference for computational positional astronomy.
 #
 from . import bahai
+from . import coptic
 from . import daycount
 from . import dublin
 from . import french_republican
@@ -36,7 +37,7 @@ from . import ordinal
 __version__ = '2.1.0'
 
 __all__ = [
-    'holidays', 'bahai', 'dublin',
+    'holidays', 'bahai', 'coptic', 'dublin',
     'daycount',
     'french_republican', 'gregorian', 'hebrew',
     'indian_civil', 'islamic', 'iso',
