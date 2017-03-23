@@ -1,18 +1,18 @@
-===========
 convertdate
 ===========
 
-The convertdate package was originally developed as “`Python Date
-Utils`_” by Phil Schwartz. It had been significantly updated and
-expanded.
+The convertdate package was originally developed as "`Python Date
+Utils <http://sourceforge.net/projects/pythondateutil/>`__\ " by Phil
+Schwartz. It had been significantly updated and expanded.
 
 Available calendars:
 
+-  Babylonian
 -  Bahai
 -  Coptic (Alexandrian)
 -  French Republican
 -  Gregorian
--  Hebrew
+-  Jewish
 -  Indian Civil
 -  Islamic
 -  Julian
@@ -35,16 +35,36 @@ Installing
 
 Or download the package and run ``python setup.py install``.
 
-Using
------
+Use
+---
+
+In general, years BC are encoded with a negative sign. Giving year 0 in
+the incorrect context will either give an error or bad results.
+
+Babylonian:
+
+..
+
+    from convertdate import babylonian
+
+    babylonian.from_gregorian(2014, 10, 31)
+    # (2325, u'Araḥsamnu', 7)
+
+    babylonian.from_gregorian(2014, 10, 31, plain=True)
+    # (2325, 'Arahsamnu', 7)
 
 ::
 
     from convertdate import french_republican
-    from convertdate import hebrew
 
     french_republican.from_gregorian(2014, 10, 31)
     # (223, 2, 1, 9)
+
+Jewish (aka Hebrew):
+
+::
+
+    from convertdate import hebrew
 
     hebrew.from_gregorian(2014, 10, 31)
     # (5775, 8, 7)
@@ -116,10 +136,15 @@ astronomical notation: 1 BC is recorded as 0, 2 BC is -1, etc. This
 makes arithmatic much easier at the expense of ignoring custom.
 
 Note that for dates before 4 CE, ``convertdate`` uses the `proleptic
-Julian calendar`_. The Julian Calendar was in use from 45 BC, but before 4 CE the leap year leap year pattern was irregular.
+Julian
+calendar <https://en.wikipedia.org/wiki/Proleptic_Julian_calendar>`__.
+The Julian Calendar was in use from 45 BC to 4 CE, but with an irregular
+leap year pattern.
 
-The `proleptic Gregorian calendar`_ is used for dates before 1582 CE,
-the year of the Gregorian calendar reform.
+The `proleptic Gregorian
+calendar <https://en.wikipedia.org/wiki/Proleptic_Gregorian_calendar>`__
+is used for dates before 1582 CE, the year of the Gregorian calendar
+reform.
 
 Holidays
 --------
@@ -158,6 +183,46 @@ module, but pull requests are welcome.
     # Some Jewish holidays are included
     holidays.rosh_hashanah(2014)
 
+Special options
+---------------
+
+French Republican
+~~~~~~~~~~~~~~~~~
+
+Leap year calculations in the French Republican calendar are a matter of
+dispute. By default, ``convertdate`` calculates leap years using the
+autumnal equinox. You can also use one of three more systematic methods
+proposed over the years.
+
+-  Romme, a co-creator of the calendar, proposed leap years in years
+   divisible by four, except for years divisible by 100.
+-  Some concordances were drawn up in the 19th century that gave leap
+   years every 4 years, in years that give a remainder of three when
+   divided by four (19, 23, 27, etc...).
+-  Von Mädler proposed leap years in years divisible by four, except for
+   years divisible by 128.
+
+You can specify any of these three methods with the method keyword
+argument in ``french_republican`` conversion functions.
+
+..
+
+    from convertdate import french_republican
+
+    # Romme's method
+    french_republican.to_gregorian(20, 1, 1), method='romme')
+    # (1811, 9, 23)
+
+    # continuous method
+    french_republican.to_gregorian(20, 1, 1), method='continuous')
+    # (1811, 9, 24)
+
+    # von Mädler's method
+    french_republican.to_gregorian(20, 1, 1), method='madler')
+    # (1811, 9, 23)
+
+All the conversion methods correctly assign the leap years implemented
+while calendar was in use (3, 7, 11).
 
 Utils
 -----
@@ -184,7 +249,8 @@ dates.
     utils.nth_day_of_month(0, THUR, APRIL, 2014)
     # (2014, 4, 24)
 
-Note that when calculating weekdays, convertdate uses the convention of the `calendar` and `time` modules: Monday is 0, Sunday is 6.
+Note that when calculating weekdays, convertdate uses the convention of
+the calendar and time modules: Monday is 0, Sunday is 6.
 
 ::
 
@@ -200,11 +266,8 @@ Note that when calculating weekdays, convertdate uses the convention of the `cal
 
 Other utility functions:
 
-- nearest_weekday
-- next_or_current_weekday
-- previous_weekday
-- previous_or_current_weekday
+-  utils.nearest\_weekday
+-  utils.next\_or\_current\_weekday
+-  utils.previous\_weekday
+-  utils.previous\_or\_current\_weekday
 
-.. _Python Date Utils: http://sourceforge.net/projects/pythondateutil/
-.. _proleptic Julian calendar: https://en.wikipedia.org/wiki/Proleptic_Julian_calendar
-.. _proleptic Gregorian calendar: https://en.wikipedia.org/wiki/Proleptic_Gregorian_calendar

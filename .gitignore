@@ -13,3 +13,5 @@ dist
 *.egg
 *.pyc
 .tox
+.coverage
+htmlcov

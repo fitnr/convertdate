@@ -22,9 +22,11 @@ setup(
 
     version=version,
 
-    description=("Converts between Gregorian dates and other calendar systems."
-                 "Calendars included: Baha'i, French Republican, Hebrew, "
-                 "Indian Civil, Islamic, ISO, Julian, Mayan and Persian."),
+    description=("Converts between Gregorian dates and other calendar systems. "
+                 "Calendars included: Baha'i, analeptic Babylonian, "
+                 "French Republican, Hebrew, Indian Civil, "
+                 "Islamic, ISO, Julian, Mayan, Persian, Ordinal, "
+                 "Julian Day Count, and Dublin Day Count."),
 
     long_description=readme,
 
@@ -43,7 +45,9 @@ setup(
 
     test_suite='tests',
 
-    zip_safe=True,
+    package_data={
+        'convertdate': ['data/*.csv'],
+    },
 
     classifiers=[
         'Programming Language :: Python',
@@ -58,7 +62,6 @@ setup(
         'Operating System :: OS Independent',
         'License :: OSI Approved :: MIT License'
     ],
-
     install_requires=[
         'ephem>=3.7.5.3, <3.8',
         'pytz>=2014.10, <2018'
