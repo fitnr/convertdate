@@ -149,6 +149,27 @@ class TestHolidays(unittest.TestCase):
         self.assertEqual(holidays.yom_kippur(2015), (2015, 9, 23))
         self.assertEqual(holidays.yom_kippur(2015, True), (2015, 9, 22))
 
+        sukkots = [
+            (2016, 10, 17),
+            (2015, 9, 28),
+        ]
+        for y, m, d in sukkots:
+            self.assertEqual(holidays.sukkot(y, eve=0), (y, m, d))
+
+        shavuots = [
+            (2016, 6, 12),
+            (2015, 5, 24)
+        ]
+        for y, m, d in shavuots:
+            self.assertEqual(holidays.shavuot(y, eve=0), (y, m, d))
+
+        purims = [
+            (2017, 3, 12),
+            (2016, 3, 24)
+        ]
+        for y, m, d in purims:
+            self.assertEqual(holidays.purim(y, eve=0), (y, m, d))
+
         assert self.h.hanukkah == (2015, 12, 7)
         assert self.h.rosh_hashanah == (2015, 9, 14)
         assert self.h.yom_kippur == (2015, 9, 23)

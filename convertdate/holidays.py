@@ -210,6 +210,16 @@ def hanukkah(year, eve=None):
     return year, month, day
 
 
+def purim(year, eve=None):
+    if not hebrew.leap(year + hebrew.HEBREW_YEAR_OFFSET):
+        year, month, day = hebrew.to_jd_gregorianyear(year, hebrew.ADAR, 14)
+    else:
+        year, month, day = hebrew.to_jd_gregorianyear(year, hebrew.VEADAR, 14)  
+    if eve:
+        day = day - 1
+    return year, month, day
+
+
 def rosh_hashanah(year, eve=None):
     year, month, day = hebrew.to_jd_gregorianyear(year, hebrew.TISHRI, 1)
     if eve:
@@ -221,7 +231,6 @@ def yom_kippur(year, eve=None):
     year, month, day = hebrew.to_jd_gregorianyear(year, hebrew.TISHRI, 10)
     if eve:
         day = day - 1
-
     return year, month, day
 
 
@@ -229,8 +238,22 @@ def passover(year, eve=None):
     year, month, day = hebrew.to_jd_gregorianyear(year, hebrew.NISAN, 15)
     if eve:
         day = day - 1
-
     return year, month, day
+
+
+def shavuot(year, eve=None):
+    year, month, day = hebrew.to_jd_gregorianyear(year, hebrew.SIVAN, 6)
+    if eve:
+        day = day - 1
+    return year, month, day
+
+
+def sukkot(year, eve=None):
+    year, month, day = hebrew.to_jd_gregorianyear(year, hebrew.TISHRI, 15)
+    if eve:
+        day = day - 1
+    return year, month, day
+
 
 # Mexican holidays
 
@@ -362,6 +385,10 @@ class Holidays(object):
         return hanukkah(self.year, eve=False)
 
     @property
+    def purim(self):
+        return purim(self.year, eve=False)
+
+    @property
     def rosh_hashanah(self):
         return rosh_hashanah(self.year, eve=False)
 
@@ -372,6 +399,14 @@ class Holidays(object):
     @property
     def passover(self):
         return passover(self.year, eve=False)
+
+    @property
+    def shavuot(self):
+        return shavuot(self.year, eve=False)
+
+    @property
+    def sukkot(self):
+        return sukkot(self.year, eve=False)
 
     @property
     def dia_constitucion(self):
