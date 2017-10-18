@@ -13,3 +13,5 @@ dist
 *.egg
 *.pyc
 .tox
+.eggs
+py35
