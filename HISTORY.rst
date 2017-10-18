@@ -1,6 +1,11 @@
 History
 -------
 
+2.1.2
+-----
+* Additional Jewish holidays (thanks, @ohadeytan)
+* Upload source distributions to Pypi (#10)
+
 2.1.1
 -----
 * Add Coptic (Alexandrian) calendar converter.
