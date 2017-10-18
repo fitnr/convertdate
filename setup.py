@@ -9,11 +9,6 @@
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
 from setuptools import setup
 
-try:
-    readme = open('README.rst').read()
-except IOError:
-    readme = ''
-
 with open('convertdate/__init__.py') as i:
     version = next(r for r in i.readlines() if '__version__' in r).split('=')[1].strip('"\' \n')
 
@@ -26,7 +21,7 @@ setup(
                  "Calendars included: Baha'i, French Republican, Hebrew, "
                  "Indian Civil, Islamic, ISO, Julian, Mayan and Persian."),
 
-    long_description=readme,
+    long_description=open('README.rst').read(),
 
     author="Neil Freeman",
 
