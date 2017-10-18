@@ -33,7 +33,6 @@ class TestHolidays(unittest.TestCase):
         assert self.h.mothers_day == (2015, 5, 10)
         self.assertEqual(self.h.fathers_day, (2015, 6, 21))
 
-
     def test_class(self):
 
         H = holidays.Holidays()
@@ -196,6 +195,7 @@ class TestHolidays(unittest.TestCase):
         assert self.h.columbus_day == (2015, 10, 12)
         assert self.h.veterans_day == (2015, 11, 11)
         assert self.h.martin_luther_king_day == (2015, 1, 19)
+
 
 if __name__ == '__main__':
     unittest.main()

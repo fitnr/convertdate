@@ -31,7 +31,7 @@ VEADAR = 13
 
 
 def leap(year):
-    #//  Is a given Hebrew year a leap year ?
+    # Is a given Hebrew year a leap year ?
     return (((year * 7) + 1) % 19) < 7
 
 
@@ -45,7 +45,7 @@ def year_months(year):
 
 def delay_1(year):
     '''Test for delay of start of new year and to avoid'''
-    #//  Sunday, Wednesday, and Friday as start of the new year.
+    # Sunday, Wednesday, and Friday as start of the new year.
     months = trunc(((235 * year) - 234) / 19)
     parts = 12084 + (13753 * months)
     day = trunc((months * 29) + parts / 25920)

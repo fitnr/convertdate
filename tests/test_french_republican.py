@@ -108,38 +108,38 @@ class TestFrenchRepublican(unittest.TestCase):
             self.assertEqual(jd + 0.5, gregorian.to_jd(*gregorian.from_jd(jd + 0.5)))
 
     def test_french_republican_leap(self):
-        assert fr.leap(3) == True
-        assert fr.leap(3, 'madler') == True
-        assert fr.leap(3, 'romme') == True
-        assert fr.leap(3, 'continuous') == True
+        self.assertTrue(fr.leap(3))
+        self.assertTrue(fr.leap(3, 'madler'))
+        self.assertTrue(fr.leap(3, 'romme'))
+        self.assertTrue(fr.leap(3, 'continuous'))
 
-        assert fr.leap(7) == True
-        assert fr.leap(7, 'madler') == True
-        assert fr.leap(7, 'romme') == True
-        assert fr.leap(7, 'continuous') == True
+        self.assertTrue(fr.leap(7))
+        self.assertTrue(fr.leap(7, 'madler'))
+        self.assertTrue(fr.leap(7, 'romme'))
+        self.assertTrue(fr.leap(7, 'continuous'))
 
-        assert fr.leap(11) == True
-        assert fr.leap(11, 'madler') == True
-        assert fr.leap(11, 'romme') == True
-        assert fr.leap(11, 'continuous') == True
+        self.assertTrue(fr.leap(11))
+        self.assertTrue(fr.leap(11, 'madler'))
+        self.assertTrue(fr.leap(11, 'romme'))
+        self.assertTrue(fr.leap(11, 'continuous'))
 
-        assert fr.leap(4) == False
-        assert fr.leap(14) == False
+        self.assertFalse(fr.leap(4))
+        self.assertFalse(fr.leap(14))
 
-        assert fr.leap(15) == True
-        assert fr.leap(15, 'madler') == True
-        assert fr.leap(15, 'romme') == False
-        assert fr.leap(15, 'continuous') == True
+        self.assertTrue(fr.leap(15))
+        self.assertTrue(fr.leap(15, 'madler'))
+        self.assertFalse(fr.leap(15, 'romme'))
+        self.assertTrue(fr.leap(15, 'continuous'))
 
-        assert fr.leap(20) == True
-        assert fr.leap(20, 'madler') == True
-        assert fr.leap(20, 'romme') == True
-        assert fr.leap(20, 'continuous') == False
+        self.assertTrue(fr.leap(20))
+        self.assertTrue(fr.leap(20, 'madler'))
+        self.assertTrue(fr.leap(20, 'romme'))
+        self.assertFalse(fr.leap(20, 'continuous'))
 
-        assert fr.leap(23) == False
-        assert fr.leap(23, 'madler') == False
-        assert fr.leap(23, 'romme') == False
-        assert fr.leap(23, 'continuous') == True
+        self.assertFalse(fr.leap(23))
+        self.assertFalse(fr.leap(23, 'madler'))
+        self.assertFalse(fr.leap(23, 'romme'))
+        self.assertTrue(fr.leap(23, 'continuous'))
 
         self.assertRaises(ValueError, fr.leap, 100, method='foo')
 
@@ -292,18 +292,18 @@ class TestFrenchRepublican(unittest.TestCase):
 
     def test_french_republican_months(self):
         self.assertEqual(fr.MOIS[0], "Vendémiaire")
-        assert fr.MOIS[1] == "Brumaire"
-        assert fr.MOIS[2] == 'Frimaire'
-        assert fr.MOIS[3] == 'Nivôse'
-        assert fr.MOIS[4] == 'Pluviôse'
-        assert fr.MOIS[5] == 'Ventôse'
-        assert fr.MOIS[6] == 'Germinal'
-        assert fr.MOIS[7] == 'Floréal'
-        assert fr.MOIS[8] == 'Prairial'
-        assert fr.MOIS[9] == 'Messidor'
-        assert fr.MOIS[10] == 'Thermidor'
-        assert fr.MOIS[12] == 'Sansculottides'
-        assert fr.MOIS[11] == "Fructidor"
+        self.assertEqual(fr.MOIS[1], "Brumaire")
+        self.assertEqual(fr.MOIS[2], 'Frimaire')
+        self.assertEqual(fr.MOIS[3], 'Nivôse')
+        self.assertEqual(fr.MOIS[4], 'Pluviôse')
+        self.assertEqual(fr.MOIS[5], 'Ventôse')
+        self.assertEqual(fr.MOIS[6], 'Germinal')
+        self.assertEqual(fr.MOIS[7], 'Floréal')
+        self.assertEqual(fr.MOIS[8], 'Prairial')
+        self.assertEqual(fr.MOIS[9], 'Messidor')
+        self.assertEqual(fr.MOIS[10], 'Thermidor')
+        self.assertEqual(fr.MOIS[12], 'Sansculottides')
+        self.assertEqual(fr.MOIS[11], "Fructidor")
 
     def test_french_republican_schematic_error(self):
         self.assertRaises(ValueError, fr.from_jd, self.jd, method=400)
@@ -311,10 +311,11 @@ class TestFrenchRepublican(unittest.TestCase):
 
     def test_french_republican_names(self):
         self.assertEqual(fr.day_name(1, 1), "Raisin")
-        assert fr.day_name(2, 1) == "Pomme"
-        assert fr.day_name(4, 18) == "Pierre à chaux"
-        assert fr.day_name(12, 15) == "Truite"
-        assert fr.day_name(13, 1) == "La Fête de la Vertu"
+        self.assertEqual(fr.day_name(2, 1), "Pomme")
+        self.assertEqual(fr.day_name(4, 18), "Pierre à chaux")
+        self.assertEqual(fr.day_name(12, 15), "Truite")
+        self.assertEqual(fr.day_name(13, 1), "La Fête de la Vertu")
+
 
 if __name__ == '__main__':
     unittest.main()
