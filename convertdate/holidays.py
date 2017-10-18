@@ -214,7 +214,7 @@ def purim(year, eve=None):
     if not hebrew.leap(year + hebrew.HEBREW_YEAR_OFFSET):
         year, month, day = hebrew.to_jd_gregorianyear(year, hebrew.ADAR, 14)
     else:
-        year, month, day = hebrew.to_jd_gregorianyear(year, hebrew.VEADAR, 14)  
+        year, month, day = hebrew.to_jd_gregorianyear(year, hebrew.VEADAR, 14)
     if eve:
         day = day - 1
     return year, month, day
