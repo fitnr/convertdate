@@ -1,6 +1,10 @@
 History
 -------
 
+2.1.3
+-----
+* Bump requirements
+
 2.1.2
 -----
 * Additional Jewish holidays (thanks, @ohadeytan)

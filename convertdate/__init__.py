@@ -34,7 +34,7 @@ from . import persian
 from . import positivist
 from . import ordinal
 
-__version__ = '2.1.2'
+__version__ = '2.1.3'
 
 __all__ = [
     'holidays', 'bahai', 'coptic', 'dublin',
