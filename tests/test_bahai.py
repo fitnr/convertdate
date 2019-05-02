@@ -12,7 +12,7 @@ class TestBahai(unittest.TestCase):
         self.tm = time.localtime()
         self.gregoriandate = (self.tm[0], self.tm[1], self.tm[2])
 
-    def trivial(self):
+    def test_trivial(self):
         assert 1 == 1
 
 
