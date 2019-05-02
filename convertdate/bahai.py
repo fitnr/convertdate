@@ -58,7 +58,7 @@ def to_jd(year, month, day):
     '''Determine Julian day from Bahai date'''
     gy = year - 1 + EPOCH_GREGORIAN_YEAR
 
-    narwuz_day = gregorian_day_of_nawruz(gy)
+    nawruz_day = gregorian_day_of_nawruz(gy)
 
     if month != 20:
         m = 0
