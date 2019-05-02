@@ -11,8 +11,8 @@ from math import trunc
 from calendar import isleap
 from . import gregorian
 from .utils import monthcalendarhelper, jwday
-from pymeeus import Sun
-from pymeeus import Epoch
+from pymeeus.Sun import Sun
+from pymeeus.Epoch import Epoch
 
 
 EPOCH = 2394646.5
