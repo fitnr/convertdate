@@ -12,9 +12,6 @@ class TestBahai(unittest.TestCase):
         self.tm = time.localtime()
         self.gregoriandate = (self.tm[0], self.tm[1], self.tm[2])
 
-    def test_trivial(self):
-        assert 1 == 1
-
     def test_nawruz(self):
         nawruz_official = {
             2015: 21,
@@ -74,6 +71,22 @@ class TestBahai(unittest.TestCase):
             actual = bahai.to_gregorian(bahaiyear, 1, 1)
             expected = (year, 3, nawruz_official[year])
             self.assertEqual (expected, actual)
+
+
+    def test_misc(self):
+        pairs = {
+            (2041, 11, 27): (198, 14, 6),
+            (2043, 11, 28): (198, 14, 6),
+        }
+
+        for gregorian in pairs:
+            badi = pairs[gregorian]
+
+            actual_gregorian = bahai.to_gregorian(badi)
+            actual_bahai = bahai.to_bahai(gregorian)
+
+            self.assertEqual(actual_gregorian, gregorian)
+            self.assertEqual(actual_bahai, bahai)
 
 
     def test_days_ha(self):
