@@ -13,6 +13,7 @@ from . import gregorian
 from .utils import monthcalendarhelper, jwday
 from pymeeus.Sun import Sun
 from pymeeus.Epoch import Epoch
+from pymeeus.Angle import Angle
 
 
 EPOCH = 2394646.5
