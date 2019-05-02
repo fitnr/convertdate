@@ -45,12 +45,12 @@ def gregorian_day_of_nawruz(year):
     if equinox < sunsets[1]:
         if equinox < sunsets[0]:
             return 19
-        else 
+        else:
             return 20
     else:
         if equinox < sunsets[2]:
             return 21
-        else
+        else:
             return 22
 
 def to_jd(year, month, day):
