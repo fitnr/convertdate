@@ -115,8 +115,8 @@ def month_length(year, month):
     gy = year + EPOCH_GREGORIAN_YEAR - 1
 
     if month == 19:
-        nawruz_future = gregorian_day_of_nawruz(gy)
-        nawruz_past = gregorian_day_of_nawruz(gy-1)
+        nawruz_future = gregorian_day_of_nawruz(gy+1)
+        nawruz_past = gregorian_day_of_nawruz(gy)
         length_of_year = nawruz_future+365-nawruz_past
 
         if isleap(gy):
