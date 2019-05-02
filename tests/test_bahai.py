@@ -82,8 +82,8 @@ class TestBahai(unittest.TestCase):
         for gregorian in pairs:
             badi = pairs[gregorian]
 
-            actual_gregorian = bahai.to_gregorian(badi)
-            actual_bahai = bahai.to_bahai(gregorian)
+            actual_gregorian = bahai.to_gregorian(*badi)
+            actual_bahai = bahai.to_bahai(*gregorian)
 
             self.assertEqual(actual_gregorian, gregorian)
             self.assertEqual(actual_bahai, bahai)
