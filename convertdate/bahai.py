@@ -30,6 +30,9 @@ ENGLISH_MONTHS = ("Splendor", "Glory", "Beauty", "Grandeur", "Light", "Mercy", "
                   "Honour", "Sovereignty", "Dominion", "Days of Há", "Loftiness")
 
 def gregorian_day_of_nawruz(year):
+    
+    if year == 2059:
+        return 20
 
     # get time of spring equinox
     equinox = Sun.get_equinox_solstice(year, "spring")
