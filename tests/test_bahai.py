@@ -76,17 +76,17 @@ class TestBahai(unittest.TestCase):
     def test_misc(self):
         pairs = {
             (2041, 11, 27): (198, 14, 6),
-            (2043, 11, 28): (198, 14, 6),
+            (2043, 11, 28): (200, 14, 6)
         }
 
         for gregorian in pairs:
             badi = pairs[gregorian]
 
             actual_gregorian = bahai.to_gregorian(*badi)
-            actual_bahai = bahai.from_gregorian(*gregorian)
+            actual_badi = bahai.from_gregorian(*gregorian)
 
             self.assertEqual(actual_gregorian, gregorian)
-            self.assertEqual(actual_bahai, bahai)
+            self.assertEqual(actual_badi, badi)
 
 
     def test_days_ha(self):
