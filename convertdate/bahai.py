@@ -40,7 +40,7 @@ def gregorian_day_of_nawruz(year):
 
     # get time of sunset in Tehran
     days = [19,20,21]
-    sunsets = map(lambda x: Epoch(year, 3, x).rise_set(latitude, longitude)[1], days)
+    sunsets = list(map(lambda x: Epoch(year, 3, x).rise_set(latitude, longitude)[1], days))
 
     # compare
     if equinox < sunsets[1]:
