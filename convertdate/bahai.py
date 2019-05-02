@@ -112,7 +112,7 @@ def to_gregorian(year, month, day):
 
 
 def month_length(year, month):
-    gy = year + EPOCH_GREGORIAN_YEAR
+    gy = year + EPOCH_GREGORIAN_YEAR - 1
 
     if month == 19:
         nawruz_future = gregorian_day_of_nawruz(gy)

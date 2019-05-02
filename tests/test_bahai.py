@@ -76,5 +76,67 @@ class TestBahai(unittest.TestCase):
             self.assertEqual (expected, actual)
 
 
+    def test_days_ha(self):
+        days_official = {
+            2016: 4,
+            2017: 4,
+            2018: 5,
+            2019: 4,
+            2020: 4,
+            2021: 4,
+            2022: 5,
+            2023: 4,
+            2024: 4,
+            2025: 4,
+            2026: 5,
+            2027: 4,
+            2028: 4,
+            2029: 4,
+            2030: 4,
+            2031: 5,
+            2032: 4,
+            2033: 4,
+            2034: 4,
+            2035: 5,
+            2036: 4,
+            2037: 4,
+            2038: 4,
+            2039: 5,
+            2040: 4,
+            2041: 4,
+            2042: 4,
+            2043: 5,
+            2044: 4,
+            2045: 4,
+            2046: 4,
+            2047: 5,
+            2048: 4,
+            2049: 4,
+            2050: 4,
+            2051: 5,
+            2052: 4,
+            2053: 4,
+            2054: 4,
+            2055: 5,
+            2056: 4,
+            2057: 4,
+            2058: 4,
+            2059: 4,
+            2060: 5,
+            2061: 4,
+            2062: 4,
+            2063: 4,
+            2064: 5,
+            2065: 4
+        }
+
+        for year in days_official:
+            bahaiyear = year - 1844  # there's some off-by-one business here
+                                     # the Baha'i year of Ayam-i-Ha in 20XX 
+                                     # starts in 20XX-1
+            actual = bahai.monthlength(bahaiyear, 19)
+            expected = days_official[year]
+            self.assertEqual (expected, actual)
+
 if __name__ == '__main__':
     unittest.main()
