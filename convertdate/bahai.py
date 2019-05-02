@@ -12,6 +12,7 @@ from calendar import isleap
 from . import gregorian
 from .utils import monthcalendarhelper, jwday
 from pymeeus import Sun
+from pymeeus import Epoch
 
 
 EPOCH = 2394646.5
@@ -28,11 +29,29 @@ ENGLISH_MONTHS = ("Splendor", "Glory", "Beauty", "Grandeur", "Light", "Mercy", "
                   "Honour", "Sovereignty", "Dominion", "Days of Há", "Loftiness")
 
 def gregorian_day_of_nawruz(year):
-    epoch = Sun.get_equinox_solstice(year, "spring")
-    equinox_year, equinox_month, equinox_day, equinox_hour, equinox_minute, equinox_second = epoch.get_full_date()
-    print("{}/{}/{} {}:{}:{}".format(equinox_year, equinox_month, equinox_day, equinox_hour, equinox_minute, round(equinox_second, 0)))
 
-    return 21
+    # get time of spring equinox
+    equinox = Sun.get_equinox_solstice(year, "spring")
+
+    # get sunset times in Tehran
+    latitude = Angle(35.6944)
+    longitude = Angle(51.4215)
+
+    # get time of sunset in Tehran
+    days = [19,20,21]
+    sunsets = map(days, lambda x: Epoch(year, 3, x).rise_set(latitude, longitude)[1])
+
+    # compare
+    if equinox < sunsets[1]:
+        if equinox < sunsets[0]:
+            return 19
+        else 
+            return 20
+    else:
+        if equinox < sunsets[2]:
+            return 21
+        else
+            return 22
 
 def to_jd(year, month, day):
     '''Determine Julian day from Bahai date'''
