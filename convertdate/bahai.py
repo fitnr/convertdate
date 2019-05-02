@@ -11,6 +11,8 @@ from math import trunc
 from calendar import isleap
 from . import gregorian
 from .utils import monthcalendarhelper, jwday
+from pymeeus import Sun
+
 
 EPOCH = 2394646.5
 EPOCH_GREGORIAN_YEAR = 1844
@@ -25,10 +27,18 @@ ENGLISH_MONTHS = ("Splendor", "Glory", "Beauty", "Grandeur", "Light", "Mercy", "
                   "Perfection", "Names", "Might", "Will", "Knowledge", "Power", "Speech", "Questions",
                   "Honour", "Sovereignty", "Dominion", "Days of Há", "Loftiness")
 
+def gregorian_day_of_nawruz(year):
+    epoch = Sun.get_equinox_solstice(year, "spring")
+    equinox_year, equinox_month, equinox_day, equinox_hour, equinox_minute, equinox_second = epoch.get_full_date()
+    print("{}/{}/{} {}:{}:{}".format(equinox_year, equinox_month, equinox_day, equinox_hour, equinox_minute, round(equinox_second, 0)))
+
+    return 21
 
 def to_jd(year, month, day):
     '''Determine Julian day from Bahai date'''
     gy = year - 1 + EPOCH_GREGORIAN_YEAR
+
+    narwuz_day = gregorian_day_of_nawruz(gy)
 
     if month != 20:
         m = 0
@@ -37,7 +47,7 @@ def to_jd(year, month, day):
             m = -14
         else:
             m = -15
-    return gregorian.to_jd(gy, 3, 20) + (19 * (month - 1)) + m + day
+    return gregorian.to_jd(gy, 3, nawruz_day - 1) + (19 * (month - 1)) + m + day
 
 
 def from_jd(jd):
@@ -46,6 +56,7 @@ def from_jd(jd):
     jd = trunc(jd) + 0.5
     g = gregorian.from_jd(jd)
     gy = g[0]
+    nawruz_day = gregorian_day_of_nawruz(gy)
 
     bstarty = EPOCH_GREGORIAN_YEAR
 
@@ -58,7 +69,7 @@ def from_jd(jd):
 
     year = bys + 1
     days = jd - to_jd(year, 1, 1)
-    bld = to_jd(year, 20, 1)
+    bld = to_jd(year, nawruz_day - 1, 1)
 
     if jd >= bld:
         month = 20
