@@ -71,8 +71,9 @@ class TestBahai(unittest.TestCase):
 
         for year in nawruz_official:
             bahaiyear = year - 1844 + 1
-            date = bahai.to_gregorian(bahaiyear, 1, 1)
-            assert (year, 3, nawruz_official[year]) == date
+            actual = bahai.to_gregorian(bahaiyear, 1, 1)
+            expected = (year, 3, nawruz_official[year])
+            assertEqual (expected, actual)
 
 
 if __name__ == '__main__':
