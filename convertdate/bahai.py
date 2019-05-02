@@ -109,11 +109,16 @@ def to_gregorian(year, month, day):
 
 
 def month_length(year, month):
+    gy = year + EPOCH_GREGORIAN_YEAR
+
     if month == 19:
-        if isleap(year + EPOCH_GREGORIAN_YEAR):
-            return 5
-        else:
-            return 4
+        nawruz_future = gregorian_day_of_nawruz(gy)
+        nawruz_past = gregorian_day_of_nawruz(gy-1)
+        length_of_year = nawruz_future+365-nawruz_past
+
+        if isleap(gy):
+            length_of_year = length_of_year + 1
+        return length_of_year - 19*19
 
     else:
         return 19
