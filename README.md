@@ -109,6 +109,16 @@ argument in `french_republican` conversion functions.
 All the conversion methods correctly assign the leap years implemented
 while calendar was in use (3, 7, 11).
 
+Baha'i
+------
+
+Please note that there are 19 months in the Bahá'í (Badí) calendar, with a
+special period called Ayyam-i-Há occurring before the last month.
+However, for the purposes of this library, Ayyam-i-Ha is included
+among the months, and the months are numbered 1-20. Thus, month 1
+is the month of Bahá, month 18 is the month of Mulk, "month 19" is
+Ayyam-i-Há, and "month 20" is the month of 'Alá.
+
 Before the Common Era
 ---------------------
 

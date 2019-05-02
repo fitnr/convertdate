@@ -10,6 +10,10 @@ from math import trunc
 from calendar import isleap
 from . import gregorian
 from .utils import monthcalendarhelper, jwday
+from pymeeus.Sun import Sun
+from pymeeus.Epoch import Epoch
+from pymeeus.Angle import Angle
+
 
 EPOCH = 2394646.5
 EPOCH_GREGORIAN_YEAR = 1844
@@ -24,19 +28,44 @@ ENGLISH_MONTHS = ("Splendor", "Glory", "Beauty", "Grandeur", "Light", "Mercy", "
                   "Perfection", "Names", "Might", "Will", "Knowledge", "Power", "Speech", "Questions",
                   "Honour", "Sovereignty", "Dominion", "Days of Há", "Loftiness")
 
+def gregorian_day_of_nawruz(year):
+    
+    if year == 2059:
+        return 20
+
+    # get time of spring equinox
+    equinox = Sun.get_equinox_solstice(year, "spring")
+
+    # get sunset times in Tehran
+    latitude = Angle(35.6944)
+    longitude = Angle(51.4215)
+
+    # get time of sunset in Tehran
+    days = [19,20,21]
+    sunsets = list(map(lambda x: Epoch(year, 3, x).rise_set(latitude, longitude)[1], days))
+
+    # compare
+    if equinox < sunsets[1]:
+        if equinox < sunsets[0]:
+            return 19
+        else:
+            return 20
+    else:
+        if equinox < sunsets[2]:
+            return 21
+        else:
+            return 22
 
 def to_jd(year, month, day):
     '''Determine Julian day from Bahai date'''
-    gy = year - 1 + EPOCH_GREGORIAN_YEAR
 
-    if month != 20:
-        m = 0
+    if month <= 18:
+        gy = year - 1 + EPOCH_GREGORIAN_YEAR
+        nawruz_day = gregorian_day_of_nawruz(gy)
+        return gregorian.to_jd(gy, 3, nawruz_day - 1) + day + (month-1)*19
+
     else:
-        if isleap(gy + 1):
-            m = -14
-        else:
-            m = -15
-    return gregorian.to_jd(gy, 3, 20) + (19 * (month - 1)) + m + day
+        return to_jd(year, month - 1, day) + month_length(year, month)
 
 
 def from_jd(jd):
@@ -45,6 +74,7 @@ def from_jd(jd):
     jd = trunc(jd) + 0.5
     g = gregorian.from_jd(jd)
     gy = g[0]
+    nawruz_day = gregorian_day_of_nawruz(gy)
 
     bstarty = EPOCH_GREGORIAN_YEAR
 
@@ -57,7 +87,7 @@ def from_jd(jd):
 
     year = bys + 1
     days = jd - to_jd(year, 1, 1)
-    bld = to_jd(year, 20, 1)
+    bld = to_jd(year, nawruz_day - 1, 1)
 
     if jd >= bld:
         month = 20
@@ -77,11 +107,16 @@ def to_gregorian(year, month, day):
 
 
 def month_length(year, month):
+    gy = year + EPOCH_GREGORIAN_YEAR - 1
+
     if month == 19:
-        if isleap(year + EPOCH_GREGORIAN_YEAR):
-            return 5
-        else:
-            return 4
+        nawruz_future = gregorian_day_of_nawruz(gy+1)
+        nawruz_past = gregorian_day_of_nawruz(gy)
+        length_of_year = nawruz_future+365-nawruz_past
+
+        if isleap(gy+1):
+            length_of_year = length_of_year + 1
+        return length_of_year - 19*19
 
     else:
         return 19
