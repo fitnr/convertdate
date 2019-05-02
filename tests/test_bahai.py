@@ -134,7 +134,7 @@ class TestBahai(unittest.TestCase):
             bahaiyear = year - 1844  # there's some off-by-one business here
                                      # the Baha'i year of Ayam-i-Ha in 20XX 
                                      # starts in 20XX-1
-            actual = bahai.monthlength(bahaiyear, 19)
+            actual = bahai.month_length(bahaiyear, 19)
             expected = days_official[year]
             self.assertEqual (expected, actual)
 
