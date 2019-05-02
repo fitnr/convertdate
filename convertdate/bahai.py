@@ -119,7 +119,7 @@ def month_length(year, month):
         nawruz_past = gregorian_day_of_nawruz(gy)
         length_of_year = nawruz_future+365-nawruz_past
 
-        if isleap(gy):
+        if isleap(gy+1):
             length_of_year = length_of_year + 1
         return length_of_year - 19*19
 
