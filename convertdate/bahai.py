@@ -66,7 +66,7 @@ def to_jd(year, month, day):
         return gregorian.to_jd(gy, 3, nawruz_day - 1) + day + (month-1)*19
 
     else:
-        return self.to_jd(year, month - 1, day) + self.month_length(year, month)
+        return to_jd(year, month - 1, day) + month_length(year, month)
 
 
 def from_jd(jd):
