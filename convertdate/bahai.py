@@ -59,18 +59,14 @@ def gregorian_day_of_nawruz(year):
 
 def to_jd(year, month, day):
     '''Determine Julian day from Bahai date'''
-    gy = year - 1 + EPOCH_GREGORIAN_YEAR
 
-    nawruz_day = gregorian_day_of_nawruz(gy)
+    if month <= 18:
+        gy = year - 1 + EPOCH_GREGORIAN_YEAR
+        nawruz_day = gregorian_day_of_nawruz(gy)
+        return gregorian.to_jd(gy, 3, nawruz_day - 1) + day + (month-1)*19
 
-    if month != 20:
-        m = 0
     else:
-        if isleap(gy + 1):
-            m = -14
-        else:
-            m = -15
-    return gregorian.to_jd(gy, 3, nawruz_day - 1) + (19 * (month - 1)) + m + day
+        return self.to_jd(year, month - 1, day) + self.month_length(year, month)
 
 
 def from_jd(jd):
