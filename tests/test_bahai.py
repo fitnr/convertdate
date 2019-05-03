@@ -74,7 +74,7 @@ class TestBahai(unittest.TestCase):
 
     def test_reflexive(self):
         for jd in range(2159677, 2488395, 7):
-            self.assertEqual(jd, bahai.to_jd(*bahai.from_jd(jd)))
+            self.assertEqual(jd+0.5, bahai.to_jd(*bahai.from_jd(jd+0.5)))
 
     def test_misc(self):
         pairs = {
