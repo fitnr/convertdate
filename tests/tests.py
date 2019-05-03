@@ -30,7 +30,7 @@ class CalTestCase(unittest.TestCase):
         self.c = gregorian.to_jd(*self.c_greg)
         self.x = gregorian.to_jd(2016, 2, 29)
 
-        self.jdcs = range(2159677, 2488395, 20)
+        self.jdcs = range(2159677, 2488395, 2000)
 
     def test_utils(self):
         self.assertEqual(utils.amod(100, 4), 4)
