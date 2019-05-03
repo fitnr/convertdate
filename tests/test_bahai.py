@@ -72,16 +72,22 @@ class TestBahai(unittest.TestCase):
             expected = (year, 3, nawruz_official[year])
             self.assertEqual (expected, actual)
 
-    def reflexive(self):
+    def test_reflexive(self):
         for jd in range(2159677, 2488395, 7):
             self.assertEqual(jd, bahai.to_jd(*bahai.from_jd(jd)))
 
     def test_misc(self):
         pairs = {
-            (2041, 11, 27): (198, 14, 6),
-            (2043, 11, 28): (200, 14, 6),
-            (2038, 3, 1): (194, 20, 1),
-            (2039, 3, 2): (195, 20, 1)
+            (2041, 11, 27): (198, 14, 6), # ascension of Abdu'l-Bahá 2041
+            (2043, 11, 28): (200, 14, 6), # ascension of Abdu'l-Bahá 2043
+            (2038, 3, 1): (194, 20, 1), # beginning of fast 2038
+            (2039, 3, 2): (195, 20, 1), # beginning of fast 2039
+            (2040, 3, 1): (196, 20, 1), # beginning of fast 2040
+            (2041, 3, 1): (197, 20, 1), # beginning of fast 2041
+            (2042, 3, 1): (198, 20, 1), # beginning of fast 2042
+            (2043, 3, 2): (199, 20, 1), # beginning of fast 2043
+            (2031, 10, 17): (188, 12, 2), #twin holy days, 2031
+            (2031, 10, 18): (188, 12, 3)
         }
 
         for gregorian in pairs:
