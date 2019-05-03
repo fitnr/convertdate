@@ -76,7 +76,9 @@ class TestBahai(unittest.TestCase):
     def test_misc(self):
         pairs = {
             (2041, 11, 27): (198, 14, 6),
-            (2043, 11, 28): (200, 14, 6)
+            (2043, 11, 28): (200, 14, 6),
+            (2038, 3, 1): (194, 20, 1),
+            (2039, 3, 2): (195, 20, 1)
         }
 
         for gregorian in pairs:
