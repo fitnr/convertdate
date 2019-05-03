@@ -1,4 +1,5 @@
-[![Build Status](https://travis-ci.org/fitnr/convertdate.svg?branch=master)](https://travis-ci.org/fitnr/convertdate)
+.. image:: https://travis-ci.org/fitnr/convertdate.svg?branch=master
+       :target: https://travis-ci.org/fitnr/convertdate
 
 ===========
 convertdate
