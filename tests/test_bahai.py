@@ -72,6 +72,9 @@ class TestBahai(unittest.TestCase):
             expected = (year, 3, nawruz_official[year])
             self.assertEqual (expected, actual)
 
+    def reflexive(self):
+        for jd in range(2159677, 2488395, 7):
+            self.assertEqual(jd, bahai.to_jd(*bahai.from_jd(jd)))
 
     def test_misc(self):
         pairs = {
