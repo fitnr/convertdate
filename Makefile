@@ -10,7 +10,7 @@ test:
 	coverage report
 	coverage html
 
-deploy: README.rst
+deploy:
 	git push; git push --tags
 	rm -rf dist build
 	python setup.py sdist bdist_wheel --universal
