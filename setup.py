@@ -10,7 +10,7 @@
 from setuptools import setup
 
 try:
-    readme = open('README.rst').read()
+    readme = open('README.md').read()
 except IOError:
     readme = ''
 
@@ -27,6 +27,7 @@ setup(
                  "Indian Civil, Islamic, ISO, Julian, Mayan and Persian."),
 
     long_description=readme,
+    long_description_content_type='text/markdown',
 
     author="Neil Freeman",
 
