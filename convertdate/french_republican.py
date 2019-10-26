@@ -7,9 +7,9 @@
 # http://opensource.org/licenses/MIT
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
 from math import trunc
-from . import dublin, gregorian
+from pymeeus.Sun import Sun
+from . import gregorian
 from .data.french_republican_days import french_republican_days
-import ephem
 
 # julian day (1792, 9, 22)
 EPOCH = 2375839.5
@@ -37,36 +37,37 @@ MOIS = [
 LEAP_CYCLE_DAYS = 1461.  # 365 * 4 + 1
 LEAP_CYCLE_YEARS = 4.
 
-# methods:
-# 4 (concordance rule): leap every four years: 3, 7, 11, 15, ... etc
-# 100 (Romme's rule): leap every 4th and 400th year, but not 100th: 20, 24, ... 96, 104, ... 396, 400, ...
-# 128 (von Mädler's rule): leap every 4th but not 128th: 20, 24, ... 124, 132, ...
-# equinox [default]: use calculation of the equinox to determine date, never returns a leap year
-
 
 def leap(year, method=None):
     '''
     Determine if this is a leap year in the FR calendar using one of three methods: 4, 100, 128
     (every 4th years, every 4th or 400th but not 100th, every 4th but not 128th)
-    '''
 
+    Methods:
+        * 4 (concordance rule): leap every four years: 3, 7, 11, 15, ... etc
+        * 100 (Romme's rule): leap every 4th and 400th year, but not 100th:
+            20, 24, ... 96, 104, ... 396, 400, 404 ...
+        * 128 (von Mädler's rule): leap every 4th but not 128th: 20, 24, ... 124, 132, ...
+        * equinox [default]: use calculation of the equinox to determine date, never returns a leap year
+    '''
     method = method or 'equinox'
 
     if year in (3, 7, 11):
         return True
-    elif year < 15:
+
+    if year < 15:
         return False
 
     if method in (4, 'continuous') or (year <= 16 and method in (128, 'madler', 4, 'continuous')):
         return year % 4 == 3
 
-    elif method in (100, 'romme'):
+    if method in (100, 'romme'):
         return (year % 4 == 0 and year % 100 != 0) or year % 400 == 0
 
-    elif method in (128, 'madler'):
+    if method in (128, 'madler'):
         return year % 4 == 0 and year % 128 != 0
 
-    elif method == 'equinox':
+    if method == 'equinox':
         # Is equinox on 366th day after (year, 1, 1)
         startjd = to_jd(year, 1, 1, method='equinox')
         if premier_da_la_annee(startjd + 367) - startjd == 366.0:
@@ -77,16 +78,36 @@ def leap(year, method=None):
     return False
 
 
+def _previous_fall_equinox(jd):
+    '''Return the julian day count of the previous fall equinox.'''
+    y, _, _ = gregorian.from_jd(jd)
+    eqx = Sun.get_equinox_solstice(y, "autumn").jde()
+    if eqx > jd:
+        eqx = Sun.get_equinox_solstice(y - 1, "autumn").jde()
+
+    return eqx
+
+
+def _next_fall_equinox(jd):
+    '''Return the julian day count of the previous fall equinox.'''
+    y, _, _ = gregorian.from_jd(jd)
+    eqx = Sun.get_equinox_solstice(y, "autumn").jde()
+    if eqx < jd:
+        eqx = Sun.get_equinox_solstice(y + 1, "autumn").jde()
+
+    return eqx
+
+
 def premier_da_la_annee(jd):
-    '''Determine the year in the French revolutionary calendar in which a given Julian day falls.
-    Returns Julian day number containing fall equinox (first day of the FR year)'''
-    p = ephem.previous_fall_equinox(dublin.from_jd(jd))
-    previous = trunc(dublin.to_jd(p) - 0.5) + 0.5
+    '''
+        Returns Julian day number containing fall equinox (first day of the FR year)
+        of the current FR year.
+    '''
+    previous = trunc(_previous_fall_equinox(jd) - 0.5) + 0.5
 
     if previous + 364 < jd:
         # test if current day is the equinox if the previous equinox was a long time ago
-        n = ephem.next_fall_equinox(dublin.from_jd(jd))
-        nxt = trunc(dublin.to_jd(n) - 0.5) + 0.5
+        nxt = trunc(_next_fall_equinox(jd) - 0.5) + 0.5
 
         if nxt <= jd:
             return nxt
@@ -110,8 +131,7 @@ def to_jd(year, month, day, method=None):
     if method == 'equinox':
         return _to_jd_equinox(year, month, day)
 
-    else:
-        return _to_jd_schematic(year, month, day, method)
+    return _to_jd_schematic(year, month, day, method)
 
 
 def _to_jd_schematic(year, month, day, method):
@@ -181,9 +201,10 @@ def _to_jd_schematic(year, month, day, method):
 
 
 def _to_jd_equinox(an, mois, jour):
+    '''Return jd of this FR date, counting from the previous equinox.'''
     day_of_adr = (30 * (mois - 1)) + (jour - 1)
-    equinoxe = ephem.next_fall_equinox(str(an + YEAR_EPOCH))
-    return trunc(dublin.to_jd(equinoxe.real) - 0.5) + 0.5 + day_of_adr
+    equinoxe = _next_fall_equinox(gregorian.to_jd(an + YEAR_EPOCH, 1, 1))
+    return trunc(equinoxe - 0.5) + 0.5 + day_of_adr
 
 
 def from_jd(jd, method=None):
