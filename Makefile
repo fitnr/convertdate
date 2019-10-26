@@ -13,5 +13,5 @@ test:
 deploy: README.rst
 	git push; git push --tags
 	rm -rf dist build
-	python3.5 setup.py sdist bdist_wheel --universal
+	python setup.py sdist bdist_wheel --universal
 	twine upload dist/*
