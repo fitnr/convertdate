@@ -102,7 +102,7 @@ argument in `french_republican` conversion functions.
     french_republican.to_gregorian(20, 1, 1), method='continuous')
     # (1811, 9, 24)
 
-    # von M&auml;dler's method
+    # von Madler's method
     french_republican.to_gregorian(20, 1, 1), method='madler')
     # (1811, 9, 23)
 
@@ -112,12 +112,18 @@ while calendar was in use (3, 7, 11).
 Baha'i
 ------
 
-Please note that there are 19 months in the Bahá'í (Badí) calendar, with a
-special period called Ayyam-i-Há occurring before the last month.
-However, for the purposes of this library, Ayyam-i-Ha is included
-among the months, and the months are numbered 1-20. Thus, month 1
-is the month of Bahá, month 18 is the month of Mulk, "month 19" is
-Ayyam-i-Há, and "month 20" is the month of 'Alá.
+The Bah&aacute;'&iacute; (Bad&iacute;) calendar has an intercalary period, Ayyam-i-H&aacute;, which occurs between the 18th and 19th months.
+Dates in this period are returned as month 19, and the month of &lsquo;Al&aacute; is reported as month 20.
+
+```python
+from convertdate import bahai
+# the first day of Ayyam-i-Ha:
+bahai.to_gregorian(175, 19, 1)
+# (2019, 2, 11)
+# The first day of 'Ala:
+bahai.to_gregorian(175, 20, 1)
+# (2019, 3, 2)
+```
 
 Before the Common Era
 ---------------------

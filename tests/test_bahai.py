@@ -2,165 +2,77 @@
 from __future__ import unicode_literals
 import unittest
 import time
-from convertdate import gregorian
 from convertdate import bahai
 
 
 class TestBahai(unittest.TestCase):
 
+    pairs = {
+        (2041, 11, 27): (198, 14, 6),  # ascension of Abdu'l-Bahá 2041
+        (2043, 11, 28): (200, 14, 6),  # ascension of Abdu'l-Bahá 2043
+        (2038, 3, 1): (194, 20, 1),  # beginning of fast 2038
+        (2039, 3, 2): (195, 20, 1),  # beginning of fast 2039
+        (2040, 3, 1): (196, 20, 1),  # beginning of fast 2040
+        (2041, 3, 1): (197, 20, 1),  # beginning of fast 2041
+        (2042, 3, 1): (198, 20, 1),  # beginning of fast 2042
+        (2043, 3, 2): (199, 20, 1),  # beginning of fast 2043
+        (2031, 10, 17): (188, 12, 2),  # twin holy days, 2031
+        (2031, 10, 18): (188, 12, 3)
+    }
+
     def setUp(self):
         self.tm = time.localtime()
         self.gregoriandate = (self.tm[0], self.tm[1], self.tm[2])
 
-    def test_nawruz(self):
+    def test_gregorian_nawruz(self):
         nawruz_official = {
-            2015: 21,
-            2016: 20,
-            2017: 20,
-            2018: 21,
-            2019: 21,
-            2020: 20,
-            2021: 20,
-            2022: 21,
-            2023: 21,
-            2024: 20,
-            2025: 20,
-            2026: 21,
-            2027: 21,
-            2028: 20,
-            2029: 20,
-            2030: 20,
-            2031: 21,
-            2032: 20,
-            2033: 20,
-            2034: 20,
-            2035: 21,
-            2036: 20,
-            2037: 20,
-            2038: 20,
-            2039: 21,
-            2040: 20,
-            2041: 20,
-            2042: 20,
-            2043: 21,
-            2044: 20,
-            2045: 20,
-            2046: 20,
-            2047: 21,
-            2048: 20,
-            2049: 20,
-            2050: 20,
-            2051: 21,
-            2052: 20,
-            2053: 20,
-            2054: 20,
-            2055: 21,
-            2056: 20,
-            2057: 20,
-            2058: 20,
-            2059: 20,
-            2060: 20,
-            2061: 20,
-            2062: 20,
-            2063: 20,
-            2064: 20
+            20: [
+                2016, 2017, 2020, 2021, 2024, 2025, 2028, 2029, 2030, 2032,
+                2033, 2034, 2036, 2037, 2038, 2040, 2041, 2042, 2044, 2045,
+                2046, 2048, 2049, 2050, 2052, 2053, 2054, 2056, 2057, 2058,
+                2059, 2060, 2061, 2062, 2063, 2064
+            ],
+            21: [
+                2015, 2018, 2019, 2022, 2023, 2026, 2027, 2031, 2035, 2039,
+                2043, 2047, 2051, 2055
+            ]
         }
 
-        for year in nawruz_official:
-            bahaiyear = year - 1844 + 1
-            actual = bahai.to_gregorian(bahaiyear, 1, 1)
-            expected = (year, 3, nawruz_official[year])
-            self.assertEqual (expected, actual)
+        for date, gyears in nawruz_official.items():
+            for gyear in gyears:
+                self.assertEqual((3, date), bahai.gregorian_nawruz(gyear))
 
     def test_reflexive(self):
         for jd in range(2159677, 2488395, 1867):
             self.assertEqual(jd+0.5, bahai.to_jd(*bahai.from_jd(jd+0.5)))
 
-    def test_misc(self):
-        pairs = {
-            (2041, 11, 27): (198, 14, 6), # ascension of Abdu'l-Bahá 2041
-            (2043, 11, 28): (200, 14, 6), # ascension of Abdu'l-Bahá 2043
-            (2038, 3, 1): (194, 20, 1), # beginning of fast 2038
-            (2039, 3, 2): (195, 20, 1), # beginning of fast 2039
-            (2040, 3, 1): (196, 20, 1), # beginning of fast 2040
-            (2041, 3, 1): (197, 20, 1), # beginning of fast 2041
-            (2042, 3, 1): (198, 20, 1), # beginning of fast 2042
-            (2043, 3, 2): (199, 20, 1), # beginning of fast 2043
-            (2031, 10, 17): (188, 12, 2), #twin holy days, 2031
-            (2031, 10, 18): (188, 12, 3)
+    def test_to_gregorian(self):
+        for g, b in self.pairs.items():
+            self.assertEqual(g, bahai.to_gregorian(*b))
+
+    def test_from_gregorian(self):
+        for g, b in self.pairs.items():
+            self.assertEqual(b, bahai.from_gregorian(*g))
+
+    def test_month_length(self):
+        for x in range(1, 19):
+            self.assertEqual(bahai.month_length(2019, x), 19)
+
+    def test_month_length_ha(self):
+        official = {
+            4: [
+                2016, 2017, 2019, 2020, 2021, 2023, 2024, 2025, 2027, 2028, 2029, 2030, 2032,
+                2033, 2034, 2036, 2037, 2038, 2040, 2041, 2042, 2044, 2045, 2046, 2048, 2049,
+                2050, 2052, 2053, 2054, 2056, 2057, 2058, 2059, 2061, 2062, 2063, 2065
+            ],
+            5: [2018, 2022, 2026, 2031, 2035, 2039, 2043, 2047, 2051, 2055, 2060, 2064]
         }
 
-        for gregorian in pairs:
-            badi = pairs[gregorian]
+        for length, gyears in official.items():
+            for gyear in gyears:
+                byear = gyear - 1844
+                self.assertEqual(length, bahai.month_length(byear, 19))
 
-            actual_gregorian = bahai.to_gregorian(*badi)
-            actual_badi = bahai.from_gregorian(*gregorian)
-
-            self.assertEqual(actual_gregorian, gregorian)
-            self.assertEqual(actual_badi, badi)
-
-
-    def test_days_ha(self):
-        days_official = {
-            2016: 4,
-            2017: 4,
-            2018: 5,
-            2019: 4,
-            2020: 4,
-            2021: 4,
-            2022: 5,
-            2023: 4,
-            2024: 4,
-            2025: 4,
-            2026: 5,
-            2027: 4,
-            2028: 4,
-            2029: 4,
-            2030: 4,
-            2031: 5,
-            2032: 4,
-            2033: 4,
-            2034: 4,
-            2035: 5,
-            2036: 4,
-            2037: 4,
-            2038: 4,
-            2039: 5,
-            2040: 4,
-            2041: 4,
-            2042: 4,
-            2043: 5,
-            2044: 4,
-            2045: 4,
-            2046: 4,
-            2047: 5,
-            2048: 4,
-            2049: 4,
-            2050: 4,
-            2051: 5,
-            2052: 4,
-            2053: 4,
-            2054: 4,
-            2055: 5,
-            2056: 4,
-            2057: 4,
-            2058: 4,
-            2059: 4,
-            2060: 5,
-            2061: 4,
-            2062: 4,
-            2063: 4,
-            2064: 5,
-            2065: 4
-        }
-
-        for year in days_official:
-            bahaiyear = year - 1844  # there's some off-by-one business here
-                                     # the Baha'i year of Ayam-i-Ha in 20XX 
-                                     # starts in 20XX-1
-            actual = (year, bahai.month_length(bahaiyear, 19))
-            expected = (year, days_official[year])
-            self.assertEqual (expected, actual)
 
 if __name__ == '__main__':
     unittest.main()

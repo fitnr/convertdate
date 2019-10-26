@@ -63,6 +63,6 @@ setup(
     install_requires=[
         'ephem>=3.7.5.3, <3.8',
         'pytz>=2014.10, < 2020',
-        'pymeeus>=0.3.6'
+        'pymeeus>=0.3.6, <=1'
     ]
 )

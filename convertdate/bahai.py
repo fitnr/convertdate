@@ -6,17 +6,19 @@
 # Licensed under the MIT license:
 # http://opensource.org/licenses/MIT
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
-from math import trunc
+from math import trunc, ceil
 from calendar import isleap
-from . import gregorian
-from .utils import monthcalendarhelper, jwday
 from pymeeus.Sun import Sun
 from pymeeus.Epoch import Epoch
 from pymeeus.Angle import Angle
+from . import gregorian
+from .utils import monthcalendarhelper, jwday
 
 
 EPOCH = 2394646.5
 EPOCH_GREGORIAN_YEAR = 1844
+
+TEHRAN = 51.4215, 35.6944
 
 WEEKDAYS = ("Jamál", "Kamál", "Fidál", "Idál", "Istijlál", "Istiqlál", "Jalál")
 
@@ -28,57 +30,48 @@ ENGLISH_MONTHS = ("Splendor", "Glory", "Beauty", "Grandeur", "Light", "Mercy", "
                   "Perfection", "Names", "Might", "Will", "Knowledge", "Power", "Speech", "Questions",
                   "Honour", "Sovereignty", "Dominion", "Days of Há", "Loftiness")
 
-def gregorian_day_of_nawruz(year):
-    
-    if year == 2059:
-        return 20
 
-    # get time of spring equinox
+def gregorian_nawruz(year):
+    '''
+        Return Nawruz in the Gregorian calendar.
+        Returns a tuple (month, day), where month is always 3
+    '''
+    if year == 2059:
+        return 3, 20
+
+    # Timestamp of spring equinox.
     equinox = Sun.get_equinox_solstice(year, "spring")
 
-    # get sunset times in Tehran
-    latitude = Angle(35.6944)
-    longitude = Angle(51.4215)
+    # Get times of sunsets in Tehran near vernal equinox.
+    x, y = Angle(TEHRAN[0]), Angle(TEHRAN[1])
+    days = trunc(equinox.get_date()[2]), ceil(equinox.get_date()[2])
 
-    # get time of sunset in Tehran
-    days = [19,20,21]
-    sunsets = list(map(lambda x: Epoch(year, 3, x).rise_set(latitude, longitude)[1], days))
+    for day in days:
+        sunset = Epoch(year, 3, day).rise_set(y, x)[1]
+        if sunset > equinox:
+            return 3, day
 
-    # compare
-    if equinox < sunsets[1]:
-        if equinox < sunsets[0]:
-            return 19
-        else:
-            return 20
-    else:
-        if equinox < sunsets[2]:
-            return 21
-        else:
-            return 22
 
 def to_jd(year, month, day):
     '''Determine Julian day from Bahai date'''
-
     if month <= 18:
         gy = year - 1 + EPOCH_GREGORIAN_YEAR
-        nawruz_day = gregorian_day_of_nawruz(gy)
-        return gregorian.to_jd(gy, 3, nawruz_day - 1) + day + (month-1)*19
+        n_month, n_day = gregorian_nawruz(gy)
+        return gregorian.to_jd(gy, n_month, n_day - 1) + day + (month - 1) * 19
 
-    else:
-        return to_jd(year, month - 1, day) + month_length(year, month)
+    return to_jd(year, month - 1, day) + month_length(year, month)
 
 
 def from_jd(jd):
     '''Calculate Bahai date from Julian day'''
-
     jd = trunc(jd) + 0.5
     g = gregorian.from_jd(jd)
     gy = g[0]
-    nawruz_day = gregorian_day_of_nawruz(gy)
+    n_month, n_day = gregorian_nawruz(gy)
 
     bstarty = EPOCH_GREGORIAN_YEAR
 
-    if jd <= gregorian.to_jd(gy, 3, 20):
+    if jd <= gregorian.to_jd(gy, n_month, 20):
         x = 1
     else:
         x = 0
@@ -87,7 +80,7 @@ def from_jd(jd):
 
     year = bys + 1
     days = jd - to_jd(year, 1, 1)
-    bld = to_jd(year, nawruz_day - 1, 1)
+    bld = to_jd(year, n_day - 1, 1)
 
     if jd >= bld:
         month = 20
@@ -110,16 +103,16 @@ def month_length(year, month):
     gy = year + EPOCH_GREGORIAN_YEAR - 1
 
     if month == 19:
-        nawruz_future = gregorian_day_of_nawruz(gy+1)
-        nawruz_past = gregorian_day_of_nawruz(gy)
-        length_of_year = nawruz_future+365-nawruz_past
+        _, nawruz_future = gregorian_nawruz(gy + 1)
+        _, nawruz_past = gregorian_nawruz(gy)
+        length_of_year = nawruz_future + 365 - nawruz_past
 
-        if isleap(gy+1):
+        if isleap(gy + 1):
             length_of_year = length_of_year + 1
-        return length_of_year - 19*19
 
-    else:
-        return 19
+        return length_of_year - 19 * 19
+
+    return 19
 
 
 def monthcalendar(year, month):
