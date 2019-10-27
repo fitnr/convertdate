@@ -12,6 +12,7 @@ dist
 *.egg-info
 *.egg
 *.pyc
+*.whl
 .tox
 .eggs
 py35

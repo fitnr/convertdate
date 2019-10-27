@@ -13,5 +13,6 @@ test:
 deploy:
 	git push; git push --tags
 	rm -rf dist build
-	python setup.py sdist bdist_wheel --universal
+	python setup.py sdist
+	python setup.py bdist_wheel --universal
 	twine upload dist/*
