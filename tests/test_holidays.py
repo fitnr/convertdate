@@ -72,7 +72,7 @@ class TestHolidays(unittest.TestCase):
         assert holidays.thanksgiving(2015, 'canada') == (2015, 10, 12)
 
     def test_easter(self):
-        easters = [
+        easters = { 'western': [
             (1994, 4, 3),
             (1995, 4, 16),
             (1996, 4, 7),
@@ -114,11 +114,63 @@ class TestHolidays(unittest.TestCase):
             (2032, 3, 28),
             (2033, 4, 17),
             (2034, 4, 9)
-        ]
-        for y, m, d in easters:
+        ],
+        'eastern': [
+            (1999, 4, 11),
+            (2000, 4, 30),
+            (2001, 4, 15),
+            (2002, 5, 5),
+            (2003, 4, 27),
+            (2004, 4, 11),
+            (2005, 5, 1),
+            (2006, 4, 23),
+            (2007, 4, 8),
+            (2008, 4, 27),
+            (2009, 4, 19),
+            (2010, 4, 4),
+            (2011, 4, 24),
+            (2012, 4, 15),
+            (2013, 5, 5),
+            (2014, 4, 20),
+            (2015, 4, 12),
+            (2016, 5, 1),
+            (2017, 4, 16),
+            (2018, 4, 8),
+            (2019, 4, 28),
+            (2020, 4, 19),
+            (2021, 5, 2),
+            (2022, 4, 24),
+            (2023, 4, 16),
+            (2024, 5, 5),
+            (2025, 4, 20),
+            (2026, 4, 12),
+            (2027, 5, 2),
+            (2028, 4, 16),
+            (2029, 4, 8),
+            (2030, 4, 28),
+            (2031, 4, 13),
+            (2032, 5, 2),
+            (2033, 4, 24),
+            (2034, 4, 9),
+            (2035, 4, 29),
+            (2036, 4, 20),
+            (2037, 4, 5),
+            (2038, 4, 25),
+            (2039, 4, 17)
+        ]}
+        for y, m, d in easters.get('western'):
             self.assertEqual(holidays.easter(y), (y, m, d))
+        for y, m, d in easters.get('eastern'):
+            self.assertEqual(holidays.easter(y, church="orthodox", calendar="gregorian"), (y, m, d))
+            self.assertEqual(holidays.easter(y, church="eastern", calendar="gregorian"), (y, m, d))
+
+        # Test some years when Julian Easter falls on April 6
+        for y in (1634, 1729, 1824, 2071, 2166, 2261, 2356):
+            self.assertEqual((y, 4, 6), holidays.easter(y, church="orthodox", calendar="julian"))
+            self.assertEqual((y, 4, 13), holidays.easter(y, church="eastern", calendar="julian"))
 
         self.assertEqual(self.h.easter, (2015, 4, 5))
+        self.assertEqual((1436, 6, 15), holidays.easter(2015, calendar="islamic"))
 
     def test_jewish_holidays(self):
         # http://www.chabad.org/holidays/passover/pesach_cdo/aid/671901/jewish/When-is-Passover-in-2013-2014-2015-2016-and-2017.htm
