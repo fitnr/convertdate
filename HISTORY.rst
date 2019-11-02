@@ -1,6 +1,14 @@
 History
 -------
 
+2.2.0
+-----
+
+* Repair Bahai intercalary days bug (#13, thanks @bchurchill)
+* Replace pyephem, which is now in maintenance mode, with pymeeus.
+* Remove shebangs and regularize licenses (thanks @fabaff)
+* Convert readme to ascii (#16)
+
 2.1.3
 -----
 * Bump requirements

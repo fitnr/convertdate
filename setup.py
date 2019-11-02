@@ -10,7 +10,7 @@
 from setuptools import setup
 
 try:
-    readme = open('README.rst').read()
+    readme = open('README.md').read()
 except IOError:
     readme = ''
 
@@ -27,6 +27,7 @@ setup(
                  "Indian Civil, Islamic, ISO, Julian, Mayan and Persian."),
 
     long_description=readme,
+    long_description_content_type='text/markdown',
 
     author="Neil Freeman",
 
@@ -53,6 +54,8 @@ setup(
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
         'Topic :: Religion',
         'Topic :: Scientific/Engineering :: Astronomy',
         'Operating System :: OS Independent',
@@ -60,7 +63,7 @@ setup(
     ],
 
     install_requires=[
-        'ephem>=3.7.5.3, <3.8',
-        'pytz>=2014.10, < 2020'
+        'pytz>=2014.10, < 2020',
+        'pymeeus>=0.3.6, <=1'
     ]
 )

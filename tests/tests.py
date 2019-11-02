@@ -110,12 +110,8 @@ class CalTestCase(unittest.TestCase):
 
     def test_bahai(self):
         self.reflexive(bahai.from_jd, bahai.to_jd)
-        self.assertEqual(bahai.from_gregorian(1844, 3, 21), (1, 1, 1))
-        self.assertEqual(bahai.to_gregorian(1, 1, 1), (1844, 3, 21))
         self.assertEqual(bahai.month_length(1, 3), 19)
         self.assertEqual(bahai.month_length(1, 1), 19)
-        self.assertEqual(bahai.month_length(4, 19), 5)
-        self.assertEqual(bahai.month_length(5, 19), 4)
         self.assertEqual(self.jd, bahai.to_jd(*bahai.from_jd(self.jd)))
 
     def test_coptic(self):

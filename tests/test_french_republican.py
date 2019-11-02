@@ -290,6 +290,13 @@ class TestFrenchRepublican(unittest.TestCase):
         # Coup of 30 Prairial VII
         self.assertEqual(fr.to_gregorian(7, 9, 30), (1799, 6, 18))
 
+    def test_premier_da_la_annee(self):
+        # Autumnal equinoxes in 1793 and 1794
+        e0 = 2376204.5
+        e1 = 2376569.5
+        self.assertEqual(fr.premier_da_la_annee(e1 - 10), e0)
+        self.assertEqual(fr.premier_da_la_annee(e1 + 100), e1)
+
     def test_french_republican_months(self):
         self.assertEqual(fr.MOIS[0], "Vendémiaire")
         self.assertEqual(fr.MOIS[1], "Brumaire")
