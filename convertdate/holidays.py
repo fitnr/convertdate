@@ -8,9 +8,10 @@
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
 import time
 import calendar
+import importlib
 from math import trunc
 from .utils import nth_day_of_month
-from . import hebrew
+from . import hebrew, julian
 
 # weekdays
 MON = 0
@@ -71,7 +72,23 @@ def pulaski_day(year):
     return nth_day_of_month(1, MON, MAR, year)
 
 
-def easter(year):
+def easter(year, church=None):
+    '''Calculate Easter in the given church according to the given calendar.'''
+    church = church or "western"
+
+    if church == "western":
+        return _easter_western(year)
+
+    if church == "orthodox":
+        return julian.to_gregorian(*_easter_julian(year))
+
+    if church == "eastern":
+        return julian.to_gregorian(*_easter_julian(year, mode="eastern"))
+
+    raise ValueError("Unknown value for 'church'")
+
+
+def _easter_western(year):
     '''Calculate western easter'''
     # formula taken from http://aa.usno.navy.mil/faq/docs/easter.html
     c = trunc(year / 100)
@@ -91,7 +108,27 @@ def easter(year):
     month = 3 + trunc((l + 40) / 44)
     day = l + 28 - 31 * trunc(month / 4)
 
-    return year, int(month), int(day)
+    date = (year, int(month), int(day))
+
+    return date
+
+
+def _easter_julian(year, mode="dionysian"):
+    '''Calculate Easter for the orthodox and eastern churches in the Julian calendar.'''
+    # Uses Meeus's Julian algorithm.
+    meton = (year % 19)
+    b = year % 4
+    c = year % 7
+    d = (19 * meton + 15) % 30
+    if mode == "eastern" and meton == 0:
+        d = d + 1
+    e = (2 * b + 4 * c - d + 6) % 7
+    fmj = 113 + d  # Easter full moon (days after -92 March)
+    dmj = fmj + e + 1  # Easter Sunday (days after -92 March)
+    esmj = trunc(dmj / 31)  # month of Easter Sunday
+    esdj = (dmj % 31) + 1  # day of Easter Sunday
+
+    return year, esmj, esdj
 
 
 def may_day(year):

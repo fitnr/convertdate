@@ -1,6 +1,6 @@
 import unittest
 from datetime import datetime
-from convertdate import holidays
+from convertdate import holidays, julian
 
 
 class TestHolidays(unittest.TestCase):
@@ -71,7 +71,7 @@ class TestHolidays(unittest.TestCase):
 
         assert holidays.thanksgiving(2015, 'canada') == (2015, 10, 12)
 
-    def test_easter(self):
+    def test_easterWestern(self):
         easters = [
             (1994, 4, 3),
             (1995, 4, 16),
@@ -113,12 +113,81 @@ class TestHolidays(unittest.TestCase):
             (2031, 4, 13),
             (2032, 3, 28),
             (2033, 4, 17),
-            (2034, 4, 9)
+            (2034, 4, 9),
+            (2345, 4, 22)
         ]
+
         for y, m, d in easters:
             self.assertEqual(holidays.easter(y), (y, m, d))
 
+    def test_easterEastern(self):
+        easters = [
+            (1999, 4, 11),
+            (2000, 4, 30),
+            (2001, 4, 15),
+            (2002, 5, 5),
+            (2003, 4, 27),
+            (2004, 4, 11),
+            (2005, 5, 1),
+            (2006, 4, 23),
+            (2007, 4, 8),
+            (2008, 4, 27),
+            (2009, 4, 19),
+            (2010, 4, 4),
+            (2011, 4, 24),
+            (2012, 4, 15),
+            (2013, 5, 5),
+            (2014, 4, 20),
+            (2015, 4, 12),
+            (2016, 5, 1),
+            (2017, 4, 16),
+            (2018, 4, 8),
+            (2019, 4, 28),
+            (2020, 4, 19),
+            (2021, 5, 2),
+            (2022, 4, 24),
+            (2023, 4, 16),
+            (2024, 5, 5),
+            (2025, 4, 20),
+            (2026, 4, 12),
+            (2027, 5, 2),
+            (2028, 4, 16),
+            (2029, 4, 8),
+            (2030, 4, 28),
+            (2031, 4, 13),
+            (2032, 5, 2),
+            (2033, 4, 24),
+            (2034, 4, 9),
+            (2035, 4, 29),
+            (2036, 4, 20),
+            (2037, 4, 5),
+            (2038, 4, 25),
+            (2039, 4, 17),
+            (2056, 4, 9),
+            (2156, 4, 11)
+        ]
+
+        for y, m, d in easters:
+            self.assertEqual(holidays.easter(y, "orthodox"), (y, m, d))
+            self.assertEqual(holidays.easter(y, "eastern"), (y, m, d))
+
         self.assertEqual(self.h.easter, (2015, 4, 5))
+
+    def testNonChalcedonian(self):
+        # In these years, Orthodox Easter falls on 6 April (Julian),
+        # but Non-Chalcedonian churches celebrate it a week later on 13 Aprail
+        years = 570, 665, 760, 1007, 1102, 1197, 1292, 1539, 1634, 1729, 1824, 2071, 2166, 2261, 2356
+
+        for y in years:
+            orthodox = julian.from_gregorian(*holidays.easter(y, "orthodox"))
+            eastern = julian.from_gregorian(*holidays.easter(y, "eastern"))
+            self.assertNotEqual(orthodox, eastern)
+            self.assertEqual((y, 4, 6), orthodox)
+            self.assertEqual((y, 4, 13), eastern)
+
+        for y in years:
+            self.assertEqual(holidays.easter(y + 1, "orthodox"), holidays.easter(y + 1, "eastern"))
+
 
     def test_jewish_holidays(self):
         # http://www.chabad.org/holidays/passover/pesach_cdo/aid/671901/jewish/When-is-Passover-in-2013-2014-2015-2016-and-2017.htm

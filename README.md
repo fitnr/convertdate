@@ -192,6 +192,18 @@ but pull requests are welcome.
 
     # Some Jewish holidays are included
     holidays.rosh_hashanah(2014)
+    
+    # Easter can be calculated according to different churches 
+    # ('western', 'orthodox', 'eastern')
+    # The eastern Christian computation differs from the Orthodox one
+    # 4 times in each 532-year cycle.
+    
+    holidays.easter(2019)
+    # (2019, 4, 21)
+    holidays.easter(2019, church="orthodox")
+    # (2019, 4, 28)
+    holidays.easter(2019, church="orthodox")
+    # (2019, 4, 28)
 
 Utils
 -----
