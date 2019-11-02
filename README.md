@@ -77,16 +77,16 @@ Special Options
 
 ### Armenian
 
-The Armenian calendar begins on the Julian date 11 July 552 and has two modes
-of reckoning. The first is the invariant-length version consisting of 12 months
-of 30 days each and five epagomena days; the second is the version established
-by Yovhannes Sarkawag in 1084, which fixed the first day of the year with
-respect to the Julian calendar and added a sixth epagomenal day every four
-years. 
+The Armenian calendar begins on 11 July 552 (Julian) and has two modes of
+reckoning. The first is the invariant-length version consisting of 12 months
+of 30 days each and five epagomenal days; the second is the version
+established by Yovhannes Sarkawag in 1084, which fixed the first day of the
+year with respect to the Julian calendar and added a sixth epagomenal day
+every four years.
 
-By default the invariant calendar is used, but the Sarkawag calendar can be 
-used for dates after the Julian date 10 August 1084 by specifying the parameter 
-`method='sarkawag'` to the relevant functions.
+By default the invariant calendar is used, but the Sarkawag calendar can be
+used beginning with the Armenian year 533 (11 August 1084) by passing the
+parameter `method='sarkawag'` to the relevant functions.
 
 
 ### French Republican
