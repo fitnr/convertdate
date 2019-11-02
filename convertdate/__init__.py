@@ -15,6 +15,7 @@
 # Meeus, Jean. Astronomical Algorithms . Richmond: Willmann-Bell, 1991. ISBN 0-943396-35-2.
 #    The essential reference for computational positional astronomy.
 #
+from . import armenian
 from . import bahai
 from . import coptic
 from . import daycount
@@ -36,7 +37,7 @@ from . import ordinal
 __version__ = '2.1.3'
 
 __all__ = [
-    'holidays', 'bahai', 'coptic', 'dublin',
+    'holidays', 'armenian', 'bahai', 'coptic', 'dublin',
     'daycount',
     'french_republican', 'gregorian', 'hebrew',
     'indian_civil', 'islamic', 'iso',
