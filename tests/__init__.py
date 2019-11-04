@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 # Most of this code is ported from Fourmilab's javascript calendar converter
 # http://www.fourmilab.ch/documents/calendar/
 # which was developed by John Walker

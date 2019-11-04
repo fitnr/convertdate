@@ -8,7 +8,6 @@
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
 import time
 import calendar
-import importlib
 from math import trunc
 from .utils import nth_day_of_month
 from . import hebrew, julian

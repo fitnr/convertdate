@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import unittest
 import time
 from convertdate import julianday
@@ -30,10 +31,11 @@ class TestArmenian(unittest.TestCase):
 
     def testReflexive(self):
         self.assertEqual(self.today, to_jd(*from_jd(self.today)))
-        self.assertEqual(self.today, to_jd(*from_jd(self.today, "sarkawag"), "sarkawag"))
+        self.assertEqual(self.today, to_jd(*from_jd(self.today, "sarkawag"), method="sarkawag"))
         for jd in range(2159677, 2488395, 2000):
-            self.assertEqual(jd + 0.5, to_jd(*from_jd(jd + 0.5)))
-            self.assertEqual(jd + 0.5, to_jd(*from_jd(jd + 0.5, "sarkawag"), "sarkawag"))
+            jd = jd + 0.5
+            self.assertEqual(jd, to_jd(*from_jd(jd)))
+            self.assertEqual(jd, to_jd(*from_jd(jd, "sarkawag"), method="sarkawag"))
 
     def testLeap(self):
         self.assertEqual(True, leap(600))
