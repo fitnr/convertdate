@@ -63,7 +63,7 @@ setup(
     ],
 
     install_requires=[
-        'pytz>=2014.10, < 2020',
+        'pytz>=2014.10',
         'pymeeus>=0.3.6, <=1'
     ]
 )
