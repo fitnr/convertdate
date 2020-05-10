@@ -1,6 +1,12 @@
 History
 -------
 
+2.2.1
+-----
+* Add orthodox/eastern Easter calculations and docs
+* Add module for Armenian and Sarkawag regularisation
+* Bump pytz requirement
+
 2.2.0
 -----
 
