@@ -8,6 +8,7 @@ In development
  - coptic: rename `MONTH_NAMES` to `MONTHS`, rename `DAY_NAMES` to `WEEKDAYS`
  - french_republican: add `MONTHS`
  - mayan: rename `HAAB_MONTHS` to `HAAB`, rename `TZOLKIN_NAMES` to `TZOLKIN`
+* Add some Jewish and Islamic holidays to `holidays`: `shemini_azeret`, `lag_baomer`, `tu_beshvat`, `tisha_bav`, `ramadan`, `ashura`, `eid_alfitr`, `eid_aladha`.
 
 2.2.2
 -----

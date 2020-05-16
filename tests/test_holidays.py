@@ -6,6 +6,7 @@ from convertdate import holidays, julian
 
 
 class TestHolidays(unittest.TestCase):
+
     def setUp(self):
         self.h = holidays.Holidays(2015)
 
@@ -274,6 +275,27 @@ class TestHolidays(unittest.TestCase):
         assert holidays.washingtons_birthday(2020, True) == (2020, 2, 17)
         assert holidays.new_years(2022, True) == (2021, 12, 31)
         self.assertSequenceEqual(holidays.christmas(2021, True), (2021, 12, 24))
+
+    def test_islamic_holidays(self):
+        """Test the dates of certain Islamic holidays."""
+        holidays_2015 = {
+            'eid_aladha': (2015, 9, 24),
+            'ramadan': (2015, 6, 18),
+            'eid_alfitr': (2015, 7, 18),
+        }
+        with self.subTest():
+            for name, date in holidays_2015.items():
+                self.assertEqual(getattr(self.h, name), date, name)
+
+        h21 = holidays.Holidays(2021)
+        holidays_2021 = {
+            'eid_aladha': (2021, 7, 20),
+            'ramadan': (2021, 4, 13),
+            'eid_alfitr': (2021, 5, 13),
+        }
+        with self.subTest():
+            for name, date in holidays_2021.items():
+                self.assertEqual(getattr(h21, name), date, name)
 
 
 if __name__ == '__main__':

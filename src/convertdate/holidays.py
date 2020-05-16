@@ -15,7 +15,7 @@ import calendar
 import time
 from math import trunc
 from .utils import jwday, nth_day_of_month
-from . import gregorian, hebrew, julian
+from . import gregorian, hebrew, islamic, julian
 
 # weekdays
 MON = 0
@@ -385,6 +385,36 @@ def dia_revolucion(year):
     return nth_day_of_month(3, MON, NOV, year)
 
 
+# Islamic holidays
+
+def ramadan(year, eve=None):
+    jd = islamic.to_jd_gregorianyear(year, 9, 1)
+    if eve:
+        jd = jd = 1
+    return gregorian.from_jd(jd)
+
+
+def ashura(year, eve=None):
+    jd = islamic.to_jd_gregorianyear(year, 1, 10)
+    if eve:
+        jd = jd = 1
+    return gregorian.from_jd(jd)
+
+
+def eid_alfitr(year, eve=None):
+    jd = islamic.to_jd_gregorianyear(year, 10, 1)
+    if eve:
+        jd = jd = 1
+    return gregorian.from_jd(jd)
+
+
+def eid_aladha(year, eve=None):
+    jd = islamic.to_jd_gregorianyear(year, 12, 10)
+    if eve:
+        jd = jd = 1
+    return gregorian.from_jd(jd)
+
+
 class Holidays:
     '''Convenience class for fetching many holidays in a given year.'''
     # pylint: disable=missing-function-docstring
@@ -545,6 +575,22 @@ class Holidays:
     @property
     def dia_revolucion(self):
         return dia_revolucion(self.year)
+
+    @property
+    def ramadan(self):
+        return ramadan(self.year)
+
+    @property
+    def ashura(self):
+        return ashura(self.year)
+
+    @property
+    def eid_alfitr(self):
+        return eid_alfitr(self.year)
+
+    @property
+    def eid_aladha(self):
+        return eid_aladha(self.year)
 
 
 if __name__ == '__main__':

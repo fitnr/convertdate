@@ -4,6 +4,7 @@
 # Licensed under the MIT license:
 # http://opensource.org/licenses/MIT
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
+"""Convert dates between the Hijri calendar and the Gregorian and Julian calendars."""
 from math import trunc
 
 from . import gregorian
@@ -11,7 +12,20 @@ from .utils import ceil, jwday, monthcalendarhelper
 
 EPOCH = 1948439.5
 WEEKDAYS = ("al-'ahad", "al-'ithnayn", "ath-thalatha'", "al-'arb`a'", "al-khamis", "al-jum`a", "as-sabt")
-
+MONTHS = [
+    "al-Muḥarram",
+    "Ṣafar",
+    "Rabīʿ al-ʾAwwal",
+    "Rabīʿ ath-Thānī,",
+    "Jumādā al-ʾAwwal,",
+    "Jumādā ath-Thāniyah,",
+    "Rajab",
+    "Shaʿbān",
+    "Ramaḍān",
+    "Shawwāl",
+    "Zū al-Qaʿdah",
+    "Zū al-Ḥijjah",
+]
 HAS_29_DAYS = (2, 4, 6, 8, 10)
 HAS_30_DAYS = (1, 3, 5, 7, 9, 11)
 
@@ -28,12 +42,24 @@ def to_jd(year, month, day):
 
 def from_jd(jd):
     '''Calculate Islamic date from Julian day'''
-
     jd = trunc(jd) + 0.5
     year = trunc(((30 * (jd - EPOCH)) + 10646) / 10631)
     month = min(12, ceil((jd - (29 + to_jd(year, 1, 1))) / 29.5) + 1)
     day = int(jd - to_jd(year, month, 1)) + 1
     return (year, month, day)
+
+
+def to_jd_gregorianyear(gregorianyear, islamic_month, islamic_day):
+    # Gregorian year is either 578 or 623 years greater than Islamic year
+    # we'll first try 622 if conversion to gregorian isn't the same
+    # year that was passed to this method, then it must be 623.
+    jan1 = gregorian.to_jd(gregorianyear, 1, 1)
+    yi, mi, _ = from_jd(jan1)
+
+    if mi > islamic_month:
+        yi = yi + 1
+
+    return to_jd(yi, islamic_month, islamic_day)
 
 
 def from_gregorian(year, month, day):

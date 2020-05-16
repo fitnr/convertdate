@@ -59,6 +59,20 @@ class CalTestCase(unittest.TestCase):
         self.assertEqual(self.jd, islamic.to_jd(*islamic.from_jd(self.jd)))
         self.reflexive(islamic.from_jd, islamic.to_jd)
 
+        new_years = [
+            (2012, 11, 15),
+            (2015, 10, 15),
+            (2019, 9, 1),
+            (2020, 8, 20),
+            (2021, 8, 10),
+            (2022, 7, 30),
+        ]
+
+        for date in new_years:
+            jd = islamic.to_jd_gregorianyear(date[0], 1, 1)
+            with self.subTest(date[0]):
+                self.assertEqual(date, gregorian.from_jd(jd))
+
     def test_persian(self):
         self.assertEqual(self.jd, persian.to_jd(*persian.from_jd(self.jd)))
         self.assertEqual(persian.leap(-101), False)
