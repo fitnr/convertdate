@@ -224,10 +224,25 @@ class TestHolidays(unittest.TestCase):
         for y, m, d in purims:
             self.assertEqual(holidays.purim(y, eve=0), (y, m, d))
 
+        tisha_bavs = [
+            (2019, 8, 11),
+            (2020, 7, 30),
+            (2021, 7, 18),
+            (2022, 8, 7),
+            (2023, 7, 27),
+        ]
+        for y, m, d in tisha_bavs:
+            self.assertEqual(holidays.tisha_bav(y, eve=0), (y, m, d))
+
         assert self.h.hanukkah == (2015, 12, 7)
         assert self.h.rosh_hashanah == (2015, 9, 14)
         assert self.h.yom_kippur == (2015, 9, 23)
         assert self.h.passover == (2015, 4, 4)
+
+        assert self.h.tisha_bav == (2015, 7, 26)
+        assert self.h.shemini_azeret == (2015, 10, 5)
+        assert self.h.lag_baomer == (2015, 5, 7)
+        assert self.h.tu_beshvat == (2015, 2, 4)
 
     def test_mexican_holidays(self):
         self.assertEqual(holidays.natalicio_benito_juarez(2015, False), (2015, 3, 21))

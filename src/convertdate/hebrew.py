@@ -149,14 +149,13 @@ def to_jd_gregorianyear(gregorianyear, hebrew_month, hebrew_day):
         gd = gregorian.from_jd(jd)
         if gd[0] == gregorianyear:
             break
-        
-        gd = None
 
-    if not gd:  # should never occur, but just incase...
+        jd = None
+
+    if not jd:  # should never occur, but just incase...
         raise ValueError("Could not determine gregorian year")
 
-    # tuple: (y, m, d)
-    return (gd[0], gd[1], gd[2])
+    return gregorian.to_jd(gd[0], gd[1], gd[2])
 
 
 def from_gregorian(year, month, day):

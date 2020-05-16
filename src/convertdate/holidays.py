@@ -14,9 +14,8 @@ without the ``eve`` option, the (secular) day is returned. This is the default.
 import calendar
 import time
 from math import trunc
-
-from . import hebrew, julian
-from .utils import nth_day_of_month
+from .utils import jwday, nth_day_of_month
+from . import gregorian, hebrew, julian
 
 # weekdays
 MON = 0
@@ -265,55 +264,85 @@ def new_years_eve(year):
     return (year, DEC, 31)
 
 def hanukkah(year, eve=None):
-    year, month, day = hebrew.to_jd_gregorianyear(year, hebrew.KISLEV, 25)
+    jd = hebrew.to_jd_gregorianyear(year, hebrew.KISLEV, 25)
     if eve:
-        day = day - 1
-    return year, month, day
+        jd = jd - 1
+    return gregorian.from_jd(jd)
 
 
 def purim(year, eve=None):
     if not hebrew.leap(year + hebrew.HEBREW_YEAR_OFFSET):
-        year, month, day = hebrew.to_jd_gregorianyear(year, hebrew.ADAR, 14)
+        jd = hebrew.to_jd_gregorianyear(year, hebrew.ADAR, 14)
     else:
-        year, month, day = hebrew.to_jd_gregorianyear(year, hebrew.VEADAR, 14)
+        jd = hebrew.to_jd_gregorianyear(year, hebrew.VEADAR, 14)
     if eve:
-        day = day - 1
-    return year, month, day
+        jd = jd - 1
+    return gregorian.from_jd(jd)
 
 
 def rosh_hashanah(year, eve=None):
-    year, month, day = hebrew.to_jd_gregorianyear(year, hebrew.TISHRI, 1)
+    jd = hebrew.to_jd_gregorianyear(year, hebrew.TISHRI, 1)
     if eve:
-        day = day - 1
-    return year, month, day
+        jd = jd - 1
+    return gregorian.from_jd(jd)
 
 
 def yom_kippur(year, eve=None):
-    year, month, day = hebrew.to_jd_gregorianyear(year, hebrew.TISHRI, 10)
+    jd = hebrew.to_jd_gregorianyear(year, hebrew.TISHRI, 10)
     if eve:
-        day = day - 1
-    return year, month, day
+        jd = jd - 1
+    return gregorian.from_jd(jd)
 
 
 def passover(year, eve=None):
-    year, month, day = hebrew.to_jd_gregorianyear(year, hebrew.NISAN, 15)
+    jd = hebrew.to_jd_gregorianyear(year, hebrew.NISAN, 15)
     if eve:
-        day = day - 1
-    return year, month, day
+        jd = jd - 1
+    return gregorian.from_jd(jd)
 
 
 def shavuot(year, eve=None):
-    year, month, day = hebrew.to_jd_gregorianyear(year, hebrew.SIVAN, 6)
+    jd = hebrew.to_jd_gregorianyear(year, hebrew.SIVAN, 6)
     if eve:
-        day = day - 1
-    return year, month, day
+        jd = jd - 1
+    return gregorian.from_jd(jd)
 
 
 def sukkot(year, eve=None):
-    year, month, day = hebrew.to_jd_gregorianyear(year, hebrew.TISHRI, 15)
+    jd = hebrew.to_jd_gregorianyear(year, hebrew.TISHRI, 15)
     if eve:
-        day = day - 1
-    return year, month, day
+        jd = jd - 1
+    return gregorian.from_jd(jd)
+
+
+def shemini_azeret(year, eve=None):
+    jd = hebrew.to_jd_gregorianyear(year, hebrew.TISHRI, 22)
+    if eve:
+        jd = jd - 1
+    return gregorian.from_jd(jd)
+
+
+def lag_baomer(year, eve=None):
+    jd = hebrew.to_jd_gregorianyear(year, hebrew.IYYAR, 18)
+    if eve:
+        jd = jd - 1
+    return gregorian.from_jd(jd)
+
+
+def tu_beshvat(year, eve=None):
+    jd = hebrew.to_jd_gregorianyear(year, hebrew.SHEVAT, 15)
+    if eve:
+        jd = jd - 1
+    return gregorian.from_jd(jd)
+
+
+def tisha_bav(year, eve=None):
+    jd = hebrew.to_jd_gregorianyear(year, hebrew.AV, 9)
+    if jwday(jd) == SAT:
+        jd = jd + 1
+    if eve:
+        jd = jd - 1
+    return gregorian.from_jd(jd)
 
 
 # Mexican holidays
@@ -484,6 +513,22 @@ class Holidays:
     @property
     def sukkot(self):
         return sukkot(self.year, eve=False)
+
+    @property
+    def tu_beshvat(self):
+        return tu_beshvat(self.year, eve=False)
+
+    @property
+    def shemini_azeret(self):
+        return shemini_azeret(self.year, eve=False)
+
+    @property
+    def lag_baomer(self):
+        return lag_baomer(self.year, eve=False)
+
+    @property
+    def tisha_bav(self):
+        return tisha_bav(self.year, eve=False)
 
     @property
     def dia_constitucion(self):
