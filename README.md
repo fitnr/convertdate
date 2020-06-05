@@ -42,7 +42,7 @@ Using
     from convertdate import hebrew
 
     french_republican.from_gregorian(2014, 10, 31)
-    # (223, 2, 1, 9)
+    # (223, 2, 9)
 
     hebrew.from_gregorian(2014, 10, 31)
     # (5775, 8, 7)
