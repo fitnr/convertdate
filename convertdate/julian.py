@@ -25,8 +25,7 @@ HAVE_31_DAYS = (1, 3, 5, 7, 8, 10, 12)
 def leap(year):
     if year % 4 and year > 0:
         return 0
-    else:
-        return 3
+    return 3
 
 
 def month_length(year, month):
@@ -42,7 +41,7 @@ def legal_date(year, month, day):
     '''Check if this is a legal date in the Julian calendar'''
     daysinmonth = month_length(year, month)
 
-    if not (0 < day <= daysinmonth):
+    if not 0 < day <= daysinmonth:
         raise ValueError("Month {} doesn't have a day {}".format(month, day))
 
     return True
