@@ -32,6 +32,11 @@ class CalTestCase(unittest.TestCase):
 
         self.jdcs = range(2159677, 2488395, 2000)
 
+    def assertSequenceType(self, seq, cls):
+        '''Assert that all members of `seq` are of the type `cls`.'''
+        for x in seq:
+            self.assertIs(type(x), cls)
+
     def test_utils(self):
         self.assertEqual(utils.amod(100, 4), 4)
         self.assertEqual(utils.ceil(1.2), 2)
@@ -194,6 +199,16 @@ class CalTestCase(unittest.TestCase):
     def test_monthcalendar_hebrew(self):
         self.assertEqual(hebrew.monthcalendar(5775, 7).pop(0).pop(4), 1)
         self.assertEqual(hebrew.monthcalendar(5775, 7).pop().pop(0), 25)
+
+    def test_returntype(self):
+        self.assertSequenceType(bahai.from_gregorian(2020, 6, 4), int)
+        self.assertSequenceType(coptic.from_gregorian(2020, 6, 4), int)
+        self.assertSequenceType(hebrew.from_gregorian(2020, 6, 4), int)
+        self.assertSequenceType(islamic.from_gregorian(2020, 6, 4), int)
+        self.assertSequenceType(indian_civil.from_gregorian(2020, 6, 4), int)
+        self.assertSequenceType(iso.from_gregorian(2020, 6, 4), int)
+        self.assertSequenceType(julian.from_gregorian(2020, 6, 4), int)
+        self.assertSequenceType(persian.from_gregorian(2020, 6, 4), int)
 
 
 if __name__ == '__main__':

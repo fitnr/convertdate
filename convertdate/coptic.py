@@ -34,7 +34,7 @@ def from_jd(jdc):
 
     month = floor(yday / 30) + 1
     day = yday - (month - 1) * 30 + 1
-    return year, month, day
+    return int(year), int(month), int(day)
 
 
 def to_gregorian(year, month, day):
@@ -49,13 +49,13 @@ def month_length(year, month):
     if month <= 12:
         return 30
 
-    elif month == 13:
+    if month == 13:
         if is_leap(year):
             return 6
-        else:
-            return 5
-    else:
-        raise ValueError("Invalid month")
+
+        return 5
+
+    raise ValueError("Invalid month")
 
 
 def monthcalendar(year, month):

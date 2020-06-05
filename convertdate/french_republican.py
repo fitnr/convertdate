@@ -136,7 +136,6 @@ def to_jd(year, month, day, method=None):
 
 def _to_jd_schematic(year, month, day, method):
     '''Calculate JD using various leap-year calculation methods'''
-
     y0, y1, y2, y3, y4, y5 = 0, 0, 0, 0, 0, 0
 
     intercal_cycle_yrs, over_cycle_yrs, leap_suppression_yrs = None, None, None
@@ -217,8 +216,7 @@ def from_jd(jd, method=None):
     if method == 'equinox':
         return _from_jd_equinox(jd)
 
-    else:
-        return _from_jd_schematic(jd, method)
+    return _from_jd_schematic(jd, method)
 
 
 def _from_jd_schematic(jd, method):
@@ -305,7 +303,7 @@ def _from_jd_schematic(jd, method):
     month = trunc(J / 30.)
     J = J - month * 30
 
-    return year + 1, month + 1, trunc(J) + 1
+    return trunc(year) + 1, month + 1, trunc(J) + 1
 
 
 def _from_jd_equinox(jd):

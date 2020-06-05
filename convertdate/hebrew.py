@@ -57,7 +57,6 @@ def delay_1(year):
 
 def delay_2(year):
     '''Check for delay in start of new year due to length of adjacent years'''
-
     last = delay_1(year - 1)
     present = delay_1(year)
     next_ = delay_1(year + 1)
@@ -142,10 +141,10 @@ def from_jd(jd):
 
 
 def to_jd_gregorianyear(gregorianyear, hebrew_month, hebrew_day):
+    '''Returns the Gregorian date when a given Hebrew month and year within a given Gregorian year.'''
     # gregorian year is either 3760 or 3761 years less than hebrew year
     # we'll first try 3760 if conversion to gregorian isn't the same
     # year that was passed to this method, then it must be 3761.
-
     for y in (gregorianyear + HEBREW_YEAR_OFFSET, gregorianyear + HEBREW_YEAR_OFFSET + 1):
         jd = to_jd(y, hebrew_month, hebrew_day)
         gd = gregorian.from_jd(jd)
