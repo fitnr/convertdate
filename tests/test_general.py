@@ -56,6 +56,10 @@ class CalTestCase(unittest.TestCase):
         self.assertEqual(self.jd, hebrew.to_jd(*hebrew.from_jd(self.jd)))
         self.reflexive(hebrew.from_jd, hebrew.to_jd)
 
+        # Anno Mundi
+        am = hebrew.to_jd(1, hebrew.TISHRI, 1)
+        self.assertEqual(julian.from_jd(am), (-3760, 10, 7))
+
     def test_islamic(self):
         self.assertEqual(self.jd, islamic.to_jd(*islamic.from_jd(self.jd)))
         self.reflexive(islamic.from_jd, islamic.to_jd)

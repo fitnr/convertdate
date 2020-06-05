@@ -38,8 +38,8 @@ def year_months(year):
     '''How many months are there in a Hebrew year (12 = normal, 13 = leap)'''
     if leap(year):
         return 13
-    else:
-        return 12
+
+    return 12
 
 
 def delay_1(year):
@@ -64,10 +64,11 @@ def delay_2(year):
 
     if next_ - present == 356:
         return 2
-    elif present - last == 382:
+
+    if present - last == 382:
         return 1
-    else:
-        return 0
+
+    return 0
 
 
 def year_days(year):
