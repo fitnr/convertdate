@@ -44,7 +44,7 @@ class TestBahai(unittest.TestCase):
 
     def test_reflexive(self):
         for jd in range(2159677, 2488395, 1867):
-            self.assertEqual(jd+0.5, bahai.to_jd(*bahai.from_jd(jd+0.5)))
+            self.assertEqual(jd + 0.5, bahai.to_jd(*bahai.from_jd(jd + 0.5)))
 
     def test_to_gregorian(self):
         for g, b in self.pairs.items():

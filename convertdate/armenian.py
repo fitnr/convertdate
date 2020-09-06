@@ -18,7 +18,7 @@ MONTHS_ARM = ["նաւասարդ", "հոռի", "սահմի", "տրէ", "քաղո�
 def _valid_date(year, month, day, method=None):
     try:
         assert 1 <= month <= 13
-    except:
+    except AssertionError:
         raise ValueError("Month out of range")
 
     day_max = 30
@@ -36,12 +36,12 @@ def _valid_date(year, month, day, method=None):
 
     try:
         assert year >= year_min
-    except:
+    except AssertionError:
         raise ValueError("Year out of range for Armenian calendar ({} method)".format(method))
 
     try:
         assert 1 <= day <= day_max
-    except:
+    except AssertionError:
         raise ValueError("Day out of range")
 
     return True
@@ -132,6 +132,5 @@ def tostring(year, month, day, lang=None):
         month_name = MONTHS_ARM[month - 1]
     else:
         month = month_name = MONTHS[month - 1]
-
 
     return "{0:d} {1:} {2:d}".format(day, month_name, year)

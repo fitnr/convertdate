@@ -108,5 +108,6 @@ class TestArmenian(unittest.TestCase):
     def testTostring(self):
         self.assertEqual('14 trē 1469', tostring(1469, 4, 14))
 
+
 if __name__ == '__main__':
     unittest.main()

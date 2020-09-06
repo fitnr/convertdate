@@ -110,10 +110,10 @@ def _easter_western(year):
     j = year + trunc(year / 4) + i + 2 - c + trunc(c / 4)
     j = j - 7 * trunc(j / 7)
 
-    l = i - j
+    L = i - j
 
-    month = 3 + trunc((l + 40) / 44)
-    day = l + 28 - 31 * trunc(month / 4)
+    month = 3 + trunc((L + 40) / 44)
+    day = L + 28 - 31 * trunc(month / 4)
 
     date = (year, int(month), int(day))
 
