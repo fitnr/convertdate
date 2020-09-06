@@ -36,8 +36,14 @@ NOV = 11
 DEC = 12
 
 
-def new_years(year):
-    '''Jan 1st'''
+def new_years(year, observed=None):
+    '''Jan 1st, possibly observed on last day of previous year'''
+    if observed:
+        weekday = calendar.weekday(year, JAN, 1)
+        if weekday == SAT:
+            return (year - 1, DEC, 31)
+        if weekday == SUN:
+            return (year, JAN, 2)
     return (year, JAN, 1)
 
 
@@ -56,8 +62,10 @@ def valentines_day(year):
     return (year, FEB, 14)
 
 
-def washingtons_birthday(year):
-    '''Feb 22'''
+def washingtons_birthday(year, observed=None):
+    '''Feb 22, possibly observed on 3rd Monday in February'''
+    if observed:
+        return nth_day_of_month(3, MON, FEB, year)
     return (year, FEB, 22)
 
 
@@ -159,10 +167,10 @@ def independence_day(year, observed=None):
     day = 4
 
     if observed:
-        if calendar.weekday(year, JUL, 4) == SAT:
+        weekday = calendar.weekday(year, JUL, 4)
+        if weekday == SAT:
             day = 3
-
-        if calendar.weekday(year, JUL, 4) == SUN:
+        if weekday == SUN:
             day = 5
 
     return (year, JUL, day)
@@ -192,9 +200,17 @@ def election_day(year):
     return nth_day_of_month(1, TUE, NOV, year)
 
 
-def veterans_day(year):
-    '''Nov 11'''
-    return (year, NOV, 11)
+def veterans_day(year, observed=None):
+    '''Nov 11, or the following closest weekday'''
+    day = 11
+    if observed:
+        weekday = calendar.weekday(year, NOV, 11)
+        if weekday == SAT:
+            day = 10
+        if weekday == SUN:
+            day = 12
+
+    return (year, NOV, day)
 
 
 def rememberance_day(year):
@@ -224,9 +240,16 @@ def christmas_eve(year):
     return (year, DEC, 24)
 
 
-def christmas(year):
+def christmas(year, observed=None):
     '''25th of December'''
-    return (year, DEC, 25)
+    day = 25
+    if observed:
+        weekday = calendar.weekday(year, DEC, 25)
+        if weekday == SAT:
+            day = 24
+        if weekday == SUN:
+            day = 26
+    return (year, DEC, day)
 
 
 def new_years_eve(year):
@@ -329,7 +352,7 @@ class Holidays(object):
     # the holidays...
     @property
     def christmas(self):
-        return christmas(self.year)
+        return christmas(self.year, True)
 
     @property
     def christmas_eve(self):
@@ -341,7 +364,7 @@ class Holidays(object):
 
     @property
     def new_years(self):
-        return new_years(self.year)
+        return new_years(self.year, True)
 
     @property
     def new_years_eve(self):
@@ -385,7 +408,7 @@ class Holidays(object):
 
     @property
     def veterans_day(self):
-        return veterans_day(self.year)
+        return veterans_day(self.year, True)
 
     @property
     def valentines_day(self):

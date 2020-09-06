@@ -35,14 +35,12 @@ class TestHolidays(unittest.TestCase):
         self.assertEqual(self.h.fathers_day, (2015, 6, 21))
 
     def test_class(self):
-
-        H = holidays.Holidays()
-        assert H.year == datetime.now().year
+        h = holidays.Holidays()
+        assert h.year == datetime.now().year
         assert str(self.h) == 'Holidays(2015)'
 
-        H.set_year(2010)
-
-        assert H.year == 2010
+        h.set_year(2010)
+        assert h.year == 2010
 
     def test_events(self):
         assert holidays.new_years(2013) == (2013, 1, 1)
@@ -189,7 +187,6 @@ class TestHolidays(unittest.TestCase):
         for y in years:
             self.assertEqual(holidays.easter(y + 1, "orthodox"), holidays.easter(y + 1, "eastern"))
 
-
     def test_jewish_holidays(self):
         # http://www.chabad.org/holidays/passover/pesach_cdo/aid/671901/jewish/When-is-Passover-in-2013-2014-2015-2016-and-2017.htm
         # the date here is the start of the holiday, so the eve=1 option is used
@@ -265,6 +262,15 @@ class TestHolidays(unittest.TestCase):
         assert self.h.columbus_day == (2015, 10, 12)
         assert self.h.veterans_day == (2015, 11, 11)
         assert self.h.martin_luther_king_day == (2015, 1, 19)
+
+    def test_usa_holidays_observed(self):
+        self.assertSequenceEqual(holidays.independence_day(2015), (2015, 7, 4))
+        assert holidays.independence_day(2015, True) == (2015, 7, 3)
+        assert holidays.washingtons_birthday(2015) == (2015, 2, 22)
+        assert holidays.washingtons_birthday(2015, True) == (2015, 2, 16)
+        assert holidays.washingtons_birthday(2020, True) == (2020, 2, 17)
+        assert holidays.new_years(2022, True) == (2021, 12, 31)
+        self.assertSequenceEqual(holidays.christmas(2021, True), (2021, 12, 24))
 
 
 if __name__ == '__main__':
