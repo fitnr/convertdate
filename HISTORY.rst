@@ -1,6 +1,10 @@
 History
 -------
 
+2.2.2
+-----
+* Add `observed` argument to the functions for several American holidays (#30)
+
 2.2.1
 -----
 * Add orthodox/eastern Easter calculations and docs
@@ -9,7 +13,6 @@ History
 
 2.2.0
 -----
-
 * Repair Bahai intercalary days bug (#13, thanks @bchurchill)
 * Replace pyephem, which is now in maintenance mode, with pymeeus.
 * Remove shebangs and regularize licenses (thanks @fabaff)
@@ -31,31 +34,28 @@ History
 
 2.1.0
 -----
-
 * Change Exception thrown on illegal dates to ValueError.
 * Add Comte's Positivist calendar.
 * Bump requirement versions.
 
 2.0.8
 -----
-
 * Fix Persian weekday order (thanks, @meyt)
 
 2.0.7
 -----
-
 * Better Python 2/3 compatibility
 * Improve tests
 * bump pytz requirement
 
 2.0.6
 -----
-
 * Executing holidays module returns class with current year, not '2014'.
 * Expand tests for French Republican, Bahai, Persian, holidays
 * Add Travis CI testing
 
 Bug fixes:
+
 * Fix edge case when detecting the day of fall equinox in French Republican calendar
 * Fix minor methods of calculating French Republican leap years.
 * Change holidays.holidays.fathers_day from a method to a property
@@ -64,34 +64,28 @@ Bug fixes:
 
 2.0.5
 -----
-Bug fixes:
 * Fix Yom Kippur error in holidays.py (issue #3)
 
 2.0.4
 -----
-
-Bug fixes:
 * Typo in name of holidays.independence_day method
 * Fix major bug in ordinal.from_gregorian
-
-Other changes:
 * Expand and organized tests
 
 2.0.3.1
 -------
-
 Features:
 
-- Add `ordinal` module, for counting the day of year
-- Added Mexican national holidays
-- Add `monthcalendar` functions
+* Add `ordinal` module, for counting the day of year
+* Added Mexican national holidays
+* Add `monthcalendar` functions
 
 Other changes:
+
 * Simplified logic in `ISO` module
 
 2.0.3
 -----
-
 Features:
 
 - Add list of day names and `day_name` function to French Republican converter
@@ -107,7 +101,6 @@ Other changes:
 
 2.0.2
 -----
-
 Features:
 
 * Add support for Python 3 (#1)
