@@ -33,6 +33,7 @@ from . import mayan
 from . import persian
 from . import positivist
 from . import ordinal
+from . import utils
 
 __version__ = '2.2.1'
 
@@ -43,5 +44,5 @@ __all__ = [
     'indian_civil', 'islamic', 'iso',
     'julian', 'julianday',
     'mayan', 'persian', 'positivist', 'mayan',
-    'ordinal',
+    'ordinal', 'utils'
 ]

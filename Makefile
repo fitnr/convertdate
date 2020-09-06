@@ -5,14 +5,19 @@
 # http://opensource.org/licenses/MIT
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
 
+.PHONY: all htmlcov test deploy
+all:
+
+htmlcov: | test
+	python -m coverage html
+
 test:
-	coverage run --source convertdate setup.py test
-	coverage report
-	coverage html
+	python -m coverage run --branch --source=convertdate -m unittest discover -s tests
+	python -m coverage report
 
 deploy:
-	git push; git push --tags
 	rm -rf dist build
 	python setup.py sdist
 	python setup.py bdist_wheel --universal
 	twine upload dist/*
+	git push; git push --tags
