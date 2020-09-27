@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 import unittest
 from datetime import datetime
+
 from convertdate import holidays, julian
 
 
 class TestHolidays(unittest.TestCase):
-
     def setUp(self):
         self.h = holidays.Holidays(2015)
 
@@ -113,7 +113,7 @@ class TestHolidays(unittest.TestCase):
             (2032, 3, 28),
             (2033, 4, 17),
             (2034, 4, 9),
-            (2345, 4, 22)
+            (2345, 4, 22),
         ]
 
         for y, m, d in easters:
@@ -163,7 +163,7 @@ class TestHolidays(unittest.TestCase):
             (2038, 4, 25),
             (2039, 4, 17),
             (2056, 4, 9),
-            (2156, 4, 11)
+            (2156, 4, 11),
         ]
 
         for y, m, d in easters:
@@ -190,13 +190,7 @@ class TestHolidays(unittest.TestCase):
     def test_jewish_holidays(self):
         # http://www.chabad.org/holidays/passover/pesach_cdo/aid/671901/jewish/When-is-Passover-in-2013-2014-2015-2016-and-2017.htm
         # the date here is the start of the holiday, so the eve=1 option is used
-        passovers = [
-            (2013, 3, 25),
-            (2014, 4, 14),
-            (2015, 4, 3),
-            (2016, 4, 22),
-            (2017, 4, 10)
-        ]
+        passovers = [(2013, 3, 25), (2014, 4, 14), (2015, 4, 3), (2016, 4, 22), (2017, 4, 10)]
         for y, m, d in passovers:
             self.assertEqual(holidays.passover(y, eve=1), (y, m, d))
 
@@ -222,17 +216,11 @@ class TestHolidays(unittest.TestCase):
         for y, m, d in sukkots:
             self.assertEqual(holidays.sukkot(y, eve=0), (y, m, d))
 
-        shavuots = [
-            (2016, 6, 12),
-            (2015, 5, 24)
-        ]
+        shavuots = [(2016, 6, 12), (2015, 5, 24)]
         for y, m, d in shavuots:
             self.assertEqual(holidays.shavuot(y, eve=0), (y, m, d))
 
-        purims = [
-            (2017, 3, 12),
-            (2016, 3, 24)
-        ]
+        purims = [(2017, 3, 12), (2016, 3, 24)]
         for y, m, d in purims:
             self.assertEqual(holidays.purim(y, eve=0), (y, m, d))
 

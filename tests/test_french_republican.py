@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-import unittest
+
 import time
-from convertdate import gregorian
+import unittest
+
 from convertdate import french_republican as fr
+from convertdate import gregorian
 
 year_starts = [
     ((1, 1, 1), (1792, 9, 22)),
@@ -79,12 +81,11 @@ madler = [
     ((223, 1, 1), (2014, 9, 23)),
     ((224, 1, 1), (2015, 9, 23)),
     ((224, 13, 6), (2016, 9, 22)),
-    ((225, 1, 1), (2016, 9, 23))
+    ((225, 1, 1), (2016, 9, 23)),
 ]
 
 
 class TestFrenchRepublican(unittest.TestCase):
-
     def setUp(self):
         self.tm = time.localtime()
         self.gregoriandate = (self.tm[0], self.tm[1], self.tm[2])
@@ -229,8 +230,9 @@ class TestFrenchRepublican(unittest.TestCase):
             self.assertEqual(f, fr.from_gregorian(*g, method=100))
 
     def test_french_republican_schematic_romme(self):
-        self.assertEqual(self.gregoriandate, fr.to_gregorian(
-            *fr.from_gregorian(*self.gregoriandate, method=100), method=100))
+        self.assertEqual(
+            self.gregoriandate, fr.to_gregorian(*fr.from_gregorian(*self.gregoriandate, method=100), method=100)
+        )
 
         self.assertEqual(self.jd, fr.to_jd(*fr.from_jd(self.jd, method='romme'), method=100))
         self.assertEqual(self.x, fr.to_jd(*fr.from_jd(self.x, method=100), method=100))

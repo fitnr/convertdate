@@ -1,14 +1,10 @@
 # -*- coding: utf-8 -*-
-
 # This file is part of convertdate.
 # http://github.com/fitnr/convertdate
-
 # Licensed under the MIT license:
 # http://opensource.org/licenses/MIT
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
-from . import gregorian
-from . import julianday
-from . import julian
+from . import gregorian, julian, julianday
 
 
 class DayCount(object):

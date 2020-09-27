@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
-
 # This file is part of convertdate.
 # http://github.com/fitnr/convertdate
-
 # Licensed under the MIT license:
 # http://opensource.org/licenses/MIT
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
-from math import trunc
 from calendar import isleap
+from math import trunc
+
 from . import gregorian
 from .utils import jwday, monthcalendarhelper
 
@@ -74,8 +73,8 @@ def to_jd(year, month, day):
 
 
 def from_jd(jd):
-    '''Calculate Indian Civil date from Julian day
-    Offset in years from Saka era to Gregorian epoch'''
+    """Calculate Indian Civil date from Julian day
+    Offset in years from Saka era to Gregorian epoch"""
 
     start = 80
     # Day offset between Saka and Gregorian
@@ -105,7 +104,7 @@ def from_jd(jd):
         day = yday + 1
     else:
         mday = yday - Caitra
-        if (mday < (31 * 5)):
+        if mday < (31 * 5):
             month = trunc(mday / 31) + 2
             day = (mday % 31) + 1
         else:

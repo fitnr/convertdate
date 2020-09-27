@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
-
 # This file is part of convertdate.
 # http://github.com/fitnr/convertdate
-
 # Licensed under the MIT license:
 # http://opensource.org/licenses/MIT
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
-import math
 import calendar
+import math
 
 TROPICALYEAR = 365.24219878  # Mean solar tropical year
 
@@ -46,6 +44,7 @@ def search_weekday(weekday, jd, direction, offset):
 
 
 #  Utility weekday functions, just wrappers for search_weekday
+
 
 def nearest_weekday(weekday, jd):
     return search_weekday(weekday, jd, 1, 3)
@@ -86,7 +85,7 @@ def monthcalendarhelper(start_weekday, month_length):
 
     days = [None] * lpad + list(range(1, 1 + month_length)) + rpad * [None]
 
-    return [days[i:i + 7] for i in range(0, len(days), 7)]
+    return [days[i : i + 7] for i in range(0, len(days), 7)]
 
 
 def nth_day_of_month(n, weekday, month, year):

@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
-
 # This file is part of convertdate.
 # http://github.com/fitnr/convertdate
-
 # Licensed under the MIT license:
 # http://opensource.org/licenses/MIT
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
 from calendar import isleap, monthrange
-from .utils import floor, monthcalendarhelper, jwday
+
+from .utils import floor, jwday, monthcalendarhelper
 
 EPOCH = 1721425.5
 
@@ -68,11 +67,13 @@ def to_jd(year, month, day):
         leap_adj = -2
 
     return (
-        EPOCH - 1 + (YEAR_DAYS * (year - 1)) +
-        floor((year - 1) / LEAP_CYCLE_YEARS) +
-        (-floor((year - 1) / LEAP_SUPPRESSION_YEARS)) +
-        floor((year - 1) / INTERCALATION_CYCLE_YEARS) +
-        floor((((367 * month) - 362) / 12) + leap_adj + day)
+        EPOCH
+        - 1
+        + (YEAR_DAYS * (year - 1))
+        + floor((year - 1) / LEAP_CYCLE_YEARS)
+        + (-floor((year - 1) / LEAP_SUPPRESSION_YEARS))
+        + floor((year - 1) / INTERCALATION_CYCLE_YEARS)
+        + floor((((367 * month) - 362) / 12) + leap_adj + day)
     )
 
 
@@ -91,11 +92,7 @@ def from_jd(jd):
     dquad = dcent % LEAP_CYCLE_DAYS
 
     yindex = floor(dquad / YEAR_DAYS)
-    year = (
-        quadricent * INTERCALATION_CYCLE_YEARS +
-        cent * LEAP_SUPPRESSION_YEARS +
-        quad * LEAP_CYCLE_YEARS + yindex
-    )
+    year = quadricent * INTERCALATION_CYCLE_YEARS + cent * LEAP_SUPPRESSION_YEARS + quad * LEAP_CYCLE_YEARS + yindex
 
     if not (cent == 4 or yindex == 4):
         year += 1

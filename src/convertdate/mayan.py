@@ -1,16 +1,14 @@
 # -*- coding: utf-8 -*-
-
 # This file is part of convertdate.
 # http://github.com/fitnr/convertdate
-
 # Licensed under the MIT license:
 # http://opensource.org/licenses/MIT
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
-from math import trunc
 import itertools
-from .utils import amod
-from . import gregorian
+from math import trunc
 
+from . import gregorian
+from .utils import amod
 
 EPOCH = 584282.5
 HAAB = [
@@ -113,11 +111,11 @@ def from_jd(jd):
     '''Calculate Mayan long count from Julian day'''
     d = jd - EPOCH
     baktun = trunc(d / 144000)
-    d = (d % 144000)
+    d = d % 144000
     katun = trunc(d / 7200)
-    d = (d % 7200)
+    d = d % 7200
     tun = trunc(d / 360)
-    d = (d % 360)
+    d = d % 360
     uinal = trunc(d / 20)
     kin = int((d % 20))
 
@@ -214,8 +212,8 @@ def _tzolkin_count(day, name):
 
 
 def tzolkin_generator(number=None, name=None):
-    '''For a given tzolkin name/number combination, return a generator
-    that gives cycle, starting with the input'''
+    """For a given tzolkin name/number combination, return a generator
+    that gives cycle, starting with the input"""
 
     # By default, it will start at the beginning
     number = number or 13
@@ -335,7 +333,7 @@ def haab_monthcalendar(baktun=None, katun=None, tun=None, uinal=None, kin=None, 
             return None
         return next(generate)
 
-    return [[(k, g(k, gen_tzolkin), g(k, gen_longcount)) for k in days[i:i + 13]] for i in range(0, len(days), 13)]
+    return [[(k, g(k, gen_tzolkin), g(k, gen_longcount)) for k in days[i : i + 13]] for i in range(0, len(days), 13)]
 
 
 def haab_monthcalendar_prospective(haabmonth, jdc):

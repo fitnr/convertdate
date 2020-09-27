@@ -9,43 +9,36 @@
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
 from setuptools import setup
 
+
 try:
     readme = open('README.md').read()
 except IOError:
     readme = ''
 
-with open('convertdate/__init__.py') as i:
+with open('src/convertdate/__init__.py') as i:
     version = next(r for r in i.readlines() if '__version__' in r).split('=')[1].strip('"\' \n')
+
+tests_require = [
+    "coverage",
+    "pylint",
+    "isort",
+]
 
 setup(
     name="convertdate",
-
     version=version,
-
     description=("Converts between Gregorian dates and other calendar systems."
                  "Calendars included: Baha'i, French Republican, Hebrew, "
                  "Indian Civil, Islamic, ISO, Julian, Mayan and Persian."),
-
     long_description=readme,
     long_description_content_type='text/markdown',
-
     author="Neil Freeman",
-
     license='MIT',
-
     author_email="contact@fakeisthenewreal.org",
-
     url="https://github.com/fitnr/convertdate",
-
-    packages=[
-        "convertdate",
-        "convertdate.data"
-    ],
-
-    test_suite='tests',
-
+    packages=['convertdate', 'convertdate.data'],
+    package_dir={'convertdate': 'src/convertdate'},
     zip_safe=True,
-
     classifiers=[
         'Programming Language :: Python',
         'Programming Language :: Python :: 2',
@@ -61,9 +54,12 @@ setup(
         'Operating System :: OS Independent',
         'License :: OSI Approved :: MIT License'
     ],
-
     install_requires=[
         'pytz>=2014.10',
         'pymeeus>=0.3.6, <=1'
-    ]
+    ],
+    tests_require=tests_require,
+    extras_require={
+        'test': tests_require
+    }
 )

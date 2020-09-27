@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
-import unittest
 import time
-from convertdate import gregorian
-from convertdate import julian
+import unittest
+
+from convertdate import gregorian, julian
 
 
 class TestGregorian(unittest.TestCase):
-
     def reflexive(self, from_func, to_func):
         for jd in self.jdcs:
             self.assertEqual(jd + 0.5, to_func(*from_func(jd + 0.5)))

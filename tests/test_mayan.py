@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-import unittest
+
 import time
-from convertdate import gregorian
-from convertdate import mayan
+import unittest
+
+from convertdate import gregorian, mayan
 
 
 class TestMayan(unittest.TestCase):
-
     def setUp(self):
         self.tm = time.localtime()
         self.gregoriandate = (self.tm[0], self.tm[1], self.tm[2])

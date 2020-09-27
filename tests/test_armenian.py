@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-import unittest
 import time
+import unittest
+
 from convertdate import julianday
-from convertdate.armenian import (
-    _valid_date, leap, to_jd, from_jd, to_julian, from_julian,
-    to_gregorian, from_gregorian, month_length, tostring
-)
+from convertdate.armenian import (_valid_date, from_gregorian, from_jd,
+                                  from_julian, leap, month_length,
+                                  to_gregorian, to_jd, to_julian, tostring)
 
 
 class TestArmenian(unittest.TestCase):

@@ -401,5 +401,5 @@ french_republican_days = {
         u"La Fête de l'Opinion",
         u"La Fête des Récompenses",
         u"La Fête de la Révolution",
-    ]
+    ],
 }

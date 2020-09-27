@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
-
 # This file is part of convertdate.
 # http://github.com/fitnr/convertdate
-
 # Licensed under the MIT license:
 # http://opensource.org/licenses/MIT
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
-import time
 import calendar
+import time
 from math import trunc
-from .utils import nth_day_of_month
+
 from . import hebrew, julian
+from .utils import nth_day_of_month
 
 # weekdays
 MON = 0
@@ -123,7 +122,7 @@ def _easter_western(year):
 def _easter_julian(year, mode="dionysian"):
     '''Calculate Easter for the orthodox and eastern churches in the Julian calendar.'''
     # Uses Meeus's Julian algorithm.
-    meton = (year % 19)
+    meton = year % 19
     b = year % 4
     c = year % 7
     d = (19 * meton + 15) % 30
@@ -182,8 +181,8 @@ def labor_day(year):
 
 
 def columbus_day(year, country='usa'):
-    '''in USA: 2nd Monday in Oct
-       Elsewhere: Oct 12'''
+    """in USA: 2nd Monday in Oct
+    Elsewhere: Oct 12"""
     if country == 'usa':
         return nth_day_of_month(2, MON, OCT, year)
     else:
@@ -255,6 +254,7 @@ def christmas(year, observed=None):
 def new_years_eve(year):
     '''Dec 31st'''
     return (year, DEC, 31)
+
 
 # Jewish holidays begins the sunset before the first (secular) day of the holiday
 # With the eve option set, the day of this sunset is returned
@@ -339,7 +339,6 @@ def dia_revolucion(year):
 
 
 class Holidays(object):
-
     def __init__(self, year=None):
         self.year = year or time.localtime().tm_year
 

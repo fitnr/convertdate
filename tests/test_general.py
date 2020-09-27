@@ -1,25 +1,16 @@
 # -*- coding: utf-8 -*-
-import unittest
 import time
+import unittest
 from datetime import datetime
+
 import pytz
-from convertdate import utils
-from convertdate import bahai
-from convertdate import coptic
-from convertdate import dublin
-from convertdate import gregorian
-from convertdate import hebrew
-from convertdate import islamic
-from convertdate import indian_civil
-from convertdate import iso
-from convertdate import julian
-from convertdate import julianday
-from convertdate import persian
-from convertdate import ordinal
+
+from convertdate import (bahai, coptic, dublin, gregorian, hebrew,
+                         indian_civil, islamic, iso, julian, julianday,
+                         ordinal, persian, utils)
 
 
 class CalTestCase(unittest.TestCase):
-
     def setUp(self):
         self.tm = time.localtime()
         self.gregoriandate = (self.tm[0], self.tm[1], self.tm[2])
@@ -141,7 +132,7 @@ class CalTestCase(unittest.TestCase):
 
         self.assertEqual(
             dublin.to_jd(dublin.from_jd(self.c)),
-            gregorian.to_jd(*dublin.to_gregorian(dublin.from_gregorian(*self.c_greg)))
+            gregorian.to_jd(*dublin.to_gregorian(dublin.from_gregorian(*self.c_greg))),
         )
 
         self.assertEqual(dublin.to_gregorian(dublin.from_jd(1737936)), gregorian.from_jd(1737936))

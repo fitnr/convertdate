@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
-
 # This file is part of convertdate.
 # http://github.com/fitnr/convertdate
-
 # Licensed under the MIT license:
 # http://opensource.org/licenses/MIT
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
 from calendar import isleap
+
 from . import gregorian
-from .utils import floor
 from .data import positivist as data
+from .utils import floor
 
 '''
     Convert between Gregorian/Julian Day and Comte's Positivist calendar.
@@ -27,10 +26,20 @@ YEAR_EPOCH = 1789
 DAYS_IN_YEAR = 365
 
 MONTHS = (
-    'Moses', 'Homer', 'Aristotle', 'Archimedes',
-    'Caesar', 'Saint Paul', 'Charlemagne', 'Dante',
-    'Gutenberg', 'Shakespeare', 'Descartes', 'Frederic',
-    'Bichat', ''
+    'Moses',
+    'Homer',
+    'Aristotle',
+    'Archimedes',
+    'Caesar',
+    'Saint Paul',
+    'Charlemagne',
+    'Dante',
+    'Gutenberg',
+    'Shakespeare',
+    'Descartes',
+    'Frederic',
+    'Bichat',
+    '',
 )
 
 
@@ -58,9 +67,14 @@ def to_jd(year, month, day):
     gyear = year + YEAR_EPOCH - 1
 
     return (
-        gregorian.EPOCH - 1 + (365 * (gyear - 1)) +
-        floor((gyear - 1) / 4) + (-floor((gyear - 1) / 100)) +
-        floor((gyear - 1) / 400) + (month - 1) * 28 + day
+        gregorian.EPOCH
+        - 1
+        + (365 * (gyear - 1))
+        + floor((gyear - 1) / 4)
+        + (-floor((gyear - 1) / 100))
+        + floor((gyear - 1) / 400)
+        + (month - 1) * 28
+        + day
     )
 
 
@@ -84,9 +98,10 @@ def from_jd(jd):
 
     yindex = floor(dquad / gregorian.YEAR_DAYS)
     year = (
-        quadricent * gregorian.INTERCALATION_CYCLE_YEARS +
-        cent * gregorian.LEAP_SUPPRESSION_YEARS +
-        quad * gregorian.LEAP_CYCLE_YEARS + yindex
+        quadricent * gregorian.INTERCALATION_CYCLE_YEARS
+        + cent * gregorian.LEAP_SUPPRESSION_YEARS
+        + quad * gregorian.LEAP_CYCLE_YEARS
+        + yindex
     )
 
     if yindex == 4:
@@ -95,11 +110,11 @@ def from_jd(jd):
 
     else:
         yearday = (
-            depoch -
-            quadricent * gregorian.INTERCALATION_CYCLE_DAYS -
-            cent * gregorian.LEAP_SUPPRESSION_DAYS -
-            quad * gregorian.LEAP_CYCLE_DAYS -
-            yindex * gregorian.YEAR_DAYS
+            depoch
+            - quadricent * gregorian.INTERCALATION_CYCLE_DAYS
+            - cent * gregorian.LEAP_SUPPRESSION_DAYS
+            - quad * gregorian.LEAP_CYCLE_DAYS
+            - yindex * gregorian.YEAR_DAYS
         )
 
     month = floor(yearday / 28)
@@ -116,12 +131,12 @@ def to_gregorian(year, month, day):
 
 
 def dayname(year, month, day):
-    '''
+    """
     Give the name of the month and day for a given date.
 
     Returns:
         tuple month_name, day_name
-    '''
+    """
     legal_date(year, month, day)
 
     yearday = (month - 1) * 28 + day
@@ -135,16 +150,16 @@ def dayname(year, month, day):
 
 
 def weekday(day):
-    '''
-        Gives the weekday (0=Monday) of a positivist month and day.
-        Note that the festival month does not have a day.
-    '''
+    """
+    Gives the weekday (0=Monday) of a positivist month and day.
+    Note that the festival month does not have a day.
+    """
     return (day % 7) - 1
 
 
 def festival(month, day):
-    '''
+    """
     Gives the festival day for a month and day.
     Returns None if inapplicable.
-    '''
+    """
     return data.festivals.get((month, day))

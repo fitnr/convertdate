@@ -1,18 +1,47 @@
 # -*- coding: utf-8 -*-
-
 # This file is part of convertdate.
 # http://github.com/fitnr/convertdate
+# Licensed under the MIT license:
+# http://opensource.org/licenses/MIT
+# Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
 
 from math import trunc
-from .utils import jwday, monthcalendarhelper
+
 from . import gregorian, julian
+from .utils import jwday, monthcalendarhelper
 
 EPOCH = 1922501.5  # beginning of proleptic year 0, day 0 of the moveable calendar
 EPOCH_SARKAWAG = 2117210.5  # last day of Sarkawag's first cycle
-MONTHS = ["nawasard", "hoṙi", "sahmi", "trē", "kʿałocʿ", "aracʿ", "mehekan",
-          "areg", "ahekan", "mareri", "margacʿ", "hroticʿ", "aweleacʿ"]
-MONTHS_ARM = ["նաւասարդ", "հոռի", "սահմի", "տրէ", "քաղոց", "արաց", "մեհեկան",
-              "արեգ", "ահեկան", "մարերի", "մարգաց", "հրոտից", "աւելեաց"]
+MONTHS = [
+    "nawasard",
+    "hoṙi",
+    "sahmi",
+    "trē",
+    "kʿałocʿ",
+    "aracʿ",
+    "mehekan",
+    "areg",
+    "ahekan",
+    "mareri",
+    "margacʿ",
+    "hroticʿ",
+    "aweleacʿ",
+]
+MONTHS_ARM = [
+    "նաւասարդ",
+    "հոռի",
+    "սահմի",
+    "տրէ",
+    "քաղոց",
+    "արաց",
+    "մեհեկան",
+    "արեգ",
+    "ահեկան",
+    "մարերի",
+    "մարգաց",
+    "հրոտից",
+    "աւելեաց",
+]
 
 
 def _valid_date(year, month, day, method=None):

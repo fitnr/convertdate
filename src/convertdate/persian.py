@@ -1,19 +1,16 @@
 # -*- coding: utf-8 -*-
-
 # This file is part of convertdate.
 # http://github.com/fitnr/convertdate
-
 # Licensed under the MIT license:
 # http://opensource.org/licenses/MIT
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
 from math import trunc
-from .utils import ceil, jwday, monthcalendarhelper
+
 from . import gregorian
+from .utils import ceil, jwday, monthcalendarhelper
 
 EPOCH = 1948320.5
-WEEKDAYS = ("Doshanbeh", "Seshhanbeh",
-            "Chaharshanbeh", "Panjshanbeh",
-            "Jomeh", "Shanbeh", "Yekshanbeh")
+WEEKDAYS = ("Doshanbeh", "Seshhanbeh", "Chaharshanbeh", "Panjshanbeh", "Jomeh", "Shanbeh", "Yekshanbeh")
 
 HAS_31_DAYS = (1, 2, 3, 4, 5, 6)
 HAS_30_DAYS = (7, 8, 9, 10, 11)
@@ -26,7 +23,7 @@ def leap(year):
     else:
         y = 473
 
-    return ((((((year - y % 2820) + 474) + 38) * 682) % 2816) < 682)
+    return (((((year - y % 2820) + 474) + 38) * 682) % 2816) < 682
 
 
 def to_jd(year, month, day):
@@ -44,7 +41,14 @@ def to_jd(year, month, day):
     else:
         m = (month - 1) * 30 + 6
 
-    return day + m + trunc(((epyear * 682) - 110) / 2816) + (epyear - 1) * 365 + trunc(epbase / 2820) * 1029983 + (EPOCH - 1)
+    return (
+        day
+        + m
+        + trunc(((epyear * 682) - 110) / 2816)
+        + (epyear - 1) * 365
+        + trunc(epbase / 2820) * 1029983
+        + (EPOCH - 1)
+    )
 
 
 def from_jd(jd):
@@ -53,7 +57,7 @@ def from_jd(jd):
 
     depoch = jd - to_jd(475, 1, 1)
     cycle = trunc(depoch / 1029983)
-    cyear = (depoch % 1029983)
+    cyear = depoch % 1029983
 
     if cyear == 1029982:
         ycycle = 2820
@@ -64,7 +68,7 @@ def from_jd(jd):
 
     year = ycycle + (2820 * cycle) + 474
 
-    if (year <= 0):
+    if year <= 0:
         year -= 1
 
     yday = (jd - to_jd(year, 1, 1)) + 1

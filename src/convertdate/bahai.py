@@ -1,19 +1,19 @@
 # -*- coding: utf-8 -*-
-
 # This file is part of convertdate.
 # http://github.com/fitnr/convertdate
-
 # Licensed under the MIT license:
 # http://opensource.org/licenses/MIT
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
-from math import trunc, ceil
-from calendar import isleap
-from pymeeus.Sun import Sun
-from pymeeus.Epoch import Epoch
-from pymeeus.Angle import Angle
-from . import gregorian
-from .utils import monthcalendarhelper, jwday
 
+from calendar import isleap
+from math import ceil, trunc
+
+from pymeeus.Angle import Angle
+from pymeeus.Epoch import Epoch
+from pymeeus.Sun import Sun
+
+from . import gregorian
+from .utils import jwday, monthcalendarhelper
 
 EPOCH = 2394646.5
 EPOCH_GREGORIAN_YEAR = 1844
@@ -91,10 +91,10 @@ ALA = 20
 
 
 def gregorian_nawruz(year):
-    '''
-        Return Nawruz in the Gregorian calendar.
-        Returns a tuple (month, day), where month is always 3
-    '''
+    """
+    Return Nawruz in the Gregorian calendar.
+    Returns a tuple (month, day), where month is always 3
+    """
     if year == 2059:
         return 3, 20
 

@@ -1,19 +1,16 @@
 # -*- coding: utf-8 -*-
-
 # This file is part of convertdate.
 # http://github.com/fitnr/convertdate
-
 # Licensed under the MIT license:
 # http://opensource.org/licenses/MIT
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
 from math import trunc
-from .utils import ceil, jwday, monthcalendarhelper
+
 from . import gregorian
+from .utils import ceil, jwday, monthcalendarhelper
 
 EPOCH = 1948439.5
-WEEKDAYS = ("al-'ahad", "al-'ithnayn",
-            "ath-thalatha'", "al-'arb`a'",
-            "al-khamis", "al-jum`a", "as-sabt")
+WEEKDAYS = ("al-'ahad", "al-'ithnayn", "ath-thalatha'", "al-'arb`a'", "al-khamis", "al-jum`a", "as-sabt")
 
 HAS_29_DAYS = (2, 4, 6, 8, 10)
 HAS_30_DAYS = (1, 3, 5, 7, 9, 11)

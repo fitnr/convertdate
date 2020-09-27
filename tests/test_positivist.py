@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
 import unittest
-from convertdate.positivist import (
-    EPOCH, from_jd, to_jd, from_gregorian,
-    to_gregorian, legal_date, dayname, festival
-)
+
 from convertdate.data import positivist as data
+from convertdate.positivist import (EPOCH, dayname, festival, from_gregorian,
+                                    from_jd, legal_date, to_gregorian, to_jd)
 
 
 class TestGregorian(unittest.TestCase):
-
     def setUp(self):
         pass
 

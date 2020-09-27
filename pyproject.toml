@@ -1,0 +1,17 @@
+[tool.black]
+line-length = 120
+target-version = ["py38"]
+include = 'py$'
+skip-string-normalization = true
+
+[tool.pylint.master]
+fail-under = "9.5"
+
+[tool.pylint.basic]
+# good-names = "f, i, j, k, x, y, z"
+
+[tool.pylint.format]
+max-line-length = 120
+
+[tool.isort]
+line_length = 120

@@ -366,7 +366,7 @@ day_names = (
     "Broussais",
     "Gall",
     "the Dead",
-    "Sainted Women"
+    "Sainted Women",
 )
 
 leap_day_replacements = {

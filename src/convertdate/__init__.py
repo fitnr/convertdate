@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
-
 # This file is part of convertdate.
 # http://github.com/fitnr/convertdate
-
 # Licensed under the MIT license:
 # http://opensource.org/licenses/MIT
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
-
+#
 # Most of this code is ported from Fourmilab's javascript calendar converter
 # http://www.fourmilab.ch/documents/calendar/
 # which was developed by John Walker
@@ -38,11 +36,24 @@ from . import utils
 __version__ = '2.2.2'
 
 __all__ = [
-    'holidays', 'armenian', 'bahai', 'coptic', 'dublin',
+    'holidays',
+    'armenian',
+    'bahai',
+    'coptic',
+    'dublin',
     'daycount',
-    'french_republican', 'gregorian', 'hebrew',
-    'indian_civil', 'islamic', 'iso',
-    'julian', 'julianday',
-    'mayan', 'persian', 'positivist', 'mayan',
-    'ordinal', 'utils'
+    'french_republican',
+    'gregorian',
+    'hebrew',
+    'indian_civil',
+    'islamic',
+    'iso',
+    'julian',
+    'julianday',
+    'mayan',
+    'persian',
+    'positivist',
+    'mayan',
+    'ordinal',
+    'utils',
 ]

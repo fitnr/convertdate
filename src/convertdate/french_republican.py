@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
-
 # This file is part of convertdate.
 # http://github.com/fitnr/convertdate
-
-# Licensed under the MIT license:
 # http://opensource.org/licenses/MIT
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
+# Licensed under the MIT license
+
 from math import trunc
+
 from pymeeus.Sun import Sun
+
 from . import gregorian
 from .data.french_republican_days import french_republican_days
 
@@ -34,12 +35,12 @@ MOIS = MONTHS = [
     "Sansculottides",
 ]
 
-LEAP_CYCLE_DAYS = 1461.  # 365 * 4 + 1
-LEAP_CYCLE_YEARS = 4.
+LEAP_CYCLE_DAYS = 1461.0  # 365 * 4 + 1
+LEAP_CYCLE_YEARS = 4.0
 
 
 def leap(year, method=None):
-    '''
+    """
     Determine if this is a leap year in the FR calendar using one of three methods: 4, 100, 128
     (every 4th years, every 4th or 400th but not 100th, every 4th but not 128th)
 
@@ -49,7 +50,7 @@ def leap(year, method=None):
             20, 24, ... 96, 104, ... 396, 400, 404 ...
         * 128 (von Mädler's rule): leap every 4th but not 128th: 20, 24, ... 124, 132, ...
         * equinox [default]: use calculation of the equinox to determine date, never returns a leap year
-    '''
+    """
     method = method or 'equinox'
 
     if year in (3, 7, 11):
@@ -99,10 +100,10 @@ def _next_fall_equinox(jd):
 
 
 def premier_da_la_annee(jd):
-    '''
-        Returns Julian day number containing fall equinox (first day of the FR year)
-        of the current FR year.
-    '''
+    """
+    Returns Julian day number containing fall equinox (first day of the FR year)
+    of the current FR year.
+    """
     previous = trunc(_previous_fall_equinox(jd) - 0.5) + 0.5
 
     if previous + 364 < jd:
@@ -141,8 +142,7 @@ def _to_jd_schematic(year, month, day, method):
     intercal_cycle_yrs, over_cycle_yrs, leap_suppression_yrs = None, None, None
 
     # Use the every-four-years method below year 16 (madler) or below 15 (romme)
-    if ((method in (100, 'romme') and year < 15) or
-            (method in (128, 'madler') and year < 17)):
+    if (method in (100, 'romme') and year < 15) or (method in (128, 'madler') and year < 17):
         method = 4
 
     if method in (4, 'continuous'):
@@ -153,13 +153,13 @@ def _to_jd_schematic(year, month, day, method):
         year = year - 13
         y5 = DAYS_IN_YEAR * 12 + 3
 
-        leap_suppression_yrs = 100.
+        leap_suppression_yrs = 100.0
         leap_suppression_days = 36524  # leap_cycle_days * 25 - 1
 
-        intercal_cycle_yrs = 400.
+        intercal_cycle_yrs = 400.0
         intercal_cycle_days = 146097  # leap_suppression_days * 4 + 1
 
-        over_cycle_yrs = 4000.
+        over_cycle_yrs = 4000.0
         over_cycle_days = 1460969  # intercal_cycle_days * 10 - 1
 
     elif method in (128, 'madler'):
@@ -207,10 +207,10 @@ def _to_jd_equinox(an, mois, jour):
 
 
 def from_jd(jd, method=None):
-    '''Calculate date in the French Revolutionary
+    """Calculate date in the French Revolutionary
     calendar from Julian day.  The five or six
     "sansculottides" are considered a thirteenth
-    month in the results of this function.'''
+    month in the results of this function."""
     method = method or 'equinox'
 
     if method == 'equinox':
@@ -231,8 +231,9 @@ def _from_jd_schematic(jd, method):
     intercal_cycle_days = leap_suppression_days = over_cycle_days = None
 
     # Use the every-four-years method below year 17
-    if (J <= DAYS_IN_YEAR * 12 + 3 and
-            method in (100, 'romme')) or (J <= DAYS_IN_YEAR * 17 + 4 and method in (128, 'madler')):
+    if (J <= DAYS_IN_YEAR * 12 + 3 and method in (100, 'romme')) or (
+        J <= DAYS_IN_YEAR * 17 + 4 and method in (128, 'madler')
+    ):
         method = 4
 
     # set p and r in Hatcher algorithm
@@ -240,7 +241,7 @@ def _from_jd_schematic(jd, method):
         # Leap years: 15, 19, 23, ...
         # Reorganize so that leap day is last day of cycle
         J = J + 365
-        y5 = - 1
+        y5 = -1
 
     elif method in (100, 'romme'):
         # Year 15 is not a leap year
@@ -248,13 +249,13 @@ def _from_jd_schematic(jd, method):
         y5 = 12
         J = J - DAYS_IN_YEAR * 12 - 3
 
-        leap_suppression_yrs = 100.
+        leap_suppression_yrs = 100.0
         leap_suppression_days = 36524  # LEAP_CYCLE_DAYS * 25 - 1
 
-        intercal_cycle_yrs = 400.
+        intercal_cycle_yrs = 400.0
         intercal_cycle_days = 146097  # leap_suppression_days * 4 + 1
 
-        over_cycle_yrs = 4000.
+        over_cycle_yrs = 4000.0
         over_cycle_days = 1460969  # intercal_cycle_days * 10 - 1
 
     elif method in (128, 'madler'):
@@ -300,7 +301,7 @@ def _from_jd_schematic(jd, method):
 
     year = y0 + y1 + y2 + y3 + y4 + y5
 
-    month = trunc(J / 30.)
+    month = trunc(J / 30.0)
     J = J - month * 30
 
     return trunc(year) + 1, month + 1, trunc(J) + 1
@@ -312,14 +313,14 @@ def _from_jd_equinox(jd):
     equinoxe = premier_da_la_annee(jd)
 
     an = int(gregorian.from_jd(equinoxe)[0] - YEAR_EPOCH)
-    mois = trunc((jd - equinoxe) / 30.) + 1
+    mois = trunc((jd - equinoxe) / 30.0) + 1
     jour = int((jd - equinoxe) % 30) + 1
 
     return (an, mois, jour)
 
 
 def decade(jour):
-    return trunc(jour / 100.) + 1
+    return trunc(jour / 100.0) + 1
 
 
 def day_name(month, day):
