@@ -149,8 +149,8 @@ def to_jd_gregorianyear(gregorianyear, hebrew_month, hebrew_day):
         gd = gregorian.from_jd(jd)
         if gd[0] == gregorianyear:
             break
-        else:
-            gd = None
+        
+        gd = None
 
     if not gd:  # should never occur, but just incase...
         raise ValueError("Could not determine gregorian year")

@@ -185,8 +185,8 @@ def columbus_day(year, country='usa'):
     Elsewhere: Oct 12"""
     if country == 'usa':
         return nth_day_of_month(2, MON, OCT, year)
-    else:
-        return (year, OCT, 12)
+
+    return (year, OCT, 12)
 
 
 def halloween(year):
@@ -227,11 +227,13 @@ def thanksgiving(year, country='usa'):
             return nth_day_of_month(3, THU, NOV, year)
         elif year == 1939:
             return nth_day_of_month(4, THU, NOV, year)
-        else:
-            return nth_day_of_month(0, THU, NOV, year)
+
+        return nth_day_of_month(0, THU, NOV, year)
 
     if country == 'canada':
         return nth_day_of_month(2, MON, OCT, year)
+
+    raise NotImplementedError('Unsupported argument for country')
 
 
 def christmas_eve(year):
@@ -338,7 +340,7 @@ def dia_revolucion(year):
     return nth_day_of_month(3, MON, NOV, year)
 
 
-class Holidays(object):
+class Holidays:
     def __init__(self, year=None):
         self.year = year or time.localtime().tm_year
 
@@ -358,8 +360,8 @@ class Holidays(object):
         return christmas_eve(self.year)
 
     @property
-    def thanksgiving(self, country='usa'):
-        return thanksgiving(self.year, country)
+    def thanksgiving(self):
+        return thanksgiving(self.year)
 
     @property
     def new_years(self):
@@ -402,8 +404,8 @@ class Holidays(object):
         return labor_day(self.year)
 
     @property
-    def columbus_day(self, country='usa'):
-        return columbus_day(self.year, country)
+    def columbus_day(self):
+        return columbus_day(self.year)
 
     @property
     def veterans_day(self):

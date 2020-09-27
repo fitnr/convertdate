@@ -3,9 +3,8 @@ import time
 import unittest
 
 from convertdate import julianday
-from convertdate.armenian import (_valid_date, from_gregorian, from_jd,
-                                  from_julian, leap, month_length,
-                                  to_gregorian, to_jd, to_julian, tostring)
+from convertdate.armenian import (_valid_date, from_gregorian, from_jd, from_julian, leap, month_length, to_gregorian,
+                                  to_jd, to_julian, tostring)
 
 
 class TestArmenian(unittest.TestCase):

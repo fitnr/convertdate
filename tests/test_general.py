@@ -5,8 +5,7 @@ from datetime import datetime
 
 import pytz
 
-from convertdate import (bahai, coptic, dublin, gregorian, hebrew,
-                         indian_civil, islamic, iso, julian, julianday,
+from convertdate import (bahai, coptic, dublin, gregorian, hebrew, indian_civil, islamic, iso, julian, julianday,
                          ordinal, persian, utils)
 
 

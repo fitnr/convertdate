@@ -32,7 +32,7 @@ def legal_date(year, month, day):
     else:
         daysinmonth = 30 if month in HAVE_30_DAYS else 31
 
-    if not (0 < day <= daysinmonth):
+    if not 0 < day <= daysinmonth:
         raise ValueError("Month {} doesn't have a day {}".format(month, day))
 
     return True
@@ -41,7 +41,6 @@ def legal_date(year, month, day):
 def to_jd2(year, month, day):
     '''Gregorian to Julian Day Count for years between 1801-2099'''
     # http://quasar.as.utexas.edu/BillInfo/JulianDatesG.html
-
     legal_date(year, month, day)
 
     if month <= 2:
@@ -57,6 +56,7 @@ def to_jd2(year, month, day):
 
 
 def to_jd(year, month, day):
+    '''Convert gregorian date to julian day count.'''
     legal_date(year, month, day)
 
     if month <= 2:

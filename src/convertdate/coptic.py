@@ -5,7 +5,6 @@
 # http:#opensource.org/licenses/MIT
 # Copyright (c) 2017, fitnr <fitnr@fakeisthenewreal>
 from . import gregorian
-
 from .utils import floor, jwday, monthcalendarhelper
 
 EPOCH = 1825029.5

@@ -52,8 +52,8 @@ def weeks_per_year(year):
 
     if jan1 == THU or (jan1 == WED and isleap(year)):
         return 53
-    else:
-        return 52
+
+    return 52
 
 
 def from_gregorian(year, month, day):
@@ -65,4 +65,5 @@ def to_gregorian(year, week, day):
 
 
 def format(year, week, day):
+    # pylint: disable=redefined-builtin
     return "{}-W{:02}-{}".format(year, week, day)

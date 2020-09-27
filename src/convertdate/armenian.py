@@ -46,9 +46,9 @@ MONTHS_ARM = [
 
 def _valid_date(year, month, day, method=None):
     try:
-        assert 1 <= month <= 13
-    except AssertionError:
-        raise ValueError("Month out of range")
+        assert 1 <= month <= 13, "Month out of range"
+    except AssertionError as error:
+        raise ValueError from error
 
     day_max = 30
     method = method or "moveable"
@@ -64,14 +64,14 @@ def _valid_date(year, month, day, method=None):
             day_max = 5
 
     try:
-        assert year >= year_min
-    except AssertionError:
-        raise ValueError("Year out of range for Armenian calendar ({} method)".format(method))
+        assert year >= year_min, "Year out of range for Armenian calendar ({} method)".format(method)
+    except AssertionError as err:
+        raise ValueError from err
 
     try:
-        assert 1 <= day <= day_max
-    except AssertionError:
-        raise ValueError("Day out of range")
+        assert 1 <= day <= day_max, "Day out of range"
+    except AssertionError as err:
+        raise ValueError from err
 
     return True
 

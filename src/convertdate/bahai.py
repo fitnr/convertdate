@@ -110,6 +110,8 @@ def gregorian_nawruz(year):
         if sunset > equinox:
             return 3, day
 
+    raise ValueError("Couldn't find date of Nawruz.")
+
 
 def to_jd(year, month, day):
     '''Determine Julian day from Bahai date'''

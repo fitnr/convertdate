@@ -1,3 +1,9 @@
+# This file is part of convertdate.
+# http://github.com/fitnr/convertdate
+# Licensed under the MIT license:
+# http://opensource.org/licenses/MIT
+# Copyright (c) 2020, fitnr <fitnr@fakeisthenewreal>
+
 [tool.black]
 line-length = 120
 target-version = ["py38"]
@@ -7,8 +13,11 @@ skip-string-normalization = true
 [tool.pylint.master]
 fail-under = "9.5"
 
-[tool.pylint.basic]
-# good-names = "f, i, j, k, x, y, z"
+[tool.pylint.messages_control]
+disable = [
+    "invalid-name",
+    "duplicate-code"
+]
 
 [tool.pylint.format]
 max-line-length = 120

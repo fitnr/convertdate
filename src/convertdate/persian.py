@@ -94,7 +94,7 @@ def to_gregorian(year, month, day):
 def month_length(year, month):
     if month in HAS_30_DAYS or (month == 12 and leap(year)):
         return 30
-    elif month in HAS_31_DAYS:
+    if month in HAS_31_DAYS:
         return 31
 
     return 29

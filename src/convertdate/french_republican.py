@@ -258,6 +258,12 @@ def _from_jd_schematic(jd, method):
         over_cycle_yrs = 4000.0
         over_cycle_days = 1460969  # intercal_cycle_days * 10 - 1
 
+        y0 = trunc(J / over_cycle_days) * over_cycle_yrs
+        J = J % over_cycle_days
+
+        y1 = trunc(J / intercal_cycle_days) * intercal_cycle_yrs
+        J = J % intercal_cycle_days
+
     elif method in (128, 'madler'):
         # Year 15 is a leap year, then year 20 and multiples of 4, not multiples of 128
         y5 = 16
@@ -268,14 +274,6 @@ def _from_jd_schematic(jd, method):
 
     else:
         raise ValueError("Unknown leap year method. Try: continuous, romme, madler or equinox")
-
-    if over_cycle_days:
-        y0 = trunc(J / over_cycle_days) * over_cycle_yrs
-        J = J % over_cycle_days
-
-    if intercal_cycle_days:
-        y1 = trunc(J / intercal_cycle_days) * intercal_cycle_yrs
-        J = J % intercal_cycle_days
 
     if leap_suppression_days:
         y2 = trunc(J / leap_suppression_days) * leap_suppression_yrs
@@ -336,4 +334,5 @@ def to_gregorian(an, mois, jour, method=None):
 
 
 def format(an, mois, jour):
+    # pylint: disable=redefined-builtin
     return "{0} {1} {2}".format(jour, MOIS[mois - 1], an)

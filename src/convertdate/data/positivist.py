@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-day_names = (
+DAY_NAMES = (
     "Prometheus",
     "Hercules",
     "Orpheus",
@@ -550,10 +550,9 @@ leap_day_replacements = {
     362: "Morgagni",
 }
 
-day_names_leap = [leap_day_replacements.get(i, x) for i, x in enumerate(day_names)]
+DAY_NAMES_LEAP = [leap_day_replacements.get(i, x) for i, x in enumerate(DAY_NAMES)]
 
-
-festivals = {
+FESTIVALS = {
     (1, 1): "the Great Being",
     (1, 7): "religion",
     (1, 14): "history",

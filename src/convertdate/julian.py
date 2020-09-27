@@ -1,16 +1,13 @@
 # -*- coding: utf-8 -*-
-
 # This file is part of convertdate.
 # http://github.com/fitnr/convertdate
-
-
+# Licensed under the MIT license:
 # http://opensource.org/licenses/MIT
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
 from math import trunc
 
 from .gregorian import from_jd as gregorian_from_jd
 from .gregorian import to_jd as gregorian_to_jd
-# Licensed under the MIT license:
 from .utils import jwday, monthcalendarhelper
 
 J0000 = 1721424.5  # Julian date of Gregorian epoch: 0000-01-01

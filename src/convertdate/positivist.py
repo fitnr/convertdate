@@ -1,4 +1,10 @@
 # -*- coding: utf-8 -*-
+'''
+    Convert between Gregorian/Julian Day and Comte's Positivist calendar.
+    The Positivist calendar has 13 months and one or two festival days.
+    Festival days are given as the fourteenth month.
+    The Gregorian date 1789-01-01 is Positivist 0001-01-01.
+'''
 # This file is part of convertdate.
 # http://github.com/fitnr/convertdate
 # Licensed under the MIT license:
@@ -9,13 +15,6 @@ from calendar import isleap
 from . import gregorian
 from .data import positivist as data
 from .utils import floor
-
-'''
-    Convert between Gregorian/Julian Day and Comte's Positivist calendar.
-    The Positivist calendar has 13 months and one or two festival days.
-    Festival days are given as the fourteenth month.
-    The Gregorian date 1789-01-01 is Positivist 0001-01-01.
-'''
 
 # Positivist calendar has 13 28-day months and one festival day
 
@@ -55,8 +54,8 @@ def legal_date(year, month, day):
             else:
                 assert day == 1
 
-    except AssertionError:
-        raise ValueError("Invalid Positivist date: ({}, {}, {})".format(year, month, day))
+    except AssertionError as err:
+        raise ValueError("Invalid Positivist date: ({}, {}, {})".format(year, month, day)) from err
 
     return True
 
@@ -82,8 +81,8 @@ def from_jd(jd):
     '''Convert a Julian day count to Positivist date.'''
     try:
         assert jd >= EPOCH
-    except AssertionError:
-        raise ValueError('Invalid Julian day')
+    except AssertionError as err:
+        raise ValueError('Invalid Julian day') from err
 
     depoch = floor(jd - 0.5) + 0.5 - gregorian.EPOCH
 
@@ -142,9 +141,9 @@ def dayname(year, month, day):
     yearday = (month - 1) * 28 + day
 
     if isleap(year + YEAR_EPOCH - 1):
-        dname = data.day_names_leap[yearday - 1]
+        dname = data.DAY_NAMES_LEAP[yearday - 1]
     else:
-        dname = data.day_names[yearday - 1]
+        dname = data.DAY_NAMES[yearday - 1]
 
     return MONTHS[month - 1], dname
 
@@ -162,4 +161,4 @@ def festival(month, day):
     Gives the festival day for a month and day.
     Returns None if inapplicable.
     """
-    return data.festivals.get((month, day))
+    return data.FESTIVALS.get((month, day))

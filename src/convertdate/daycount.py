@@ -7,7 +7,7 @@
 from . import gregorian, julian, julianday
 
 
-class DayCount(object):
+class DayCount:
 
     '''A day count converter for the given epoch (in terms of Julian Day Count)'''
 
@@ -35,5 +35,5 @@ class DayCount(object):
     def to_datetime(self, dc):
         return julianday.to_datetime(self.to_jd(dc))
 
-    def from_datetime(self, dt):
-        return self.from_jd(julianday.from_datetime(dt))
+    def from_datetime(self, date):
+        return self.from_jd(julianday.from_datetime(date))

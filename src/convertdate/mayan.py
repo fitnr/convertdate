@@ -184,8 +184,8 @@ def _haab_count(day, month):
 
     try:
         i = HAAB.index(month)
-    except ValueError:
-        raise ValueError("'{0}' is not a valid Haab' month".format(month))
+    except ValueError as err:
+        raise ValueError("'{0}' is not a valid Haab' month".format(month)) from err
 
     return min(i * 20, 360) + day
 
@@ -204,8 +204,8 @@ def _tzolkin_count(day, name):
 
     try:
         n = 1 + TZOLKIN.index(name)
-    except ValueError:
-        raise ValueError("'{0}' is not a valid Tzolk'in day name".format(name))
+    except ValueError as err:
+        raise ValueError("'{0}' is not a valid Tzolk'in day name".format(name)) from err
 
     names = set(y + n for y in range(0, 260, 20))
     return days.intersection(names).pop()
