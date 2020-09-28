@@ -5,7 +5,11 @@
 # http://opensource.org/licenses/MIT
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
 
-'''Convert to and from the Dublin day count'''
+'''
+The Dublin day count is a truncated `Julian day <julian.html>`__ with an epoch of noon on December 31, 1899.
+
+This is a convenience module, it uses :doc:`daycount` class for all functions.
+'''
 
 from . import daycount
 

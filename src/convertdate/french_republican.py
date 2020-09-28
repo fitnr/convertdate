@@ -4,7 +4,10 @@
 # http://opensource.org/licenses/MIT
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
 # Licensed under the MIT license
-
+"""
+The `French Republican calendar <https://en.wikipedia.org/wiki/French_Republican_calendar>`__
+was created during the heroic overthrow of the Ancien Regime.
+"""
 from math import trunc
 
 from pymeeus.Sun import Sun

@@ -4,6 +4,13 @@
 # Licensed under the MIT license:
 # http://opensource.org/licenses/MIT
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
+"""
+Generate the dates of common North American and Jewish holidays.
+
+Jewish holidays begin the sunset before the first (secular) day of the holiday
+With the ``eve`` option set to ``True``, the day of this sunset is returned
+without the ``eve`` option, the (secular) day is returned. This is the default.
+"""
 import calendar
 import time
 from math import trunc
@@ -257,12 +264,6 @@ def new_years_eve(year):
     '''Dec 31st'''
     return (year, DEC, 31)
 
-
-# Jewish holidays begins the sunset before the first (secular) day of the holiday
-# With the eve option set, the day of this sunset is returned
-# without the option, the (secular) day is returned
-
-
 def hanukkah(year, eve=None):
     year, month, day = hebrew.to_jd_gregorianyear(year, hebrew.KISLEV, 25)
     if eve:
@@ -319,28 +320,45 @@ def sukkot(year, eve=None):
 
 
 def dia_constitucion(year, observed=True):
+    """
+    Constitution Day, a public holiday in Mexico observed
+    on the first Monday in February.
+    """
     if observed:
         return nth_day_of_month(1, MON, FEB, year)
-    else:
-        return (year, FEB, 5)
+
+    return (year, FEB, 5)
 
 
 def natalicio_benito_juarez(year, observed=True):
+    """
+    Benito Juárez's Birthday, a public holiday in Mexico observed
+    on the third Monday in March.
+    """
     if observed:
         return nth_day_of_month(3, MON, MAR, year)
-    else:
-        return (year, MAR, 21)
+
+    return (year, MAR, 21)
 
 
 def dia_independencia(year):
+    """
+    Mexican independence day, observed on September 16.
+    """
     return year, SEP, 16
 
 
 def dia_revolucion(year):
+    """
+    Revolution Day, a public holiday in Mexico observed
+    on the third Monday in November.
+    """
     return nth_day_of_month(3, MON, NOV, year)
 
 
 class Holidays:
+    '''Convenience class for fetching many holidays in a given year.'''
+    # pylint: disable=missing-function-docstring
     def __init__(self, year=None):
         self.year = year or time.localtime().tm_year
 

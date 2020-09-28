@@ -15,6 +15,7 @@ class DayCount:
         self.epoch = epoch
 
     def to_gregorian(self, dc):
+        '''From day count to Gregorian (year, month, day) tuple'''
         return gregorian.from_jd(self.to_jd(dc))
 
     def from_gregorian(self, year, month, day):
@@ -30,6 +31,7 @@ class DayCount:
         return self.from_jd(julian.to_jd(year, month, day))
 
     def to_julian(self, dc):
+        '''From day count to Julian (year, month, day) tuple'''
         return julian.from_jd(self.to_jd(dc))
 
     def to_datetime(self, dc):

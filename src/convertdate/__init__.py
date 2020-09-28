@@ -4,15 +4,20 @@
 # Licensed under the MIT license:
 # http://opensource.org/licenses/MIT
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
-#
-# Most of this code is ported from Fourmilab's javascript calendar converter
-# http://www.fourmilab.ch/documents/calendar/
-# which was developed by John Walker
-#
-# The algorithms are believed to be derived from the following source:
-# Meeus, Jean. Astronomical Algorithms . Richmond: Willmann-Bell, 1991. ISBN 0-943396-35-2.
-#    The essential reference for computational positional astronomy.
-#
+"""
+The Convertdate library contains methods and functions for converting dates between
+different calendar systems.
+
+It was originally developed as as `Python Date Util <(http://sourceforge.net/projects/pythondateutil/>`__
+by Phil Schwartz. It had been significantly updated and expanded.
+
+Most of the original code is ported from
+`Fourmilab's calendar converter <http://www.fourmilab.ch/documents/calendar/>`__,
+which was developed by John Walker.
+
+The algorithms are believed to be derived from: Meeus, Jean. `Astronomical Algorithms`,
+Richmond: Willmann-Bell, 1991 (ISBN 0-943396-35-2)
+"""
 from . import armenian
 from . import bahai
 from . import coptic

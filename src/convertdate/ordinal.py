@@ -4,6 +4,10 @@
 # Licensed under the MIT license:
 # http://opensource.org/licenses/MIT
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
+"""
+The `ordinal date <https://en.wikipedia.org/wiki/Ordinal_date>` specifies the day
+of year as a number between 1 and 366.
+"""
 from calendar import isleap
 from math import trunc
 
