@@ -58,6 +58,8 @@ def to_jd(year, month, day):
         gy = year - 1 + EPOCH_GREGORIAN_YEAR
         n_month, n_day = gregorian_nawruz(gy)
         return gregorian.to_jd(gy, n_month, n_day - 1) + day + (month - 1) * 19
+    if month == 19:
+        return to_jd(year, month - 1, 19) + day
 
     return to_jd(year, month - 1, day) + month_length(year, month)
 
