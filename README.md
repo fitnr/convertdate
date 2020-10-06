@@ -134,7 +134,7 @@ Dates in this period are returned as month 19, and the month of &lsquo;Al&aacute
 from convertdate import bahai
 # the first day of Ayyam-i-Ha:
 bahai.to_gregorian(175, 19, 1)
-# (2019, 2, 11)
+# (2019, 2, 26)
 # The first day of 'Ala:
 bahai.to_gregorian(175, 20, 1)
 # (2019, 3, 2)
