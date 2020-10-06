@@ -59,9 +59,12 @@ def to_jd(year, month, day):
         n_month, n_day = gregorian_nawruz(gy)
         return gregorian.to_jd(gy, n_month, n_day - 1) + day + (month - 1) * 19
     if month == 19:
+        # Count Ayyám-i-Há from the last day of Mulk
         return to_jd(year, month - 1, 19) + day
-
-    return to_jd(year, month - 1, day) + month_length(year, month)
+    # For the month of ‘Alá we will count _backwards_ from the next Naw Rúz
+    gy = year + EPOCH_GREGORIAN_YEAR
+    n_month, n_day = gregorian_nawruz(gy)
+    return gregorian.to_jd(gy, n_month, n_day) - 20 + day
 
 
 def from_jd(jd):
