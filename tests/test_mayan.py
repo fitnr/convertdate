@@ -36,14 +36,14 @@ class TestMayan(unittest.TestCase):
 
     def test_mayan_haab(self):
         # haab
-        assert mayan.HAAB_MONTHS[2] == 'Zip'
-        assert mayan.HAAB_MONTHS.index("Xul") == 5
+        assert mayan.HAAB[2] == 'Zip'
+        assert mayan.HAAB.index("Xul") == 5
         assert mayan.to_haab(self.c) == (16, "Sotz'")
         assert mayan.to_haab(2456282.5) == (3, "K'ank'in")
 
     def test_mayan_tzolkin(self):
         # tzolkin
-        assert mayan.TZOLKIN_NAMES[0] == "Imix'"
+        assert mayan.TZOLKIN[0] == "Imix'"
         assert mayan.to_tzolkin(self.c) == (12, "B'en")
         assert mayan.to_tzolkin(2456282.5) == (4, 'Ajaw')
         assert mayan.to_tzolkin(2456850.5) == (13, 'Lamat')
@@ -63,7 +63,7 @@ class TestMayan(unittest.TestCase):
     def test_mayan_predictions(self):
         assert mayan.next_haab("Sotz'", self.c) == 2266280.5
 
-        for h in mayan.HAAB_MONTHS:
+        for h in mayan.HAAB:
             assert mayan.to_haab(mayan.next_haab(h, self.c)) == (1, h)
 
         assert mayan.next_tzolkin_haab((13, "Ajaw"), (3, "Kumk'u"), 2456849.5) == 2463662.5

@@ -14,24 +14,24 @@ from .data.french_republican_days import french_republican_days
 # julian day (1792, 9, 22)
 EPOCH = 2375839.5
 
-YEAR_EPOCH = 1791.
+YEAR_EPOCH = 1791.0
 
-DAYS_IN_YEAR = 365.
+DAYS_IN_YEAR = 365.0
 
-MOIS = [
-    u'Vendémiaire',
-    u'Brumaire',
-    u'Frimaire',
-    u'Nivôse',
-    u'Pluviôse',
-    u'Ventôse',
-    u'Germinal',
-    u'Floréal',
-    u'Prairial',
-    u'Messidor',
-    u'Thermidor',
-    u'Fructidor',
-    u'Sansculottides'
+MOIS = MONTHS = [
+    "Vendémiaire",
+    "Brumaire",
+    "Frimaire",
+    "Nivôse",
+    "Pluviôse",
+    "Ventôse",
+    "Germinal",
+    "Floréal",
+    "Prairial",
+    "Messidor",
+    "Thermidor",
+    "Fructidor",
+    "Sansculottides",
 ]
 
 LEAP_CYCLE_DAYS = 1461.  # 365 * 4 + 1

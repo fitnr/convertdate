@@ -10,9 +10,22 @@ from .utils import floor, jwday, monthcalendarhelper
 from . import gregorian
 
 EPOCH = 1825029.5
-MONTH_NAMES = ["Thout", "Paopi", "Hathor", "Koiak", "Tobi", "Meshir",
-               "Paremhat", "Paremoude", "Pashons", "Paoni", "Epip", "Mesori", "Pi Kogi Enavot"]
-DAY_NAMES = ["Tkyriaka", "Pesnau", "Pshoment", "Peftoou", "Ptiou", "Psoou", "Psabbaton"]
+MONTHS = [
+    "Thout",
+    "Paopi",
+    "Hathor",
+    "Koiak",
+    "Tobi",
+    "Meshir",
+    "Paremhat",
+    "Paremoude",
+    "Pashons",
+    "Paoni",
+    "Epip",
+    "Mesori",
+    "Pi Kogi Enavot",
+]
+WEEKDAYS = ["Tkyriaka", "Pesnau", "Pshoment", "Peftoou", "Ptiou", "Psoou", "Psabbaton"]
 
 
 def is_leap(year):

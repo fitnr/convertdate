@@ -4,6 +4,10 @@ History
 In development
 --------------
 * Fix bug in Bahai calculations during Ayyám-i-Há (#32). Thanks @chiuczek
+* Regularize variable names:
+ - coptic: rename `MONTH_NAMES` to `MONTHS`, rename `DAY_NAMES` to `WEEKDAYS`
+ - french_republican: add `MONTHS`
+ - mayan: rename `HAAB_MONTHS` to `HAAB`, rename `TZOLKIN_NAMES` to `TZOLKIN`
 
 2.2.2
 -----

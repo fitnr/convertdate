@@ -13,23 +13,95 @@ from . import gregorian
 
 
 EPOCH = 584282.5
-HAAB_MONTHS = ["Pop", "Wo'", "Zip", "Sotz'", "Sek", "Xul",
-               "Yaxk'in'", "Mol", "Ch'en", "Yax", "Sak'", "Keh",
-               "Mak", "K'ank'in", "Muwan'", "Pax", "K'ayab", "Kumk'u", "Wayeb'"]
+HAAB = [
+    "Pop",
+    "Wo'",
+    "Zip",
+    "Sotz'",
+    "Sek",
+    "Xul",
+    "Yaxk'in'",
+    "Mol",
+    "Ch'en",
+    "Yax",
+    "Sak'",
+    "Keh",
+    "Mak",
+    "K'ank'in",
+    "Muwan'",
+    "Pax",
+    "K'ayab",
+    "Kumk'u",
+    "Wayeb'",
+]
 
 HAAB_TRANSLATIONS = [
-    "Mat", "Frog", "Red", "Bat", "Bee", "Dog", "First Sun", "Water", "Cave", "Green",
-    "White", "Red", "Encloser", "Yellow Sun", "Screech Owl", "Planting Time", "Turtle", "Ripe Corn", "Nameless"]
+    "Mat",
+    "Frog",
+    "Red",
+    "Bat",
+    "Bee",
+    "Dog",
+    "First Sun",
+    "Water",
+    "Cave",
+    "Green",
+    "White",
+    "Red",
+    "Encloser",
+    "Yellow Sun",
+    "Screech Owl",
+    "Planting Time",
+    "Turtle",
+    "Ripe Corn",
+    "Nameless",
+]
 
-TZOLKIN_NAMES = ["Imix'", "Ik'", "Ak'b'al", "K'an", "Chikchan",
-                 "Kimi", "Manik'", "Lamat", "Muluk", "Ok",
-                 "Chuwen", "Eb'", "B'en", "Ix", "Men",
-                 "K'ib'", "Kab'an", "Etz'nab'", "Kawak", "Ajaw"]
+TZOLKIN = [
+    "Imix'",
+    "Ik'",
+    "Ak'b'al",
+    "K'an",
+    "Chikchan",
+    "Kimi",
+    "Manik'",
+    "Lamat",
+    "Muluk",
+    "Ok",
+    "Chuwen",
+    "Eb'",
+    "B'en",
+    "Ix",
+    "Men",
+    "K'ib'",
+    "Kab'an",
+    "Etz'nab'",
+    "Kawak",
+    "Ajaw",
+]
 
-TZOLKIN_TRANSLATIONS = ['Water', 'Wind', 'Darkness', 'Net', 'Feathered Serpent',
-                        'Death', 'Deer', 'Seed', 'Jade', 'Dog',
-                        'Thread', 'Path', 'Maize', 'Tiger', 'Bird', 'Will',
-                        'Wisdom', 'Obsidian Knife', 'Thunder', 'Sun']
+TZOLKIN_TRANSLATIONS = [
+    "Water",
+    "Wind",
+    "Darkness",
+    "Net",
+    "Feathered Serpent",
+    "Death",
+    "Deer",
+    "Seed",
+    "Jade",
+    "Dog",
+    "Thread",
+    "Path",
+    "Maize",
+    "Tiger",
+    "Bird",
+    "Will",
+    "Wisdom",
+    "Obsidian Knife",
+    "Thunder",
+    "Sun",
+]
 
 
 def to_jd(baktun, katun, tun, uinal, kin):
@@ -72,7 +144,7 @@ def to_haab(jd):
     count = day % 20
     month = trunc(day / 20)
 
-    return int(count), HAAB_MONTHS[month]
+    return int(count), HAAB[month]
 
 
 def to_tzolkin(jd):
@@ -80,7 +152,7 @@ def to_tzolkin(jd):
     lcount = trunc(jd) + 0.5 - EPOCH
     day = amod(lcount + 4, 13)
     name = amod(lcount + 20, 20)
-    return int(day), TZOLKIN_NAMES[int(name) - 1]
+    return int(day), TZOLKIN[int(name) - 1]
 
 
 def lc_to_haab(baktun, katun, tun, uinal, kin):
@@ -100,11 +172,11 @@ def lc_to_haab_tzolkin(baktun, katun, tun, uinal, kin):
 
 
 def translate_haab(h):
-    return dict(list(zip(HAAB_MONTHS, HAAB_TRANSLATIONS))).get(h)
+    return dict(list(zip(HAAB, HAAB_TRANSLATIONS))).get(h)
 
 
 def translate_tzolkin(tz):
-    return dict(list(zip(TZOLKIN_NAMES, TZOLKIN_TRANSLATIONS))).get(tz)
+    return dict(list(zip(TZOLKIN, TZOLKIN_TRANSLATIONS))).get(tz)
 
 
 def _haab_count(day, month):
@@ -113,7 +185,7 @@ def _haab_count(day, month):
         raise IndexError("Invalid day number")
 
     try:
-        i = HAAB_MONTHS.index(month)
+        i = HAAB.index(month)
     except ValueError:
         raise ValueError("'{0}' is not a valid Haab' month".format(month))
 
@@ -122,7 +194,7 @@ def _haab_count(day, month):
 
 def _tzolkin_from_count(count):
     number = amod(count, 13)
-    name = TZOLKIN_NAMES[count % 20 - 1]
+    name = TZOLKIN[count % 20 - 1]
     return number, name
 
 
@@ -133,7 +205,7 @@ def _tzolkin_count(day, name):
     days = set(x + day for x in range(0, 260, 13))
 
     try:
-        n = 1 + TZOLKIN_NAMES.index(name)
+        n = 1 + TZOLKIN.index(name)
     except ValueError:
         raise ValueError("'{0}' is not a valid Tzolk'in day name".format(name))
 
@@ -152,7 +224,7 @@ def tzolkin_generator(number=None, name=None):
     if number > 13:
         raise ValueError("Invalid day number")
 
-    if name not in TZOLKIN_NAMES:
+    if name not in TZOLKIN:
         raise ValueError("Invalid day name")
 
     count = _tzolkin_count(number, name)
