@@ -1,6 +1,10 @@
 History
 -------
 
+In development
+--------------
+* Fix bug in Bahai calculations during Ayyám-i-Há (#32). Thanks @chiuczek
+
 2.2.2
 -----
 * Add `observed` argument to the functions for several American holidays (#30)

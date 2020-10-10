@@ -1,23 +1,38 @@
 # -*- coding: utf-8 -*-
+"""Test the Bahá’í calendar"""
 from __future__ import unicode_literals
 import unittest
 import time
-from convertdate import bahai
+from convertdate import bahai, gregorian
 
 
 class TestBahai(unittest.TestCase):
 
     pairs = {
-        (2041, 11, 27): (198, 14, 6),  # ascension of Abdu'l-Bahá 2041
-        (2043, 11, 28): (200, 14, 6),  # ascension of Abdu'l-Bahá 2043
-        (2038, 3, 1): (194, 20, 1),  # beginning of fast 2038
-        (2039, 3, 2): (195, 20, 1),  # beginning of fast 2039
-        (2040, 3, 1): (196, 20, 1),  # beginning of fast 2040
-        (2041, 3, 1): (197, 20, 1),  # beginning of fast 2041
-        (2042, 3, 1): (198, 20, 1),  # beginning of fast 2042
-        (2043, 3, 2): (199, 20, 1),  # beginning of fast 2043
-        (2031, 10, 17): (188, 12, 2),  # twin holy days, 2031
-        (2031, 10, 18): (188, 12, 3)
+        (2041, 11, 27): (198, bahai.QAWL, 6),  # ascension of Abdu'l-Bahá 2041
+        (2043, 11, 28): (200, bahai.QAWL, 6),  # ascension of Abdu'l-Bahá 2043
+        (2038, 3, 1): (194, bahai.ALA, 1),  # beginning of fast 2038
+        (2039, 3, 2): (195, bahai.ALA, 1),  # beginning of fast 2039
+        (2040, 3, 1): (196, bahai.ALA, 1),  # beginning of fast 2040
+        (2041, 3, 1): (197, bahai.ALA, 1),  # beginning of fast 2041
+        (2042, 3, 1): (198, bahai.ALA, 1),  # beginning of fast 2042
+        (2043, 3, 2): (199, bahai.ALA, 1),  # beginning of fast 2043
+        (2031, 10, 17): (188, bahai.ILM, 2),  # twin holy days, 2031
+        (2031, 10, 18): (188, bahai.ILM, 3),
+        (2051, 11, 5): (208, bahai.QUDRAT, 2),
+        (2052, 10, 24): (209, bahai.ILM, 10),
+        (2053, 11, 11): (210, bahai.QUDRAT, 9),
+        (2054, 11, 1): (211, bahai.ILM, 18),
+        (2055, 10, 21): (212, bahai.ILM, 6),
+        (2056, 11, 8): (213, bahai.QUDRAT, 6),
+        (2057, 10, 29): (214, bahai.ILM, 15),
+        (2058, 10, 18): (215, bahai.ILM, 4),
+        (2059, 11, 6): (216, bahai.QUDRAT, 4),
+        (2060, 10, 25): (217, bahai.ILM, 11),
+        (2061, 10, 14): (218, bahai.MASHIYYAT, 19),
+        (2062, 11, 2): (219, bahai.ILM, 19),
+        (2063, 10, 23): (220, bahai.ILM, 9),
+        (2064, 11, 10): (221, bahai.QUDRAT, 8),
     }
 
     def setUp(self):
@@ -41,6 +56,33 @@ class TestBahai(unittest.TestCase):
         for date, gyears in nawruz_official.items():
             for gyear in gyears:
                 self.assertEqual((3, date), bahai.gregorian_nawruz(gyear))
+
+    def test_ayyam_i_ha(self):
+        # source: https://www.bahai.us/events/holy-days/
+        # years with four days in Ayyám-i-Há
+        # bahai_year: gregorian start of Ayyám-i-Há
+        ayyamiha = [
+            {"byear": 208, "gdate": (2052, 2, 26), "days": 4},
+            {"byear": 209, "gdate": (2053, 2, 25), "days": 4},
+            {"byear": 210, "gdate": (2054, 2, 25), "days": 4},
+            {"byear": 211, "gdate": (2055, 2, 25), "days": 5},
+            {"byear": 212, "gdate": (2056, 2, 26), "days": 4},
+            {"byear": 213, "gdate": (2057, 2, 25), "days": 4},
+            {"byear": 214, "gdate": (2058, 2, 25), "days": 4},
+            {"byear": 215, "gdate": (2059, 2, 25), "days": 4},
+            {"byear": 216, "gdate": (2060, 2, 25), "days": 5},
+            {"byear": 217, "gdate": (2061, 2, 25), "days": 4},
+            {"byear": 218, "gdate": (2062, 2, 25), "days": 4},
+            {"byear": 219, "gdate": (2063, 2, 25), "days": 4},
+            {"byear": 220, "gdate": (2064, 2, 25), "days": 5},
+            {"byear": 221, "gdate": (2065, 2, 25), "days": 4},
+        ]
+        with self.subTest():
+            for case in ayyamiha:
+                start_jd = gregorian.to_jd(*case["gdate"])
+                for i in range(case["days"]):
+                    b = bahai.to_jd(case["byear"], bahai.AYYAMIHA, i + 1)
+                    self.assertEqual(start_jd + i, b, "%s Ayyám-i-Há %s" % (i + 1, case["byear"]))
 
     def test_reflexive(self):
         for jd in range(2159677, 2488395, 1867):

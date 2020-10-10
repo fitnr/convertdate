@@ -22,13 +22,72 @@ TEHRAN = 51.4215, 35.6944
 
 WEEKDAYS = ("Jamál", "Kamál", "Fidál", "Idál", "Istijlál", "Istiqlál", "Jalál")
 
-MONTHS = ("Bahá", "Jalál", "Jamál", "‘Aẓamat", "Núr", "Raḥmat", "Kalimát", "Kamál", "Asmá’",
-          "‘Izzat", "Mashíyyat", "‘Ilm", "Qudrat", "Qawl", "Masá’il", "Sharaf", "Sulṭán", "Mulk",
-          "Ayyám-i-Há", "‘Alá")
+MONTHS = (
+    "Bahá",
+    "Jalál",
+    "Jamál",
+    "‘Aẓamat",
+    "Núr",
+    "Raḥmat",
+    "Kalimát",
+    "Kamál",
+    "Asmá’",
+    "‘Izzat",
+    "Mashíyyat",
+    "‘Ilm",
+    "Qudrat",
+    "Qawl",
+    "Masá’il",
+    "Sharaf",
+    "Sulṭán",
+    "Mulk",
+    "Ayyám-i-Há",
+    "‘Alá",
+)
 
-ENGLISH_MONTHS = ("Splendor", "Glory", "Beauty", "Grandeur", "Light", "Mercy", "Words",
-                  "Perfection", "Names", "Might", "Will", "Knowledge", "Power", "Speech", "Questions",
-                  "Honour", "Sovereignty", "Dominion", "Days of Há", "Loftiness")
+ENGLISH_MONTHS = (
+    "Splendor",
+    "Glory",
+    "Beauty",
+    "Grandeur",
+    "Light",
+    "Mercy",
+    "Words",
+    "Perfection",
+    "Names",
+    "Might",
+    "Will",
+    "Knowledge",
+    "Power",
+    "Speech",
+    "Questions",
+    "Honour",
+    "Sovereignty",
+    "Dominion",
+    "Days of Há",
+    "Loftiness",
+)
+
+BAHA = 1
+JALAL = 2
+JAMAL = 3
+AZAMAT = 4
+NUR = 5
+RAHMAT = 6
+KALIMAT = 7
+KAMAL = 8
+ASMA = 9
+IZZAT = 10
+MASHIYYAT = 11
+ILM = 12
+QUDRAT = 13
+QAWL = 14
+MASAIL = 15
+SHARAF = 16
+SULTAN = 17
+MULK = 18
+AYYAMIHA = 19
+ALA = 20
 
 
 def gregorian_nawruz(year):
