@@ -4,6 +4,15 @@
 # Licensed under the MIT license:
 # http:#opensource.org/licenses/MIT
 # Copyright (c) 2017, fitnr <fitnr@fakeisthenewreal>
+"""
+The `Coptic calendar <https://en.wikipedia.org/wiki/Coptic_calendar>`__,
+also called the Alexandrian calendar, is a liturgical calendar used by the
+Coptic Orthodox Church and some communities in Egypt. It is a reformed version
+of the ancient Egyptian calendar.
+
+It consists of twelve months of 30 days, followed by a "little month" of five days
+(six in leap years).
+"""
 from . import gregorian
 from .utils import floor, jwday, monthcalendarhelper
 

@@ -5,6 +5,24 @@
 # http://opensource.org/licenses/MIT
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
 
+"""
+The Bahá'í (Badí) calendar is a solar calendar with 19 months of 19 days.
+
+Every four years, an intercalary period, Ayyam-i-Há, occurs between the 18th and 19th
+months. Dates in this period are returned as month 19, and the month of ‘Alá is always
+reported as month 20.
+
+.. code-block:: python
+
+   from convertdate import bahai
+   # the first day of Ayyam-i-Ha:
+   bahai.to_gregorian(175, 19, 1)
+   # (2019, 2, 26)
+   # The first day of 'Ala:
+   bahai.to_gregorian(175, 20, 1)
+   # (2019, 3, 2)
+
+"""
 from calendar import isleap
 from math import ceil, trunc
 

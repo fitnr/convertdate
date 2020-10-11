@@ -4,6 +4,11 @@
 # Licensed under the MIT license:
 # http://opensource.org/licenses/MIT
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
+"""
+The Indian Civil calendar, also called the Indian national calendar, or the Shalivahana Shaka calendar,
+was instituted following independence. It consists of twelve months of 31 or 30 days, with a
+leap day every four years.
+"""
 from calendar import isleap
 from math import trunc
 

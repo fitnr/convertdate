@@ -5,6 +5,8 @@ The convertdate package was originally developed as "[Python Date
 Utils](http://sourceforge.net/projects/pythondateutil/)" by Phil
 Schwartz. It had been significantly updated and expanded.
 
+[Consult the complete docs for detailed usage info](https://convertdate.readthedocs.io/).
+
 Available calendars:
 
 -   Armenian
@@ -38,39 +40,37 @@ Or download the package and run `python setup.py install`.
 Using
 -----
 
-    from convertdate import french_republican
-    from convertdate import hebrew
-
-    french_republican.from_gregorian(2014, 10, 31)
-    # (223, 2, 9)
-
-    hebrew.from_gregorian(2014, 10, 31)
-    # (5775, 8, 7)
+    >>> from convertdate import french_republican
+    >>> from convertdate import hebrew
+    >>> french_republican.from_gregorian(2014, 10, 31)
+    (223, 2, 9)
+    >>> hebrew.from_gregorian(2014, 10, 31)
+    (5775, 8, 7)
 
 Note that in some calendar systems, the day begins at sundown.
 Convertdate gives the conversion for noon of the day in question.
 
-Each module includes a monthcalendar function, which will generate a
+Each module includes a `monthcalendar` function, which will generate a
 calender-like nested list for a year and month (each list of dates runs
 from Sunday to Saturday)
 
-    hebrew.monthcalendar(5775, 8)
-    # [
-    #     [None, None, None, None, None, None, 1],
-    #     [2, 3, 4, 5, 6, 7, 8],
-    #     [9, 10, 11, 12, 13, 14, 15],
-    #     [16, 17, 18, 19, 20, 21, 22],
-    #     [23, 24, 25, 26, 27, 28, 29]
-    # ]
+    >>> hebrew.monthcalendar(5775, 8)
+    [
+        [None, None, None, None, None, None, 1],
+        [2, 3, 4, 5, 6, 7, 8],
+        [9, 10, 11, 12, 13, 14, 15],
+        [16, 17, 18, 19, 20, 21, 22],
+        [23, 24, 25, 26, 27, 28, 29]
+    ]
 
-    julian.monthcalendar(2015, 1)
-    # [
-    #    [None, None, None, 1, 2, 3, 4],
-    #    [5, 6, 7, 8, 9, 10, 11],
-    #    [12, 13, 14, 15, 16, 17, 18],
-    #    [19, 20, 21, 22, 23, 24, 25],
-    #    [26, 27, 28, 29, 30, 31, None]
-    # ]
+    >>> julian.monthcalendar(2015, 1)
+    [
+       [None, None, None, 1, 2, 3, 4],
+       [5, 6, 7, 8, 9, 10, 11],
+       [12, 13, 14, 15, 16, 17, 18],
+       [19, 20, 21, 22, 23, 24, 25],
+       [26, 27, 28, 29, 30, 31, None]
+    ]
 
 Special Options
 ---------------
