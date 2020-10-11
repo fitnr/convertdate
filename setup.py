@@ -20,8 +20,6 @@ with open('src/convertdate/__init__.py') as i:
 
 tests_require = [
     "coverage",
-    "pylint",
-    "isort",
 ]
 
 setup(

@@ -11,7 +11,7 @@ all:
 htmlcov: | test
 	python -m coverage html
 
-test:
+cov:
 	python -m coverage run --branch --source=convertdate -m unittest
 	python -m coverage report
 
