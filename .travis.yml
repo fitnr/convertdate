@@ -20,9 +20,7 @@ python:
 matrix:
   exclude:
     - arch: ppc64le
-      python:
-        - pypy
-        - pypy3
+      python: pypy3
 
 # Use container-based infrastructure
 sudo: false
