@@ -166,13 +166,21 @@ def juneteenth(year):
     '''19th of June'''
     return year, JUN, 19
 
+
 def flag_day(year):
     '''June 14th'''
     return (year, JUN, 14)
 
 
 def independence_day(year, observed=None):
-    '''July 4th'''
+    """Independence Day in the United States, celebrated on July 4th.
+    May be observed on the previous or following day if it occurs on a Saturday
+    or Sunday.
+
+    Arguments:
+        year (int): Gregorian year
+        observed (boolean): If ``True``, return the date of observation.
+    """
     day = 4
 
     if observed:
@@ -191,8 +199,7 @@ def labor_day(year):
 
 
 def indigenous_peoples_day(year, country='usa'):
-    """in USA: 2nd Monday in Oct
-    Elsewhere: Oct 12"""
+    """Celebrated on the second Monday in October in the United States."""
     if country == 'usa':
         return nth_day_of_month(2, MON, OCT, year)
 
@@ -200,17 +207,20 @@ def indigenous_peoples_day(year, country='usa'):
 
 
 def columbus_day(year, country='usa'):
-    raise DeprecationWarning("columbus_day will be removed in a future release")
+    raise DeprecationWarning(
+        "columbus_day will be removed in a future release, use indigenous_peoples_day instead"
+    )
     return indigenous_peoples_day(year, country)
 
 
 def halloween(year):
-    '''Oct 31'''
+    '''Halloween is celebrated on October 31st.'''
     return (year, OCT, 31)
 
 
 def election_day(year):
-    '''1st Tues in Nov'''
+    """In most jurisdictions in the United States, Election day occurs on
+    the first Tuesday in November."""
     return nth_day_of_month(1, TUE, NOV, year)
 
 
@@ -236,7 +246,13 @@ def armistice_day(year):
 
 
 def thanksgiving(year, country='usa'):
-    '''USA: last Thurs. of November, Canada: 2nd Mon. of October'''
+    """In the United States, Thanksgiving is celebrated on the last Thursday
+    of November. In Canada, on the second Monday of October.
+
+    Arguments:
+        year (int): Gregorian year
+        country (str): either ``'usa'`` (default) or ``'canada'``
+    """
     if country == 'usa':
         if year in [1940, 1941]:
             return nth_day_of_month(3, THU, NOV, year)
@@ -252,12 +268,19 @@ def thanksgiving(year, country='usa'):
 
 
 def christmas_eve(year):
-    '''24th of December'''
+    '''The day before Christmas, or 24th of December.'''
     return (year, DEC, 24)
 
 
 def christmas(year, observed=None):
-    '''25th of December'''
+    """Christmas is celebrated on the 25th of December. For the purposes of
+    business closings, it may be observed on the previous or following day if
+    the 25th falls on a Saturday or Sunday, respectively.
+
+    Arguments:
+        year (int): Gregorian year
+        observed (boolean): If ``True``, return the date of observation.
+    """
     day = 25
     if observed:
         weekday = calendar.weekday(year, DEC, 25)
@@ -269,7 +292,7 @@ def christmas(year, observed=None):
 
 
 def new_years_eve(year):
-    '''Dec 31st'''
+    """The last day of the Gregorian year, December. 31st."""
     return (year, DEC, 31)
 
 
@@ -319,6 +342,9 @@ def shavuot(year, eve=None):
 
 
 def sukkot(year, eve=None):
+    """Sukkot, the Feast of Tabernacles or Festival of Shelters, is celebrated on
+    the 15th of Tishri.
+    """
     jd = hebrew.to_jd_gregorianyear(year, hebrew.TISHRI, 15)
     if eve:
         jd = jd - 1
@@ -340,6 +366,8 @@ def lag_baomer(year, eve=None):
 
 
 def tu_beshvat(year, eve=None):
+    """Tu BeShvat, the 'New Year of Trees', is celebrated on the 15th of Shevat.
+    """
     jd = hebrew.to_jd_gregorianyear(year, hebrew.SHEVAT, 15)
     if eve:
         jd = jd - 1
@@ -347,6 +375,9 @@ def tu_beshvat(year, eve=None):
 
 
 def tisha_bav(year, eve=None):
+    """Tisha B'Av is a fast day generally celebrated on the 9th of Av, but 
+    sometimes postponed to the following day.
+    """
     jd = hebrew.to_jd_gregorianyear(year, hebrew.AV, 9)
     if jwday(jd) == SAT:
         jd = jd + 1
@@ -399,6 +430,7 @@ def dia_revolucion(year):
 
 
 def ramadan(year, eve=None):
+    """The first day of Ramadan, the month of fasting in the Islamic calendar."""
     jd = islamic.to_jd_gregorianyear(year, 9, 1)
     if eve:
         jd = jd = 1
@@ -406,6 +438,8 @@ def ramadan(year, eve=None):
 
 
 def ashura(year, eve=None):
+    """Ashura is celebrated on the tenth day of Muharram, the first month in the
+    Islamic calendar."""
     jd = islamic.to_jd_gregorianyear(year, 1, 10)
     if eve:
         jd = jd = 1
@@ -413,6 +447,8 @@ def ashura(year, eve=None):
 
 
 def eid_alfitr(year, eve=None):
+    """Eid al-Fitr, the 'Festival of Breaking the Fast' is celebrated the first
+    day of the month of Shawwāl."""
     jd = islamic.to_jd_gregorianyear(year, 10, 1)
     if eve:
         jd = jd = 1
@@ -420,6 +456,8 @@ def eid_alfitr(year, eve=None):
 
 
 def eid_aladha(year, eve=None):
+    """Eid al-Adha, the 'Festival of the Sacrifice' begins on the tenth
+    day of the month of Zū al-Ḥijjah."""
     jd = islamic.to_jd_gregorianyear(year, 12, 10)
     if eve:
         jd = jd = 1
