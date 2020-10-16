@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 import time
-import unittest
 
 from convertdate import gregorian, mayan
 
+from . import CalTestCase
 
-class TestMayan(unittest.TestCase):
+
+class TestMayan(CalTestCase):
     def setUp(self):
         self.tm = time.localtime()
         self.gregoriandate = (self.tm[0], self.tm[1], self.tm[2])
@@ -19,14 +18,10 @@ class TestMayan(unittest.TestCase):
 
         self.jdcs = range(2159677, 2488395, 2000)
 
-    def reflexive(self, from_func, to_func):
-        for jd in self.jdcs:
-            self.assertEqual(jd + 0.5, to_func(*from_func(jd + 0.5)))
-
     def test_mayan_reflexive(self):
         assert self.jd == mayan.to_jd(*mayan.from_jd(self.jd))
 
-        self.reflexive(mayan.from_jd, mayan.to_jd)
+        self.reflexive(mayan)
 
     def test_mayan_count(self):
         assert mayan.to_jd(13, 0, 0, 0, 0) == 2456282.5
@@ -89,7 +84,3 @@ class TestMayan(unittest.TestCase):
         self.assertEqual(next(tzg), (9, "Ix"))
         assert next(tzg) == (10, "Men")
         assert next(tzg) == (11, "K'ib'")
-
-
-if __name__ == '__main__':
-    unittest.main()

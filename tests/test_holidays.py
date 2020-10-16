@@ -6,7 +6,6 @@ from convertdate import holidays, julian
 
 
 class TestHolidays(unittest.TestCase):
-
     def setUp(self):
         self.h = holidays.Holidays(2015)
 
@@ -176,7 +175,23 @@ class TestHolidays(unittest.TestCase):
     def testNonChalcedonian(self):
         # In these years, Orthodox Easter falls on 6 April (Julian),
         # but Non-Chalcedonian churches celebrate it a week later on 13 Aprail
-        years = 570, 665, 760, 1007, 1102, 1197, 1292, 1539, 1634, 1729, 1824, 2071, 2166, 2261, 2356
+        years = (
+            570,
+            665,
+            760,
+            1007,
+            1102,
+            1197,
+            1292,
+            1539,
+            1634,
+            1729,
+            1824,
+            2071,
+            2166,
+            2261,
+            2356,
+        )
 
         for y in years:
             orthodox = julian.from_gregorian(*holidays.easter(y, "orthodox"))
@@ -296,7 +311,3 @@ class TestHolidays(unittest.TestCase):
         with self.subTest():
             for name, date in holidays_2021.items():
                 self.assertEqual(getattr(h21, name), date, name)
-
-
-if __name__ == '__main__':
-    unittest.main()

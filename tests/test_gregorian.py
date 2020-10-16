@@ -1,15 +1,12 @@
 # -*- coding: utf-8 -*-
 import time
-import unittest
 
 from convertdate import gregorian, julian
 
+from . import CalTestCase
 
-class TestGregorian(unittest.TestCase):
-    def reflexive(self, from_func, to_func):
-        for jd in self.jdcs:
-            self.assertEqual(jd + 0.5, to_func(*from_func(jd + 0.5)))
 
+class TestGregorian(CalTestCase):
     def setUp(self):
         self.tm = time.localtime()
         self.gregoriandate = (self.tm[0], self.tm[1], self.tm[2])
@@ -91,7 +88,3 @@ class TestGregorian(unittest.TestCase):
         self.assertRaises(ValueError, gregorian.to_jd, 2014, 3, 32)
         self.assertRaises(ValueError, gregorian.to_jd, 2014, 4, 31)
         self.assertRaises(ValueError, gregorian.to_jd, 2014, 5, -1)
-
-
-if __name__ == '__main__':
-    unittest.main()

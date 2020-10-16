@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 import time
 import unittest
 
@@ -231,7 +229,8 @@ class TestFrenchRepublican(unittest.TestCase):
 
     def test_french_republican_schematic_romme(self):
         self.assertEqual(
-            self.gregoriandate, fr.to_gregorian(*fr.from_gregorian(*self.gregoriandate, method=100), method=100)
+            self.gregoriandate,
+            fr.to_gregorian(*fr.from_gregorian(*self.gregoriandate, method=100), method=100),
         )
 
         self.assertEqual(self.jd, fr.to_jd(*fr.from_jd(self.jd, method='romme'), method=100))
@@ -324,7 +323,3 @@ class TestFrenchRepublican(unittest.TestCase):
         self.assertEqual(fr.day_name(4, 18), "Pierre à chaux")
         self.assertEqual(fr.day_name(12, 15), "Truite")
         self.assertEqual(fr.day_name(13, 1), "La Fête de la Vertu")
-
-
-if __name__ == '__main__':
-    unittest.main()

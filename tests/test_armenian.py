@@ -6,8 +6,10 @@ from convertdate import julianday
 from convertdate.armenian import (_valid_date, from_gregorian, from_jd, from_julian, leap, month_length, to_gregorian,
                                   to_jd, to_julian, tostring)
 
+from . import CalTestCase
 
-class TestArmenian(unittest.TestCase):
+
+class TestArmenian(CalTestCase):
     def setUp(self):
         self.now = time.localtime()
         self.today = julianday.from_gregorian(self.now[0], self.now[1], self.now[2])
@@ -106,7 +108,3 @@ class TestArmenian(unittest.TestCase):
 
     def testTostring(self):
         self.assertEqual('14 trē 1469', tostring(1469, 4, 14))
-
-
-if __name__ == '__main__':
-    unittest.main()

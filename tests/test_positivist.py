@@ -92,7 +92,3 @@ class TestGregorian(unittest.TestCase):
     def test_festival(self):
         self.assertIsNone(festival(1, 2))
         self.assertEqual(festival(1, 1), data.FESTIVALS.get((1, 1)))
-
-
-if __name__ == '__main__':
-    unittest.main()

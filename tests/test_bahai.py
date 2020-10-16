@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 """Test the Bahá’í calendar"""
-from __future__ import unicode_literals
-
 import time
 import unittest
 
 from convertdate import bahai, gregorian
 
+from . import CalTestCase
 
-class TestBahai(unittest.TestCase):
+
+class TestBahai(CalTestCase):
 
     pairs = {
         (2041, 11, 27): (198, bahai.QAWL, 6),  # ascension of Abdu'l-Bahá 2041
@@ -40,6 +40,13 @@ class TestBahai(unittest.TestCase):
     def setUp(self):
         self.tm = time.localtime()
         self.gregoriandate = (self.tm[0], self.tm[1], self.tm[2])
+
+    def test_reflexive(self):
+        self.reflexive(bahai)
+
+    def test_monthlength(self):
+        self.assertEqual(bahai.month_length(1, 3), 19)
+        self.assertEqual(bahai.month_length(1, 1), 19)
 
     def test_gregorian_nawruz(self):
         nawruz_official = {
@@ -81,7 +88,22 @@ class TestBahai(unittest.TestCase):
                 2063,
                 2064,
             ],
-            21: [2015, 2018, 2019, 2022, 2023, 2026, 2027, 2031, 2035, 2039, 2043, 2047, 2051, 2055],
+            21: [
+                2015,
+                2018,
+                2019,
+                2022,
+                2023,
+                2026,
+                2027,
+                2031,
+                2035,
+                2039,
+                2043,
+                2047,
+                2051,
+                2055,
+            ],
         }
 
         for date, gyears in nawruz_official.items():
@@ -181,6 +203,5 @@ class TestBahai(unittest.TestCase):
                 byear = gyear - 1844
                 self.assertEqual(length, bahai.month_length(byear, 19))
 
-
-if __name__ == '__main__':
-    unittest.main()
+    def test_returntype(self):
+        self.assertSequenceType(bahai.from_gregorian(2020, 6, 4), int)
