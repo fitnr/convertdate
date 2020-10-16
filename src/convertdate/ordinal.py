@@ -31,7 +31,10 @@ def from_gregorian(year, month, day):
 
     leap = isleap(year)
 
-    t = (trunc(30.6 * m) + day - 122 + 59 + leap) % (365 + leap)
+    t = trunc(30.6 * m) + day - 122 + 59 + leap
+
+    if t > 365 + leap:
+        t = t - 365 - leap
 
     return year, t
 
