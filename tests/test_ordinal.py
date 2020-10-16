@@ -122,7 +122,7 @@ class TestOrdinal(unittest.TestCase):
         self.assertEqual(ordinal.from_gregorian(year, month, day), (year, dayofyear))
 
     def test_from_gregorian_for_december_31(self):
-        common_year = random.randint(-10000, 10000) - 1
+        common_year = random.randint(-10000, 10000) * 4 - 1
         leap_year = common_year * 4
         self.assertEqual(ordinal.from_gregorian(common_year, 12, 31), (common_year, 365))
         self.assertEqual(ordinal.from_gregorian(leap_year, 12, 31), (leap_year, 366))
@@ -132,7 +132,7 @@ class TestOrdinal(unittest.TestCase):
         self.assertEqual(ordinal.to_gregorian(year, dayofyear), (year, month, day))
 
     def test_to_gregorian_for_december_31(self):
-        common_year = random.randint(-10000, 10000) - 1
+        common_year = random.randint(-10000, 10000) * 4 - 1
         leap_year = common_year * 4
         self.assertEqual(ordinal.to_gregorian(common_year, 365), (common_year, 12, 31))
         self.assertEqual(ordinal.to_gregorian(leap_year, 366), (leap_year, 12, 31))
