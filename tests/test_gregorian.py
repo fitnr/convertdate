@@ -27,7 +27,7 @@ class TestGregorian(CalTestCase):
 
         assert gregorian.to_jd2(2000, 1, 1) == 2451544.5
 
-        self.reflexive(gregorian.from_jd, gregorian.to_jd)
+        self.reflexive(gregorian)
 
     def test_gregorian_proleptic(self):
         self.assertEqual(gregorian.to_jd(72, 6, 27), 1747535.5)

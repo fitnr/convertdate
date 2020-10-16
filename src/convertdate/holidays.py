@@ -162,6 +162,10 @@ def fathers_day(year):
     return nth_day_of_month(3, SUN, JUN, year)
 
 
+def juneteenth(year):
+    '''19th of June'''
+    return year, JUN, 19
+
 def flag_day(year):
     '''June 14th'''
     return (year, JUN, 14)
@@ -186,13 +190,18 @@ def labor_day(year):
     return nth_day_of_month(1, MON, SEP, year)
 
 
-def columbus_day(year, country='usa'):
+def indigenous_peoples_day(year, country='usa'):
     """in USA: 2nd Monday in Oct
     Elsewhere: Oct 12"""
     if country == 'usa':
         return nth_day_of_month(2, MON, OCT, year)
 
     return (year, OCT, 12)
+
+
+def columbus_day(year, country='usa'):
+    raise DeprecationWarning("columbus_day will be removed in a future release")
+    return indigenous_peoples_day(year, country)
 
 
 def halloween(year):
@@ -421,6 +430,7 @@ class Holidays:
     '''Convenience class for fetching many holidays in a given year.'''
 
     # pylint: disable=missing-function-docstring
+
     def __init__(self, year=None):
         self.year = year or time.localtime().tm_year
 
@@ -480,12 +490,20 @@ class Holidays:
         return memorial_day(self.year)
 
     @property
+    def juneteenth(self):
+        return juneteenth(self.year)
+
+    @property
     def labor_day(self):
         return labor_day(self.year)
 
     @property
+    def indigenous_peoples_day(self):
+        return indigenous_peoples_day(self.year)
+
+    @property
     def columbus_day(self):
-        return columbus_day(self.year)
+        return indigenous_peoples_day(self.year)
 
     @property
     def veterans_day(self):

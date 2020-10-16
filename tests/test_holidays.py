@@ -21,7 +21,7 @@ class TestHolidays(unittest.TestCase):
         h = holidays.Holidays(2014)
         self.assertEqual(h.christmas, (2014, 12, 25))
         assert h.thanksgiving == (2014, 11, 27)
-        assert h.columbus_day == (2014, 10, 13)
+        assert h.indigenous_peoples_day == (2014, 10, 13)
 
         assert h.independence_day == (2014, 7, 4)
 
@@ -56,7 +56,7 @@ class TestHolidays(unittest.TestCase):
 
         assert holidays.may_day(2015) == (2015, 5, 1)
 
-        assert holidays.columbus_day(2015, 'canada') == (2015, 10, 12)
+        assert holidays.indigenous_peoples_day(2015, 'canada') == (2015, 10, 12)
 
         assert holidays.independence_day(2015) == (2015, 7, 4)
         assert holidays.independence_day(2015, True) == (2015, 7, 3)
@@ -278,7 +278,7 @@ class TestHolidays(unittest.TestCase):
         assert self.h.lincolns_birthday == (2015, 2, 12)
         assert self.h.memorial_day == (2015, 5, 25)
         assert self.h.labor_day == (2015, 9, 7)
-        assert self.h.columbus_day == (2015, 10, 12)
+        assert self.h.indigenous_peoples_day == (2015, 10, 12)
         assert self.h.veterans_day == (2015, 11, 11)
         assert self.h.martin_luther_king_day == (2015, 1, 19)
 
@@ -290,6 +290,10 @@ class TestHolidays(unittest.TestCase):
         assert holidays.washingtons_birthday(2020, True) == (2020, 2, 17)
         assert holidays.new_years(2022, True) == (2021, 12, 31)
         self.assertSequenceEqual(holidays.christmas(2021, True), (2021, 12, 24))
+
+    def test_deprecated_columbus_day(self):
+        with self.assertRaises(DeprecationWarning):
+            holidays.columbus_day(2020)
 
     def test_islamic_holidays(self):
         """Test the dates of certain Islamic holidays."""

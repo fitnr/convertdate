@@ -9,6 +9,9 @@ In development
  - french_republican: add `MONTHS`
  - mayan: rename `HAAB_MONTHS` to `HAAB`, rename `TZOLKIN_NAMES` to `TZOLKIN`
 * Add some Jewish and Islamic holidays to `holidays`: `shemini_azeret`, `lag_baomer`, `tu_beshvat`, `tisha_bav`, `ramadan`, `ashura`, `eid_alfitr`, `eid_aladha`.
+* Add docs. See https://convertdate.readthedocs.io/
+* Fix December 31st bug in `ordinal` (#34).
+* Add Indigenous Peoples' Day and Juneteenth to `holidays`. Deprecate Columbus day.
 
 2.2.2
 -----
