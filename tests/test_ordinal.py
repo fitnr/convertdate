@@ -136,3 +136,7 @@ class TestOrdinal(unittest.TestCase):
         leap_year = common_year * 4
         self.assertEqual(ordinal.to_gregorian(common_year, 365), (common_year, 12, 31))
         self.assertEqual(ordinal.to_gregorian(leap_year, 366), (leap_year, 12, 31))
+
+
+if __name__ == '__main__':
+    unittest.main()
