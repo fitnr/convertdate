@@ -207,14 +207,27 @@ def monthcalendar(year, month):
 
 def tostring(year, month, day, lang=None):
     """Convert a Hebrew date into a string with the format DD MONTH YYYY."""
+    if year < 1:
+        return "Not a valid year"
     lang = lang or "en"
     if lang[0:2] == "he" :
+        # the hebrew gematria is a string of letters that represent a number
+        # it is the traditional way to write down a date in this calendar
+        # for year numbers greater than 1000, the gematria must be split 
+        # into a millenia part, and a year part
         str_year = ''
         if year > 999:
-            large_part = (year//1000)*1000
-            year = year-large_part
-            str_year += int_to_gematria(large_part//1000)
-        str_year += int_to_gematria(year)
+            millenia = year//1000
+            year = year - (millenia*1000)
+            if year > 0:
+                str_year += int_to_gematria(millenia)
+            else: #special representation for multiples of 1000
+                if millenia > 1:
+                    str_year += int_to_gematria(millenia-1)
+        if year > 0:
+            str_year += int_to_gematria(year)
+        else: #special representation for multiples of 1000
+            str_year += u"תת״ר"
         return f"{int_to_gematria(day)} {MONTHS_HEB.get(month)} {str_year}"
     else:
         return f"{day} {MONTHS.get(month)} {year}"
