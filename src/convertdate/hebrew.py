@@ -9,6 +9,8 @@ from math import trunc
 from . import gregorian
 from .utils import jwday, monthcalendarhelper
 
+from hebrew_numbers import int_to_gematria
+
 EPOCH = 347995.5
 HEBREW_YEAR_OFFSET = 3760
 
@@ -26,6 +28,38 @@ TEVETH = 10
 SHEVAT = 11
 ADAR = 12
 VEADAR = 13
+
+MONTHS = {
+        7: 'TISHRI',
+        8: 'HESHVAN',
+        9: 'KISLEV',
+        10: 'TEVETH',
+        11: 'SHEVAT',
+        12: 'ADAR',
+        13: 'ADAR BET',
+        1: 'NISAN',
+        2: 'IYYAR',
+        3: 'SIVAN',
+        4: 'TAMMUZ',
+        5: 'AV',
+        6: 'ELUL'
+}
+
+MONTHS_HEB = {
+        7: u'תשרי',
+        8: u'חשוון',
+        9: u'כסלו',
+        10: u'טבת',
+        11: u'שבט',
+        12: u'אדר',
+        13: u'אדר ב',
+        1: u'ניסן',
+        2: u'אייר',
+        3: u'סיוון',
+        4: u'תמוז',
+        5: u'אב',
+        6: u'אלול'
+}
 
 
 def leap(year):
@@ -170,3 +204,17 @@ def monthcalendar(year, month):
     start_weekday = jwday(to_jd(year, month, 1))
     monthlen = month_days(year, month)
     return monthcalendarhelper(start_weekday, monthlen)
+
+def tostring(year, month, day, lang=None):
+    """Convert a Hebrew date into a string with the format DD MONTH YYYY."""
+    lang = lang or "en"
+    if lang[0:2] == "he" :
+        str_year = ''
+        if year > 999:
+            large_part = (year//1000)*1000
+            year = year-large_part
+            str_year += int_to_gematria(large_part//1000)
+        str_year += int_to_gematria(year)
+        return f"{int_to_gematria(day)} {MONTHS_HEB.get(month)} {str_year}"
+    else:
+        return f"{day} {MONTHS.get(month)} {year}"

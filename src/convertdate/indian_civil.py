@@ -138,3 +138,7 @@ def monthcalendar(year, month):
     start_weekday = jwday(to_jd(year, month, 1))
     monthlen = month_length(year, month)
     return monthcalendarhelper(start_weekday, monthlen)
+
+def tostring(year, month, day):
+    """Convert a Indian Civil date into a string with the format DD MONTH YYYY."""
+    return "{0:d} {1:} {2:d}".format(day, MONTHS[month-1], year)

@@ -12,6 +12,21 @@ from .utils import ceil, jwday, monthcalendarhelper
 EPOCH = 1948320.5
 WEEKDAYS = ("Doshanbeh", "Seshhanbeh", "Chaharshanbeh", "Panjshanbeh", "Jomeh", "Shanbeh", "Yekshanbeh")
 
+MONTHS = [
+    "Farvardin",
+    "Ordibehesht",
+    "Khordad",
+    "Tir",
+    "Mordad",
+    "Shahrivar",
+    "Mehr",
+    "Aban",
+    "Azar",
+    "Dey",
+    "Bahman",
+    "Esfand"
+]
+
 HAS_31_DAYS = (1, 2, 3, 4, 5, 6)
 HAS_30_DAYS = (7, 8, 9, 10, 11)
 
@@ -104,3 +119,7 @@ def monthcalendar(year, month):
     start_weekday = jwday(to_jd(year, month, 1))
     monthlen = month_length(year, month)
     return monthcalendarhelper(start_weekday, monthlen)
+
+def tostring(year, month, day):
+    """Convert a Persian date into a string with the format DD MONTH YYYY."""
+    return "{0:d} {1:} {2:d}".format(day, MONTHS[month-1], year)
