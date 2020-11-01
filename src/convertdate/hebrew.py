@@ -171,6 +171,13 @@ def from_jd(jd):
     return (year, month, day)
 
 
+def to_civil(year, month, day):
+    """Convert a date in the ecclestical calendar (year starts in Nisan) to
+    the civil calendar (year starts in Tishrei)."""
+    if month >= TISHRI:
+        year = year + 1
+    return year, month, day
+
 def to_jd_gregorianyear(gregorianyear, hebrew_month, hebrew_day):
     '''Returns the Gregorian date when a given Hebrew month and year within a given Gregorian year.'''
     # gregorian year is either 3760 or 3761 years less than hebrew year
