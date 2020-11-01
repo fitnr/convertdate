@@ -9,6 +9,12 @@ class TestOrdinal(CalTestCase):
     def test_reflexive(self):
         self.reflexive(ordinal, range(2458849, 2458849 + 7289))
 
+    def test_to_jd(self):
+        self.assertEqual(ordinal.to_jd(1900, 1), 2415020.5)
+
+    def test_from_jd(self):
+        self.assertEqual(ordinal.from_jd(2415020.5), (1900, 1))
+
     def test_ordinal_to_gregorian(self):
         self.assertEqual(ordinal.to_gregorian(2013, 1), (2013, 1, 1))
         self.assertEqual(ordinal.to_gregorian(2013, 105), (2013, 4, 15))
@@ -31,7 +37,7 @@ class TestOrdinal(CalTestCase):
         self.assertEqual(ordinal.from_gregorian(1, 1, 1), (1, 1))
 
     def test_dec_31(self):
-        self.assertEqual(ordinal.to_gregorian(2001, 364), (2001, 12, 30))
+        self.assertEqual(ordinal.to_gregorian(2001, 364), (2001, 12, 30), 'December 30, 2001')
         self.assertEqual(ordinal.to_gregorian(2004, 365), (2004, 12, 30))
         self.assertEqual(ordinal.to_gregorian(2001, 365), (2001, 12, 31))
         self.assertEqual(ordinal.to_gregorian(2004, 366), (2004, 12, 31))

@@ -7,6 +7,8 @@
 """
 The `ordinal date <https://en.wikipedia.org/wiki/Ordinal_date>` specifies the day
 of year as a number between 1 and 366.
+
+Ordinal dates are represented by a tuple: ``(year, dayofyear)``
 """
 from calendar import isleap
 from math import trunc
@@ -15,15 +17,18 @@ from . import gregorian
 
 
 def to_jd(year, dayofyear):
-    '''Return Julian day count of given ISO year, and day of year'''
+    '''Return Julian day count of given ordinal date.'''
     return gregorian.to_jd(year, 1, 1) + dayofyear - 1
 
 
 def from_jd(jd):
-    return from_gregorian(*gregorian.from_jd(jd))
+    '''Convert a Julian day count to an ordinal date.'''
+    year, _, _ = gregorian.from_jd(jd)
+    return year, round(jd - gregorian.to_jd(year, 1, 1) + 1)
 
 
 def from_gregorian(year, month, day):
+    """Convert a Gregorian date to an ordinal date."""
     m = month + 1
 
     if m <= 3:
@@ -40,6 +45,7 @@ def from_gregorian(year, month, day):
 
 
 def to_gregorian(year, dayofyear):
+    """Convert an ordinal date to a Gregorian date."""
     leap = isleap(year)
 
     if dayofyear < 59 + leap:
