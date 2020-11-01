@@ -68,13 +68,14 @@ def leap(year):
 def year_months(year):
     '''How many months are there in a Hebrew year (12 = normal, 13 = leap)'''
     if leap(year):
-        return 13
+        return VEADAR
 
-    return 12
+    return ADAR
 
 
 def delay_1(year):
-    '''Test for delay of start of new year and to avoid'''
+    '''Test for delay of start of the ecclesiastical new year to
+    avoid improper weekdays for holidays.'''
     # Sunday, Wednesday, and Friday as start of the new year.
     months = trunc(((235 * year) - 234) / 19)
     parts = 12084 + (13753 * months)
@@ -87,7 +88,8 @@ def delay_1(year):
 
 
 def delay_2(year):
-    '''Check for delay in start of new year due to length of adjacent years'''
+    '''Check for delay in start of the ecclesiastical new year due to length
+    of adjacent years'''
     last = delay_1(year - 1)
     present = delay_1(year)
     next_ = delay_1(year + 1)
@@ -108,7 +110,7 @@ def year_days(year):
 
 def month_days(year, month):
     '''How many days are in a given month of a given year'''
-    if month > 13:
+    if month > VEADAR:
         raise ValueError("Incorrect month index")
 
     # First of all, dispose of fixed-length 29 day months
@@ -135,15 +137,15 @@ def to_jd(year, month, day):
     months = year_months(year)
     jd = EPOCH + delay_1(year) + delay_2(year) + day + 1
 
-    if month < 7:
-        for mon in range(7, months + 1):
-            jd += month_days(year, mon)
+    if month < TISHRI:
+        for m in range(TISHRI, months + 1):
+            jd += month_days(year, m)
 
-        for mon in range(1, month):
-            jd += month_days(year, mon)
+        for m in range(NISAN, month):
+            jd += month_days(year, m)
     else:
-        for mon in range(7, month):
-            jd += month_days(year, mon)
+        for m in range(TISHRI, month):
+            jd += month_days(year, m)
 
     return int(jd) + 0.5
 
@@ -153,11 +155,11 @@ def from_jd(jd):
     count = trunc(((jd - EPOCH) * 98496.0) / 35975351.0)
     year = count - 1
     i = count
-    while jd >= to_jd(i, 7, 1):
+    while jd >= to_jd(i, TISHRI, 1):
         i += 1
         year += 1
 
-    if jd < to_jd(year, 1, 1):
+    if jd < to_jd(year, NISAN, 1):
         first = 7
     else:
         first = 1
