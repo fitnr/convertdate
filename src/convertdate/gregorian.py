@@ -5,6 +5,7 @@
 # http://opensource.org/licenses/MIT
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
 from calendar import isleap, monthrange
+from datetime import date
 
 from .utils import floor, jwday, monthcalendarhelper
 
@@ -123,3 +124,8 @@ def monthcalendar(year, month):
     monthlen = month_length(year, month)
 
     return monthcalendarhelper(start_weekday, monthlen)
+
+def format(year, month, day, format_string="%d %B %Y"):
+    # pylint: disable=redefined-builtin
+    d = date(year,month,day)
+    return d.strftime(format_string)

@@ -166,9 +166,9 @@ def monthcalendar(year, month, method=None):
     monthlen = month_length(year, month, method)
     return monthcalendarhelper(start_weekday, monthlen)
 
-
-def tostring(year, month, day, lang=None):
+def format(year, month, day, lang=None):
     """Convert an Armenian date into a string with the format DD MONTH YYYY."""
+    # pylint: disable=redefined-builtin
     lang = lang or "en"
     if lang[0:2] == 'hy' or lang[0:2] == 'am' or lang == 'arm':
         month_name = MONTHS_ARM[month - 1]
@@ -176,3 +176,7 @@ def tostring(year, month, day, lang=None):
         month = month_name = MONTHS[month - 1]
 
     return "{0:d} {1:} {2:d}".format(day, month_name, year)
+
+def tostring(year, month, day, lang=None):
+    """Kept for backwards compatibility, the format function name will be standard across the library"""
+    return format(year, month, day, lang)

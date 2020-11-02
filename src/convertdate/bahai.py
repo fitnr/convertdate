@@ -204,8 +204,9 @@ def monthcalendar(year, month):
     monthlen = month_length(year, month)
     return monthcalendarhelper(start_weekday, monthlen)
 
-def tostring(year, month, day, lang=None):
+def format(year, month, day, lang=None):
     """Convert a Baha'i date into a string with the format DD MONTH YYYY."""
+    # pylint: disable=redefined-builtin
     lang = lang or "en"
     if lang[0:2] == 'ar' or lang[0:2] == 'fa':
         month_name = MONTHS[month - 1]
