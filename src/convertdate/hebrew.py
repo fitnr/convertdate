@@ -9,8 +9,6 @@ from math import trunc
 from . import gregorian
 from .utils import jwday, monthcalendarhelper
 
-from hebrew_numbers import int_to_gematria
-
 EPOCH = 347995.5
 HEBREW_YEAR_OFFSET = 3760
 
