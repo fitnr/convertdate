@@ -369,5 +369,6 @@ def to_gregorian(an, mois, jour, method=None):
 
 
 def format(an, mois, jour):
+    """Convert a FR date into a string with the format DD MONTH YYYY."""
     # pylint: disable=redefined-builtin
     return "{0} {1} {2}".format(jour, MOIS[mois - 1], an)

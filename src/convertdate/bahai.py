@@ -203,3 +203,14 @@ def monthcalendar(year, month):
     start_weekday = jwday(to_jd(year, month, 1))
     monthlen = month_length(year, month)
     return monthcalendarhelper(start_weekday, monthlen)
+
+def format(year, month, day, lang=None):
+    """Convert a Baha'i date into a string with the format DD MONTH YYYY."""
+    # pylint: disable=redefined-builtin
+    lang = lang or "en"
+    if lang[0:2] == 'ar' or lang[0:2] == 'fa':
+        month_name = MONTHS[month - 1]
+    else:
+        month_name = ENGLISH_MONTHS[month - 1]
+
+    return "{0:d} {1:} {2:d}".format(day, month_name, year)

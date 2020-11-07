@@ -27,6 +27,38 @@ SHEVAT = 11
 ADAR = 12
 VEADAR = 13
 
+MONTHS = [
+    'NISAN',
+    'IYYAR',
+    'SIVAN',
+    'TAMMUZ',
+    'AV',
+    'ELUL',
+    'TISHRI',
+    'HESHVAN',
+    'KISLEV',
+    'TEVETH',
+    'SHEVAT',
+    'ADAR',
+    'ADAR BET'
+]
+
+MONTHS_HEB = [
+    u'ניסן',
+    u'אייר',
+    u'סיוון',
+    u'תמוז',
+    u'אב',
+    u'אלול',
+    u'תשרי',
+    u'חשוון',
+    u'כסלו',
+    u'טבת',
+    u'שבט',
+    u'אדר',
+    u'אדר ב'
+]
+
 
 def leap(year):
     # Is a given Hebrew year a leap year ?
@@ -170,3 +202,13 @@ def monthcalendar(year, month):
     start_weekday = jwday(to_jd(year, month, 1))
     monthlen = month_days(year, month)
     return monthcalendarhelper(start_weekday, monthlen)
+
+def format(year, month, day, lang=None):
+    """Convert a Hebrew date into a string with the format DD MONTH YYYY."""
+    # pylint: disable=redefined-builtin
+    lang = lang or "en"
+    if lang[0:2] == "he" :
+        month_name = MONTHS_HEB[month-1]
+    else:
+        month_name = MONTHS[month-1]
+    return f"{day} {month_name} {year}"
