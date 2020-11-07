@@ -24,7 +24,7 @@ MONTHS = [
     "Azar",
     "Dey",
     "Bahman",
-    "Esfand"
+    "Esfand",
 ]
 
 HAS_31_DAYS = (1, 2, 3, 4, 5, 6)
@@ -120,7 +120,8 @@ def monthcalendar(year, month):
     monthlen = month_length(year, month)
     return monthcalendarhelper(start_weekday, monthlen)
 
+
 def format(year, month, day):
     """Convert a Persian date into a string with the format DD MONTH YYYY."""
     # pylint: disable=redefined-builtin
-    return "{0:d} {1:} {2:d}".format(day, MONTHS[month-1], year)
+    return "{0:d} {1:} {2:d}".format(day, MONTHS[month - 1], year)

@@ -28,35 +28,35 @@ ADAR = 12
 VEADAR = 13
 
 MONTHS = [
-    'NISAN',
-    'IYYAR',
-    'SIVAN',
-    'TAMMUZ',
-    'AV',
-    'ELUL',
-    'TISHRI',
-    'HESHVAN',
-    'KISLEV',
-    'TEVETH',
-    'SHEVAT',
-    'ADAR',
-    'ADAR BET'
+    'Nisan', 
+    'Iyyar', 
+    'Sivan', 
+    'Tammuz', 
+    'Av', 
+    'Elul', 
+    'Tishri', 
+    'Heshvan', 
+    'Kislev', 
+    'Teveth', 
+    'Shevat', 
+    'Adar', 
+    'Adar Bet', 
 ]
 
 MONTHS_HEB = [
-    u'ניסן',
-    u'אייר',
-    u'סיוון',
-    u'תמוז',
-    u'אב',
-    u'אלול',
-    u'תשרי',
-    u'חשוון',
-    u'כסלו',
-    u'טבת',
-    u'שבט',
-    u'אדר',
-    u'אדר ב'
+    'ניסן',
+    'אייר',
+    'סיוון',
+    'תמוז',
+    'אב',
+    'אלול',
+    'תשרי',
+    'חשוון',
+    'כסלו',
+    'טבת',
+    'שבט',
+    'אדר',
+    'אדר ב'
 ]
 
 
@@ -203,12 +203,13 @@ def monthcalendar(year, month):
     monthlen = month_days(year, month)
     return monthcalendarhelper(start_weekday, monthlen)
 
+
 def format(year, month, day, lang=None):
     """Convert a Hebrew date into a string with the format DD MONTH YYYY."""
     # pylint: disable=redefined-builtin
     lang = lang or "en"
-    if lang[0:2] == "he" :
-        month_name = MONTHS_HEB[month-1]
+    if lang[0:2] == "he":
+        month_name = MONTHS_HEB[month - 1]
     else:
-        month_name = MONTHS[month-1]
-    return f"{day} {month_name} {year}"
+        month_name = MONTHS[month - 1]
+    return "{0} {1} {2}".format(day, month_name, year)

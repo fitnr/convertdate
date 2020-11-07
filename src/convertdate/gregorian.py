@@ -125,7 +125,8 @@ def monthcalendar(year, month):
 
     return monthcalendarhelper(start_weekday, monthlen)
 
+
 def format(year, month, day, format_string="%d %B %Y"):
     # pylint: disable=redefined-builtin
-    d = date(year,month,day)
+    d = date(year, month, day)
     return d.strftime(format_string)

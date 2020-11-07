@@ -263,6 +263,7 @@ def new_years_eve(year):
     '''Dec 31st'''
     return (year, DEC, 31)
 
+
 def hanukkah(year, eve=None):
     jd = hebrew.to_jd_gregorianyear(year, hebrew.KISLEV, 25)
     if eve:
@@ -387,6 +388,7 @@ def dia_revolucion(year):
 
 # Islamic holidays
 
+
 def ramadan(year, eve=None):
     jd = islamic.to_jd_gregorianyear(year, 9, 1)
     if eve:
@@ -417,6 +419,7 @@ def eid_aladha(year, eve=None):
 
 class Holidays:
     '''Convenience class for fetching many holidays in a given year.'''
+
     # pylint: disable=missing-function-docstring
     def __init__(self, year=None):
         self.year = year or time.localtime().tm_year
