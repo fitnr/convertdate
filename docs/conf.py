@@ -22,7 +22,8 @@ copyright = '2020, Neil Freeman'
 author = 'Neil Freeman'
 
 # The full version, including alpha/beta/rc tags
-release = '2.2.2'
+with open('../src/convertdate/__init__.py') as i:
+    release = next(r for r in i.readlines() if '__version__' in r).split('=')[1].strip('"\' \n')
 
 # -- General configuration ---------------------------------------------------
 
