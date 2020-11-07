@@ -207,9 +207,7 @@ def indigenous_peoples_day(year, country='usa'):
 
 
 def columbus_day(year, country='usa'):
-    raise DeprecationWarning(
-        "columbus_day will be removed in a future release, use indigenous_peoples_day instead"
-    )
+    raise DeprecationWarning("columbus_day will be removed in a future release, use indigenous_peoples_day instead")
     return indigenous_peoples_day(year, country)
 
 
@@ -366,8 +364,7 @@ def lag_baomer(year, eve=None):
 
 
 def tu_beshvat(year, eve=None):
-    """Tu BeShvat, the 'New Year of Trees', is celebrated on the 15th of Shevat.
-    """
+    """Tu BeShvat, the 'New Year of Trees', is celebrated on the 15th of Shevat."""
     jd = hebrew.to_jd_gregorianyear(year, hebrew.SHEVAT, 15)
     if eve:
         jd = jd - 1
@@ -375,7 +372,7 @@ def tu_beshvat(year, eve=None):
 
 
 def tisha_bav(year, eve=None):
-    """Tisha B'Av is a fast day generally celebrated on the 9th of Av, but 
+    """Tisha B'Av is a fast day generally celebrated on the 9th of Av, but
     sometimes postponed to the following day.
     """
     jd = hebrew.to_jd_gregorianyear(year, hebrew.AV, 9)

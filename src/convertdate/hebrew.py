@@ -28,19 +28,19 @@ ADAR = 12
 VEADAR = 13
 
 MONTHS = [
-    'Nisan', 
-    'Iyyar', 
-    'Sivan', 
-    'Tammuz', 
-    'Av', 
-    'Elul', 
-    'Tishri', 
-    'Heshvan', 
-    'Kislev', 
-    'Teveth', 
-    'Shevat', 
-    'Adar', 
-    'Adar Bet', 
+    'Nisan',
+    'Iyyar',
+    'Sivan',
+    'Tammuz',
+    'Av',
+    'Elul',
+    'Tishri',
+    'Heshvan',
+    'Kislev',
+    'Teveth',
+    'Shevat',
+    'Adar',
+    'Adar Bet',
 ]
 
 MONTHS_HEB = [
@@ -179,6 +179,7 @@ def to_civil(year, month, day):
     if month >= TISHRI:
         year = year + 1
     return year, month, day
+
 
 def to_jd_gregorianyear(gregorianyear, hebrew_month, hebrew_day):
     '''Returns the Gregorian date when a given Hebrew month and year within a given Gregorian year.'''
