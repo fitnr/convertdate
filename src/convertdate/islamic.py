@@ -41,12 +41,52 @@ def to_jd(year, month, day):
 
 
 def from_jd(jd):
-    '''Calculate Islamic date from Julian day'''
+    '''
+    Calculate Islamic date from Julian day
+    .. warning:: Only works for Julian Day >= 1948085.5
+    '''
     jd = trunc(jd) + 0.5
     year = trunc(((30 * (jd - EPOCH)) + 10646) / 10631)
     month = min(12, ceil((jd - (29 + to_jd(year, 1, 1))) / 29.5) + 1)
     day = int(jd - to_jd(year, month, 1)) + 1
     return (year, month, day)
+
+
+def from_jd2(jd):
+    '''
+    Alternate method for Julian Day < 1948085.5
+    From Explanatory Supplement to the Astronomical Almanac by
+    P. K. Seidelmann, S. Urban
+    https://web.archive.org/web/20190430134555/aa.usno.navy.mil/publications/docs/c15_usb_online.pdf
+
+    Table 15.14 Selected arithmetic calendars, with parameters for algorithms
+    Calendar         y     j   m  n  r   p    q  v   u    s  t  w  A  B       C
+    ...
+    7 Civil Islamic 5519 7664  0 12 30 10631 14 15 100 2951 51 10
+    ...
+    Algorithm 4.
+    '''
+    y = 5519
+    j = 7664
+    m = 0
+    n = 12
+    r = 30
+    p = 10631
+    # q is not used
+    v = 15
+    u = 100
+    s = 2951
+    # t is not used
+    w = 10
+
+    f = (jd + 0.5) + j
+    e = (r * f) + v
+    g = (e % p) // r
+    h = (u * g) + w
+    day = ((h % s) // u) + 1
+    month = (((h // s) + m) % n) + 1
+    year = (e // p) - y + ((n + m - month) // n)
+    return year, month, day
 
 
 def to_jd_gregorianyear(gregorianyear, islamic_month, islamic_day):
@@ -64,6 +104,11 @@ def to_jd_gregorianyear(gregorianyear, islamic_month, islamic_day):
 
 def from_gregorian(year, month, day):
     return from_jd(gregorian.to_jd(year, month, day))
+
+
+def from_gregorian2(year, month, day):
+    '''Uses from_jd2'''
+    return from_jd2(gregorian.to_jd(year, month, day))
 
 
 def to_gregorian(year, month, day):
