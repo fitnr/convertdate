@@ -4,6 +4,16 @@
 # Licensed under the MIT license:
 # http://opensource.org/licenses/MIT
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
+"""
+The Gregorian calendar was introduced by Pope Gregory XII in October 1582. It reforms
+the Julian calendar by adjusting leap year rules to reduce the drift versus solar
+year.
+
+The Gregorian calendar, like the Julian, does not include a year 0. However, for dates before 1,
+this module uses the astronomical convention of including a year 0 to simplify
+mathematical comparisons across epochs. To present a date in the standard convention,
+use the :meth:`gregorian.format` function.
+"""
 from calendar import isleap, monthrange
 from datetime import date
 
@@ -116,17 +126,29 @@ def from_jd(jd):
 
 
 def month_length(year, month):
+    '''Calculate the length of a month in the Gregorian calendar'''
     return monthrange(year, month)[1]
 
 
 def monthcalendar(year, month):
+    '''
+    Return a list of lists that describe the calender for one month. Each inner
+    list have 7 items, one for each weekday, starting with Sunday. These items
+    are either ``None`` or an integer, counting from 1 to the number of days in
+    the month.
+    For Gregorian, this is very similiar to the built-in :meth:``calendar.monthcalendar``.
+    '''
     start_weekday = jwday(to_jd(year, month, 1))
     monthlen = month_length(year, month)
 
     return monthcalendarhelper(start_weekday, monthlen)
 
 
-def format(year, month, day, format_string="%d %B %Y"):
+def format(year, month, day, format_string="%-d %B %y"):
     # pylint: disable=redefined-builtin
+    epoch = ''
+    if year <= 0:
+        year = (year - 1) * -1
+        epoch = ' BCE'
     d = date(year, month, day)
-    return d.strftime(format_string)
+    return d.strftime(format_string) + epoch

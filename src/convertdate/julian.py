@@ -4,6 +4,21 @@
 # Licensed under the MIT license:
 # http://opensource.org/licenses/MIT
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
+"""
+The Julian calendar was implemented by Julius Caesar in 45 BC as a reformation of
+the Roman calendar. It is designed to follow the solar year, with a standard year
+of 365 days and a quadrennial leap year with an intercalary day (29 February).
+
+For the first several centuries of its use, the Julian calendar did not have a
+single year-numbering system. The Romans initially specific years with the names of political
+leaders. Later on, different areas employed different era with various epochs.
+Between the sixth and eighth centuries, western Europe adopted the Anno Domini convention.
+
+This numbering system does not include a year 0. However, for dates before 1,
+this module uses the astronomical convention of including a year 0 to simplify
+mathematical comparisons across epochs. To present a date in the standard
+convention, use the :meth:`julian.format` function.
+"""
 from .gregorian import from_jd as gregorian_from_jd
 from .gregorian import to_jd as gregorian_to_jd
 from .utils import floor, jwday, monthcalendarhelper
@@ -78,15 +93,30 @@ def to_jd(year, month, day):
 
 
 def from_gregorian(year, month, day):
+    '''Convert a Gregorian date to a Julian date.'''
     return from_jd(gregorian_to_jd(year, month, day))
 
 
 def to_gregorian(year, month, day):
+    '''Convert a Julian date to a Gregorian date.'''
     return gregorian_from_jd(to_jd(year, month, day))
 
 
 def monthcalendar(year, month):
+    '''
+    Returns a matrix representing a month’s calendar. Each row represents a week;
+    days outside of the month are represented by zeros. Each week begins with Sunday.
+    '''
     start_weekday = jwday(to_jd(year, month, 1))
     monthlen = month_length(year, month)
-
     return monthcalendarhelper(start_weekday, monthlen)
+
+
+def format(year, month, day, format_string="%-d %B %y"):
+    # pylint: disable=redefined-builtin
+    epoch = ''
+    if year <= 0:
+        year = (year - 1) * -1
+        epoch = ' BCE'
+    d = date(year, month, day)
+    return d.strftime(format_string) + epoch
