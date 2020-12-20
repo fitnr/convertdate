@@ -65,6 +65,11 @@ class TestConvertdate(CalTestCase):
             with self.subTest(date[0]):
                 self.assertEqual(date, gregorian.from_jd(jd))
 
+        self.assertEqual(islamic.from_jd(1948085.5), (0, 1, 1))
+        self.assertEqual(islamic.from_jd(1948084.5), (-1, 12, 30))
+        self.assertEqual(islamic.from_jd(1912648.5), (-100, 1, 1))
+        self.assertEqual(islamic.to_jd(-100, 1, 1), 1912648.5)
+
     def test_persian(self):
         self.assertEqual(self.jd, persian.to_jd(*persian.from_jd(self.jd)))
         self.assertEqual(persian.leap(-101), False)

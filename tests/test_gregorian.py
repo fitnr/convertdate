@@ -28,6 +28,7 @@ class TestGregorian(CalTestCase):
         assert gregorian.to_jd2(2000, 1, 1) == 2451544.5
 
         self.reflexive(gregorian)
+        self.reflexive(gregorian, range(113957, 1574957, 365))
 
     def test_gregorian_proleptic(self):
         self.assertEqual(gregorian.to_jd(72, 6, 27), 1747535.5)
@@ -40,6 +41,15 @@ class TestGregorian(CalTestCase):
         assert gregorian.from_jd(gregorian.to_jd(-100, 7, 1)) == (-100, 7, 1)
         assert gregorian.from_jd(gregorian.to_jd(-500, 12, 31)) == (-500, 12, 31)
         assert gregorian.from_jd(gregorian.to_jd(-1000, 1, 1)) == (-1000, 1, 1)
+
+    def test_gregorian_pre_epoch(self):
+        j = julian.to_jd(-4716, 3, 1)
+        g = gregorian.to_jd(-4716, 1, 23)
+        self.assertEqual(g, j)
+        self.assertEqual(g - 1, j - 1)
+        self.assertEqual(g - 1, gregorian.to_jd(-4716, 1, 22))
+        self.assertEqual(gregorian.to_jd(-4716, 1, 22), j - 1)
+        self.assertEqual(gregorian.to_jd(-4716, 1, 22), julian.to_jd(-4716, 2, 29))
 
     def test_from_gregorian_20thc(self):
         self.assertEqual(gregorian.from_jd(2418934.0), (1910, 9, 19))

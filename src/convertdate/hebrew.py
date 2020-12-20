@@ -4,7 +4,7 @@
 # Licensed under the MIT license:
 # http://opensource.org/licenses/MIT
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
-from math import trunc
+from math import floor
 
 from . import gregorian
 from .utils import jwday, monthcalendarhelper
@@ -77,9 +77,9 @@ def delay_1(year):
     '''Test for delay of start of the ecclesiastical new year to
     avoid improper weekdays for holidays.'''
     # Sunday, Wednesday, and Friday as start of the new year.
-    months = trunc(((235 * year) - 234) / 19)
+    months = floor(((235 * year) - 234) / 19)
     parts = 12084 + (13753 * months)
-    day = trunc((months * 29) + parts / 25920)
+    day = (months * 29) + floor(parts / 25920)
 
     if ((3 * (day + 1)) % 7) < 3:
         day += 1
@@ -151,8 +151,8 @@ def to_jd(year, month, day):
 
 
 def from_jd(jd):
-    jd = trunc(jd) + 0.5
-    count = trunc(((jd - EPOCH) * 98496.0) / 35975351.0)
+    jd = floor(jd) + 0.5
+    count = floor(((jd - EPOCH) * 98496.0) / 35975351.0)
     year = count - 1
     i = count
     while jd >= to_jd(i, TISHRI, 1):

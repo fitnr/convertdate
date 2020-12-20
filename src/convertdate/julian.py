@@ -4,11 +4,9 @@
 # Licensed under the MIT license:
 # http://opensource.org/licenses/MIT
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
-from math import trunc
-
 from .gregorian import from_jd as gregorian_from_jd
 from .gregorian import to_jd as gregorian_to_jd
-from .utils import jwday, monthcalendarhelper
+from .utils import floor, jwday, monthcalendarhelper
 
 J0000 = 1721424.5  # Julian date of Gregorian epoch: 0000-01-01
 J1970 = 2440587.5  # Julian date at Unix epoch: 1970-01-01
@@ -49,43 +47,34 @@ def legal_date(year, month, day):
 
 def from_jd(jd):
     '''Calculate Julian calendar date from Julian day'''
-
     jd += 0.5
-    z = trunc(jd)
-
-    a = z
+    a = floor(jd)
     b = a + 1524
-    c = trunc((b - 122.1) / 365.25)
-    d = trunc(365.25 * c)
-    e = trunc((b - d) / 30.6001)
-
-    if trunc(e < 14):
-        month = e - 1
+    c = floor((b - 122.1) / 365.25)
+    d = floor(365.25 * c)
+    e = floor((b - d) / 30.6001)
+    if e < 14:
+        month = floor(e - 1)
     else:
-        month = e - 13
-
-    if trunc(month > 2):
-        year = c - 4716
+        month = floor(e - 13)
+    if month > 2:
+        year = floor(c - 4716)
     else:
-        year = c - 4715
-
-    day = b - d - trunc(30.6001 * e)
-
+        year = floor(c - 4715)
+    day = b - d - floor(30.6001 * e)
     return (year, month, day)
 
 
 def to_jd(year, month, day):
     '''Convert to Julian day using astronomical years (0 = 1 BC, -1 = 2 BC)'''
-
     legal_date(year, month, day)
 
     # Algorithm as given in Meeus, Astronomical Algorithms, Chapter 7, page 61
-
     if month <= 2:
         year -= 1
         month += 12
 
-    return (trunc((365.25 * (year + 4716))) + trunc((30.6001 * (month + 1))) + day) - 1524.5
+    return (floor((365.25 * (year + 4716))) + floor((30.6001 * (month + 1))) + day) - 1524.5
 
 
 def from_gregorian(year, month, day):
