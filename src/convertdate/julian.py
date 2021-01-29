@@ -36,9 +36,7 @@ HAVE_31_DAYS = (1, 3, 5, 7, 8, 10, 12)
 
 
 def leap(year):
-    if year % 4 and year > 0:
-        return 0
-    return 3
+    return year % 4 == 0
 
 
 def month_length(year, month):
