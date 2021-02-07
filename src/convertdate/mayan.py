@@ -110,6 +110,8 @@ def to_jd(baktun, katun, tun, uinal, kin):
 def from_jd(jd):
     '''Calculate Mayan long count from Julian day'''
     d = jd - EPOCH
+    if d < 0:
+        raise ValueError("Day out of range")
     baktun = trunc(d / 144000)
     d = d % 144000
     katun = trunc(d / 7200)

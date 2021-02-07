@@ -8,14 +8,10 @@ from . import CalTestCase
 
 class TestMayan(CalTestCase):
     def setUp(self):
-        self.tm = time.localtime()
-        self.gregoriandate = (self.tm[0], self.tm[1], self.tm[2])
-
+        self.gdate = 2021, 2, 5
         self.c_greg = (1492, 10, 21)
         self.c = gregorian.to_jd(*self.c_greg)
-
-        self.jd = gregorian.to_jd(self.gregoriandate[0], self.gregoriandate[1], self.gregoriandate[2])
-
+        self.jd = gregorian.to_jd(*self.gdate)
         self.jdcs = range(2159677, 2488395, 2000)
 
     def test_mayan_reflexive(self):
@@ -84,3 +80,10 @@ class TestMayan(CalTestCase):
         self.assertEqual(next(tzg), (9, "Ix"))
         assert next(tzg) == (10, "Men")
         assert next(tzg) == (11, "K'ib'")
+
+    def test_start_epoch(self):
+        self.assertSequenceEqual(mayan.from_jd(mayan.EPOCH + 1), (0, 0, 0, 0, 1))
+        self.assertSequenceEqual(mayan.from_jd(mayan.EPOCH), (0, 0, 0, 0, 0))
+
+        with self.assertRaises(ValueError):
+            mayan.from_jd(mayan.EPOCH - 1)
