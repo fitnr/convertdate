@@ -136,10 +136,6 @@ class TestConvertdate(CalTestCase):
 
         self.assertEqual(julianday.to_datetime(self.x + 0.525), datetime(2016, 2, 29, 12, 36, tzinfo=pytz.utc))
 
-    def test_month_length_indian_civil(self):
-        self.assertEqual(indian_civil.month_length(1922, 1), 31)
-        self.assertEqual(indian_civil.month_length(1923, 1), 30)
-
     def test_month_length_julian(self):
         self.assertEqual(julian.month_length(1582, 10), 31)
         self.assertEqual(julian.month_length(1977, 2), 28)
@@ -154,11 +150,6 @@ class TestConvertdate(CalTestCase):
     def test_month_length_persian(self):
         self.assertEqual(persian.month_length(1354, 12), 30)
         self.assertEqual(persian.month_length(1355, 12), 29)
-
-    def test_monthcalendar_indian_civil(self):
-        self.assertEqual(indian_civil.monthcalendar(1936, 8).pop(0).pop(4), 1)
-        self.assertEqual(indian_civil.monthcalendar(1927, 2).pop(0).pop(4), 1)
-        self.assertEqual(indian_civil.monthcalendar(1922, 1).pop().pop(4), 31)
 
     def test_monthcalendar_julian(self):
         self.assertEqual(julian.monthcalendar(1582, 10).pop(0).pop(1), 1)
@@ -180,7 +171,6 @@ class TestConvertdate(CalTestCase):
         self.assertSequenceType(coptic.from_gregorian(2020, 6, 4), int)
         self.assertSequenceType(hebrew.from_gregorian(2020, 6, 4), int)
         self.assertSequenceType(islamic.from_gregorian(2020, 6, 4), int)
-        self.assertSequenceType(indian_civil.from_gregorian(2020, 6, 4), int)
         self.assertSequenceType(iso.from_gregorian(2020, 6, 4), int)
         self.assertSequenceType(julian.from_gregorian(2020, 6, 4), int)
         self.assertSequenceType(persian.from_gregorian(2020, 6, 4), int)

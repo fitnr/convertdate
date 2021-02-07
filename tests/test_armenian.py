@@ -3,8 +3,18 @@ import time
 import unittest
 
 from convertdate import julianday
-from convertdate.armenian import (_valid_date, from_gregorian, from_jd, from_julian, leap, month_length, to_gregorian,
-                                  to_jd, to_julian, tostring)
+from convertdate.armenian import (
+    _valid_date,
+    from_gregorian,
+    from_jd,
+    from_julian,
+    leap,
+    month_length,
+    to_gregorian,
+    to_jd,
+    to_julian,
+    tostring,
+)
 
 from . import CalTestCase
 
@@ -27,6 +37,9 @@ class TestArmenian(CalTestCase):
 
         with self.assertRaises(ValueError):
             _valid_date(536, 13, 6)
+
+        with self.assertRaises(ValueError):
+            from_jd(1.5)
 
         self.assertTrue(_valid_date(536, 13, 6, method="sarkawag"))
 
