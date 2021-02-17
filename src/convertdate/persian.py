@@ -4,10 +4,18 @@
 # Licensed under the MIT license:
 # http://opensource.org/licenses/MIT
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
-from math import trunc
+"""
+The modern Persian calendar, or the Solar Hijri calendar, was adopted in 1911.
+It consists of twelve months of 30 or 31 days. The new year always falls on the
+March equinox.
+"""
+from math import floor, trunc
+
+from pymeeus.Sun import Sun
+from pymeeus.Epoch import Epoch
 
 from . import gregorian
-from .utils import ceil, jwday, monthcalendarhelper
+from .utils import ceil, jwday, monthcalendarhelper, TROPICALYEAR
 
 EPOCH = 1948320.5
 WEEKDAYS = ("Doshanbeh", "Seshhanbeh", "Chaharshanbeh", "Panjshanbeh", "Jomeh", "Shanbeh", "Yekshanbeh")
@@ -33,69 +41,84 @@ HAS_30_DAYS = (7, 8, 9, 10, 11)
 
 def leap(year):
     '''Is a given year a leap year in the Persian calendar ?'''
-    if year > 0:
-        y = 474
-    else:
-        y = 473
+    return (to_jd(year + 1, 1, 1) - to_jd(year, 1, 1)) > 365
 
-    return (((((year - y % 2820) + 474) + 38) * 682) % 2816) < 682
+
+def equinox_jd(gyear):
+    """Calculate Julian day during which the March equinox, reckoned from the
+    Tehran meridian, occurred for a given Gregorian year."""
+    mean_jd = Sun.get_equinox_solstice(gyear, target='spring')
+    deltat_jd = mean_jd - Epoch.tt2ut(gyear, 3) / (24 * 60 * 60.)
+    # Apparent JD in universal time
+    apparent_jd = deltat_jd + (Sun.equation_of_time(deltat_jd)[0] / (24 * 60.))
+    # Correct for meridian of Tehran + 52.5 degrees
+    return floor(apparent_jd.jde() + (52.5 / 360))
+
+
+def last_equinox_jd(jd):
+    """Return the Julian date of spring equinox immediately preceeding the
+    given Julian date."""
+    guessyear = gregorian.from_jd(jd)[0]
+    last_equinox = equinox_jd(guessyear)
+
+    while last_equinox > jd:
+        guessyear = guessyear - 1
+        last_equinox = equinox_jd(guessyear)
+
+    next_equinox = last_equinox - 1
+
+    while not (last_equinox <= jd and jd < next_equinox):
+        last_equinox = next_equinox
+        guessyear = guessyear + 1
+        next_equinox = equinox_jd(guessyear)
+
+    return last_equinox
+
+
+def jd_to_pyear(jd):
+    """
+    Determine the year in the Persian astronomical calendar in which a given
+    Julian day falls.
+
+    Returns:
+        tuple - (Persian year, Julian day number containing equinox for this year)
+    """
+    lasteq = last_equinox_jd(jd)
+    return round((lasteq - EPOCH) / TROPICALYEAR) + 1, lasteq
 
 
 def to_jd(year, month, day):
     '''Determine Julian day from Persian date'''
+    guess = (EPOCH - 1) + (TROPICALYEAR * ((year - 1) - 1))
+    y0, equinox = year - 1, 0
 
-    if year >= 0:
-        y = 474
-    else:
-        y = 473
-    epbase = year - y
-    epyear = 474 + (epbase % 2820)
+    while y0 < year:
+        y0, equinox = jd_to_pyear(guess)
+        guess = equinox + TROPICALYEAR + 2
 
     if month <= 7:
         m = (month - 1) * 31
     else:
-        m = (month - 1) * 30 + 6
+        m = ((month - 1) * 30) + 6
 
-    return (
-        day
-        + m
-        + trunc(((epyear * 682) - 110) / 2816)
-        + (epyear - 1) * 365
-        + trunc(epbase / 2820) * 1029983
-        + (EPOCH - 1)
-    )
+    return equinox + m + day + 0.5
 
 
 def from_jd(jd):
     '''Calculate Persian date from Julian day'''
-    jd = trunc(jd) + 0.5
-
-    depoch = jd - to_jd(475, 1, 1)
-    cycle = trunc(depoch / 1029983)
-    cyear = depoch % 1029983
-
-    if cyear == 1029982:
-        ycycle = 2820
-    else:
-        aux1 = trunc(cyear / 366)
-        aux2 = cyear % 366
-        ycycle = trunc(((2134 * aux1) + (2816 * aux2) + 2815) / 1028522) + aux1 + 1
-
-    year = ycycle + (2820 * cycle) + 474
-
-    if year <= 0:
-        year -= 1
-
-    yday = (jd - to_jd(year, 1, 1)) + 1
+    jd = floor(jd) + 0.5
+    equinox = last_equinox_jd(jd)
+    year = round((equinox - EPOCH) / TROPICALYEAR) + 1
+    yday = jd - (equinox + 0.5)
 
     if yday <= 186:
         month = ceil(yday / 31)
+        day = yday - ((month - 1) * 31)
     else:
         month = ceil((yday - 6) / 30)
+        day = yday - ((month - 1) * 30) - 6
 
-    day = int(jd - to_jd(year, month, 1)) + 1
-
-    return (year, month, day)
+    return int(year), int(month), int(day)
 
 
 def from_gregorian(year, month, day):

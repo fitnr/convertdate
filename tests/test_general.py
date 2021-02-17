@@ -4,8 +4,7 @@ from datetime import datetime
 
 import pytz
 
-from convertdate import (coptic, dublin, gregorian, hebrew, indian_civil, islamic, iso, julian, julianday, ordinal,
-                         persian, utils)
+from convertdate import coptic, dublin, gregorian, hebrew, islamic, iso, julian, julianday, ordinal, persian, utils
 
 from . import CalTestCase
 
@@ -69,15 +68,6 @@ class TestConvertdate(CalTestCase):
         self.assertEqual(islamic.from_jd(1948084.5), (-1, 12, 30))
         self.assertEqual(islamic.from_jd(1912648.5), (-100, 1, 1))
         self.assertEqual(islamic.to_jd(-100, 1, 1), 1912648.5)
-
-    def test_persian(self):
-        self.assertEqual(self.jd, persian.to_jd(*persian.from_jd(self.jd)))
-        self.assertEqual(persian.leap(-101), False)
-        self.reflexive(persian)
-
-    def test_indian_civil(self):
-        self.assertEqual(self.jd, indian_civil.to_jd(*indian_civil.from_jd(self.jd)))
-        self.reflexive(indian_civil)
 
     def test_iso(self):
         self.assertEqual(iso.from_gregorian(2005, 1, 1), (2004, 53, 6))
@@ -147,10 +137,6 @@ class TestConvertdate(CalTestCase):
         self.assertEqual(islamic.month_length(1436, 2), 29)
         self.assertEqual(islamic.month_length(1436, 12), 30)
 
-    def test_month_length_persian(self):
-        self.assertEqual(persian.month_length(1354, 12), 30)
-        self.assertEqual(persian.month_length(1355, 12), 29)
-
     def test_monthcalendar_julian(self):
         self.assertEqual(julian.monthcalendar(1582, 10).pop(0).pop(1), 1)
         self.assertEqual(julian.monthcalendar(1582, 10).pop().pop(3), 31)
@@ -158,10 +144,6 @@ class TestConvertdate(CalTestCase):
     def test_monthcalendar_islamic(self):
         self.assertEqual(islamic.monthcalendar(1436, 10).pop(0).pop(6), 1)
         self.assertEqual(islamic.monthcalendar(1436, 11).pop().pop(1), 30)
-
-    def test_monthcalendar_persian(self):
-        self.assertEqual(persian.monthcalendar(1393, 8).pop(0).pop(4), 1)
-        self.assertEqual(persian.monthcalendar(1393, 8).pop().pop(0), 25)
 
     def test_monthcalendar_hebrew(self):
         self.assertEqual(hebrew.monthcalendar(5775, 7).pop(0).pop(4), 1)

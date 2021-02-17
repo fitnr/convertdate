@@ -20,7 +20,8 @@ class CalTestCase(unittest.TestCase):
         from_func = getattr(module, 'from_jd')
         dates = dates or JDCS
         for j in dates:
-            self.assertEqual(j + 0.5, to_func(*from_func(j + 0.5)))
+            j = j + 0.5
+            self.assertEqual(j, to_func(*from_func(j)), 'checking from_jd(to_jd({0}))'.format(j))
 
     def assertSequenceType(self, seq, cls):
         '''Assert that all members of `seq` are of the type `cls`.'''
