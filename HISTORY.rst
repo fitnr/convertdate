@@ -1,8 +1,12 @@
 History
 -------
 
+2.3.1
+-----
+* Adjust requirements to avoid a broken release (pymeeus 0.3.8)
+
 2.3.0
---------------
+-----
 * Fix bug in Bahai calculations during Ayyám-i-Há (#32). Thanks @chiuczek
 * Regularize variable names:
  - coptic: rename `MONTH_NAMES` to `MONTHS`, rename `DAY_NAMES` to `WEEKDAYS`
