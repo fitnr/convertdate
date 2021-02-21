@@ -53,7 +53,7 @@ setup(
     python_requires=">=3.5",
     install_requires=[
         'pytz>=2014.10',
-        'pymeeus>=0.3.6, <=1, !=0.3.8'
+        'pymeeus>=0.3.13, <=1'
     ],
     tests_require=tests_require,
     extras_require={
