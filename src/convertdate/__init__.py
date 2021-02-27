@@ -3,7 +3,7 @@
 # http://github.com/fitnr/convertdate
 # Licensed under the MIT license:
 # http://opensource.org/licenses/MIT
-# Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
+# Copyright (c) 2016, 2020, 2021 fitnr <fitnr@fakeisthenewreal>
 """
 The Convertdate library contains methods and functions for converting dates between
 different calendar systems.
@@ -38,7 +38,7 @@ from . import positivist
 from . import ordinal
 from . import utils
 
-__version__ = '2.3.1'
+__version__ = '2.3.2'
 
 __all__ = [
     'holidays',

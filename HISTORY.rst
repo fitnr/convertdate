@@ -1,6 +1,14 @@
 History
 -------
 
+2.3.2
+-----
+* Switch Persian calendar to astronomical computation (was non-canonical algorithmic method)
+* Fix inappropriate uses of trunc, which caused several errors before the Julian Day epoch (#39, #40, #42)
+* Fix bug in `julian.leap` (#43)
+* Add official suppport and tests for Python 3.9
+* Raise ValueError for attempted conversion of dates before the Mayan epoch
+
 2.3.1
 -----
 * Adjust requirements to avoid a broken release (pymeeus 0.3.8)
