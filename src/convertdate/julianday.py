@@ -8,9 +8,7 @@
 The `Julian day <https://en.wikipedia.org/wiki/Julian_day>`__
 is a continuous count of days since the beginning of the Julian era on January 1, 4713 BC.
 """
-from datetime import datetime
-
-from pytz import utc
+from datetime import datetime, timezone
 
 from . import gregorian, julian
 
@@ -36,7 +34,16 @@ def to_datetime(jdc):
     # down to ms, which are 1/1000 of a second
     ms = int(1000 * round(msfrac, 6))
 
-    return datetime(year, month, day, int(hours), int(mins), int(secs), int(ms), tzinfo=utc)
+    return datetime(
+        year,
+        month,
+        day,
+        int(hours),
+        int(mins),
+        int(secs),
+        int(ms),
+        tzinfo=timezone.utc
+    )
 
 
 def from_datetime(dt):

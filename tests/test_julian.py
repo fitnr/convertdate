@@ -1,5 +1,4 @@
 from convertdate import julian
-import pytz
 
 from . import CalTestCase
 

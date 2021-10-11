@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 import time
-from datetime import datetime
-
-import pytz
+from datetime import datetime, timezone
 
 from convertdate import coptic, dublin, gregorian, hebrew, islamic, iso, julian, julianday, ordinal, persian, utils
 
@@ -115,16 +113,16 @@ class TestConvertdate(CalTestCase):
 
     def test_julian_day(self):
         self.assertEqual(julianday.from_gregorian(*self.c_greg), self.c)
-        self.assertEqual(julianday.to_datetime(self.c), datetime(1492, 10, 21, tzinfo=pytz.utc))
-        self.assertEqual(julianday.to_datetime(self.x), datetime(2016, 2, 29, tzinfo=pytz.utc))
+        self.assertEqual(julianday.to_datetime(self.c), datetime(1492, 10, 21, tzinfo=timezone.utc))
+        self.assertEqual(julianday.to_datetime(self.x), datetime(2016, 2, 29, tzinfo=timezone.utc))
 
-        self.assertEqual(julianday.to_datetime(self.c + 0.25), datetime(1492, 10, 21, 6, tzinfo=pytz.utc))
-        self.assertEqual(julianday.to_datetime(self.x + 0.525), datetime(2016, 2, 29, 12, 36, tzinfo=pytz.utc))
+        self.assertEqual(julianday.to_datetime(self.c + 0.25), datetime(1492, 10, 21, 6, tzinfo=timezone.utc))
+        self.assertEqual(julianday.to_datetime(self.x + 0.525), datetime(2016, 2, 29, 12, 36, tzinfo=timezone.utc))
 
-        dt = datetime(2014, 11, 8, 3, 37, tzinfo=pytz.utc)
+        dt = datetime(2014, 11, 8, 3, 37, tzinfo=timezone.utc)
         self.assertEqual(julianday.from_datetime(dt), 2456969.65069)
 
-        self.assertEqual(julianday.to_datetime(self.x + 0.525), datetime(2016, 2, 29, 12, 36, tzinfo=pytz.utc))
+        self.assertEqual(julianday.to_datetime(self.x + 0.525), datetime(2016, 2, 29, 12, 36, tzinfo=timezone.utc))
 
     def test_month_length_julian(self):
         self.assertEqual(julian.month_length(1582, 10), 31)
