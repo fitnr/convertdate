@@ -11,7 +11,7 @@ include = 'py$'
 skip-string-normalization = true
 
 [tool.pylint.master]
-fail-under = "9.5"
+fail-under = "8.77"
 
 [tool.pylint.messages_control]
 disable = [

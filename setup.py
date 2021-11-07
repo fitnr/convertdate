@@ -6,7 +6,7 @@
 
 # Licensed under the MIT license:
 # http://opensource.org/licenses/MIT
-# Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
+# Copyright (c) 2016-21, fitnr <fitnr@fakeisthenewreal>
 from setuptools import setup
 
 
@@ -40,11 +40,11 @@ setup(
     classifiers=[
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
         'Topic :: Religion',
         'Topic :: Scientific/Engineering :: Astronomy',
         'Operating System :: OS Independent',
