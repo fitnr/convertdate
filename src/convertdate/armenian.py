@@ -136,18 +136,22 @@ def from_jd(jd, method=None):
 
 
 def to_julian(year, month, day, method=None):
+    """Convert an Armenian date to a Julian date"""
     return julian.from_jd(to_jd(year, month, day, method))
 
 
 def from_julian(year, month, day, method=None):
+    """Convert a Julian date to an Armenian date"""
     return from_jd(julian.to_jd(year, month, day), method)
 
 
 def to_gregorian(year, month, day, method=None):
+    """Convert an Armenian date to a Gregorian date"""
     return gregorian.from_jd(to_jd(year, month, day, method))
 
 
 def from_gregorian(year, month, day, method=None):
+    """Convert a Gregorian date to an Armenian date"""
     return from_jd(gregorian.to_jd(year, month, day), method)
 
 
@@ -162,6 +166,8 @@ def month_length(year, month, method=None):
 
 
 def monthcalendar(year, month, method=None):
+    """Returns a matrix representing a month’s calendar.
+    Each row represents a week; days outside of the month are represented by zeros."""
     start_weekday = jwday(to_jd(year, month, 1, method))
     monthlen = month_length(year, month, method)
     return monthcalendarhelper(start_weekday, monthlen)

@@ -4,6 +4,7 @@
 # Licensed under the MIT license:
 # http://opensource.org/licenses/MIT
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
+"""Helper utilities useful in several converters."""
 import calendar
 import math
 

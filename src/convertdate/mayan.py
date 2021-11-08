@@ -4,6 +4,16 @@
 # Licensed under the MIT license:
 # http://opensource.org/licenses/MIT
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
+"""
+The Mayan calendar was developed in Mesoamerica. It includes two interlocking
+cycles: the 260-day _Tzolkin_ cycle and the 365-day _Haab'_ cycle. In the _Tzolkin_ cycle,
+each day is numbered 1-13 and has one of 20 day names. The _Haab'_ cycle comprises 18 months
+of 20 days, along with five additional days (_Wayebʼ_).
+
+The calendrical system also includes the
+`Long Count <https://en.wikipedia.org/wiki/Mesoamerican_Long_Count_calendar>`__,
+a modified base-20 counting scheme. Dates in the long count are usually written in the form *7.18.14.8.12*.
+"""
 import itertools
 from math import trunc
 
@@ -305,8 +315,7 @@ def month_length(month):
     """Not the actual length of the month, but accounts for the 5 unlucky/nameless days"""
     if month == "Wayeb'":
         return 5
-    else:
-        return 20
+    return 20
 
 
 def haab_monthcalendar(baktun=None, katun=None, tun=None, uinal=None, kin=None, jdc=None):

@@ -4,6 +4,7 @@
 # Licensed under the MIT license:
 # http://opensource.org/licenses/MIT
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
+"""Conversions for the `ISO calendar system <https://en.wikipedia.org/wiki/ISO_week_date>`__."""
 from calendar import isleap
 from datetime import date
 from math import trunc
