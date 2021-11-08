@@ -13,8 +13,10 @@ of the ancient Egyptian calendar.
 It consists of twelve months of 30 days, followed by a "little month" of five days
 (six in leap years).
 """
+from math import floor
+
 from . import gregorian
-from .utils import floor, jwday, monthcalendarhelper
+from .utils import jwday, monthcalendarhelper
 
 EPOCH = 1825029.5
 MONTHS = [

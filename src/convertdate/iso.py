@@ -7,9 +7,8 @@
 """Conversions for the `ISO calendar system <https://en.wikipedia.org/wiki/ISO_week_date>`__."""
 from calendar import isleap
 from datetime import date
-from math import trunc
 
-from . import gregorian, ordinal
+from . import gregorian
 from .utils import jwday, n_weeks
 
 MON = 0

@@ -11,10 +11,10 @@
 # http://opensource.org/licenses/MIT
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
 from calendar import isleap
+from math import floor
 
 from . import gregorian
 from .data import positivist as data
-from .utils import floor
 
 # Positivist calendar has 13 28-day months and one festival day
 

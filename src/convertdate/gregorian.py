@@ -16,8 +16,9 @@ use the :meth:`gregorian.format` function.
 """
 from calendar import isleap, monthrange
 from datetime import date
+from math import floor
 
-from .utils import floor, jwday, monthcalendarhelper
+from .utils import jwday, monthcalendarhelper
 
 EPOCH = 1721425.5
 

@@ -5,8 +5,10 @@
 # http://opensource.org/licenses/MIT
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
 """Convert dates between the Hijri calendar and the Gregorian and Julian calendars."""
+from math import ceil, floor
+
 from . import gregorian
-from .utils import ceil, floor, jwday, monthcalendarhelper
+from .utils import jwday, monthcalendarhelper
 
 EPOCH = 1948439.5
 WEEKDAYS = ("al-'ahad", "al-'ithnayn", "ath-thalatha'", "al-'arb`a'", "al-khamis", "al-jum`a", "as-sabt")

@@ -14,8 +14,9 @@ without the ``eve`` option, the (secular) day is returned. This is the default.
 import calendar
 import time
 from math import trunc
-from .utils import jwday, nth_day_of_month
+
 from . import gregorian, hebrew, islamic, julian
+from .utils import jwday, nth_day_of_month
 
 # weekdays
 MON = 0

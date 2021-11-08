@@ -9,13 +9,13 @@ The modern Persian calendar, or the Solar Hijri calendar, was adopted in 1911.
 It consists of twelve months of 30 or 31 days. The new year always falls on the
 March equinox.
 """
-from math import floor, trunc
+from math import ceil, floor
 
-from pymeeus.Sun import Sun
 from pymeeus.Epoch import Epoch
+from pymeeus.Sun import Sun
 
 from . import gregorian
-from .utils import ceil, jwday, monthcalendarhelper, TROPICALYEAR
+from .utils import TROPICALYEAR, jwday, monthcalendarhelper
 
 EPOCH = 1948320.5
 WEEKDAYS = ("Doshanbeh", "Seshhanbeh", "Chaharshanbeh", "Panjshanbeh", "Jomeh", "Shanbeh", "Yekshanbeh")
@@ -67,7 +67,7 @@ def last_equinox_jd(jd):
 
     next_equinox = last_equinox - 1
 
-    while not (last_equinox <= jd and jd < next_equinox):
+    while not last_equinox <= jd < next_equinox:
         last_equinox = next_equinox
         guessyear = guessyear + 1
         next_equinox = equinox_jd(guessyear)

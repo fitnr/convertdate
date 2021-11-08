@@ -19,9 +19,12 @@ this module uses the astronomical convention of including a year 0 to simplify
 mathematical comparisons across epochs. To present a date in the standard
 convention, use the :meth:`julian.format` function.
 """
+from datetime import date
+from math import floor
+
 from .gregorian import from_jd as gregorian_from_jd
 from .gregorian import to_jd as gregorian_to_jd
-from .utils import floor, jwday, monthcalendarhelper
+from .utils import jwday, monthcalendarhelper
 
 J0000 = 1721424.5  # Julian date of Gregorian epoch: 0000-01-01
 J1970 = 2440587.5  # Julian date at Unix epoch: 1970-01-01
