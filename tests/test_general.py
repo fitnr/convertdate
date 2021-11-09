@@ -20,11 +20,6 @@ class TestConvertdate(CalTestCase):
 
         self.jdcs = range(2159677, 2488395, 2000)
 
-    def test_utils(self):
-        self.assertEqual(utils.amod(100, 4), 4)
-        self.assertEqual(utils.ceil(1.2), 2)
-        self.assertEqual(utils.jwday(self.jd), self.tm[6])
-
     def test_julian_legal_date(self):
         try:
             julian.to_jd(1900, 2, 29)
