@@ -3,7 +3,7 @@ convertdate
 
 The convertdate package was originally developed as "[Python Date
 Utils](http://sourceforge.net/projects/pythondateutil/)" by Phil
-Schwartz. It had been significantly updated and expanded.
+Schwartz. It has been significantly updated and expanded.
 
 [Consult the complete docs for detailed usage info](https://convertdate.readthedocs.io/).
 
@@ -37,8 +37,8 @@ Installing
 
 Or download the package and run `python setup.py install`.
 
-Using
------
+Examples
+--------
 
     >>> from convertdate import french_republican
     >>> from convertdate import hebrew

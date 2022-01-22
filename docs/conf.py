@@ -33,7 +33,8 @@ master_doc = 'index'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinx.ext.autodoc'
+    'sphinx.ext.autodoc',
+    'myst_parser'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -55,3 +56,4 @@ html_theme = "sphinx_rtd_theme"
 html_theme_options = {
     'display_version': True,
 }
+
