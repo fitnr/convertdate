@@ -12,7 +12,10 @@ htmlcov: | test
 	python -m coverage html
 
 test:
-	tox
+	python -m unittest
+
+pylint:
+	pylint convertdate/ tests
 
 cov:
 	python -m coverage run --branch --source=convertdate -m unittest
