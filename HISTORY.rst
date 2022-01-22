@@ -1,6 +1,11 @@
 History
 =======
 
+2.4.0
+-----
+* Drop official support for Python version 3.5 and 3.6, which have reached end-of-life.
+* Remove pytz dependency (#49)
+
 2.3.2
 -----
 * Switch Persian calendar to astronomical computation (was non-canonical algorithmic method)

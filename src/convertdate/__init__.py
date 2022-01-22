@@ -3,13 +3,13 @@
 # http://github.com/fitnr/convertdate
 # Licensed under the MIT license:
 # http://opensource.org/licenses/MIT
-# Copyright (c) 2016, 2020, 2021 fitnr <fitnr@fakeisthenewreal>
+# Copyright (c) 2016, 2020, 2021, 2022 fitnr <fitnr@fakeisthenewreal>
 """
 The Convertdate library contains methods and functions for converting dates between
 different calendar systems.
 
 It was originally developed as as `Python Date Util <(http://sourceforge.net/projects/pythondateutil/>`__
-by Phil Schwartz. It had been significantly updated and expanded.
+by Phil Schwartz. It has been significantly updated and expanded.
 
 Most of the original code is ported from
 `Fourmilab's calendar converter <http://www.fourmilab.ch/documents/calendar/>`__,
@@ -38,7 +38,7 @@ from . import positivist
 from . import ordinal
 from . import utils
 
-__version__ = '2.3.2'
+__version__ = '2.4.0'
 
 __all__ = [
     'holidays',
