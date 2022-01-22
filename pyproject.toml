@@ -2,7 +2,10 @@
 # http://github.com/fitnr/convertdate
 # Licensed under the MIT license:
 # http://opensource.org/licenses/MIT
-# Copyright (c) 2020, fitnr <fitnr@fakeisthenewreal>
+# Copyright (c) 2020-2, fitnr <fitnr@fakeisthenewreal>
+[build-system]
+requires = ["setuptools>=60.5.0", "wheel"]
+build-backend = 'setuptools.build_meta'
 
 [tool.black]
 line-length = 120

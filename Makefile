@@ -24,7 +24,6 @@ format:
 
 deploy:
 	rm -rf dist build
-	python setup.py sdist
-	python setup.py bdist_wheel
+	python -m build
 	twine upload dist/*
 	git push; git push --tags
