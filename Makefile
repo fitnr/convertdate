@@ -5,7 +5,8 @@
 # http://opensource.org/licenses/MIT
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
 
-.PHONY: all htmlcov test deploy format
+.PHONY: all htmlcov test pylint cov format publish build clean
+
 all:
 
 htmlcov: | test
@@ -25,8 +26,11 @@ format:
 	black src/ tests/
 	isort src/convertdate/*.py src/convertdate/data/*.py tests/*.py
 
-deploy:
-	rm -rf dist build
-	python -m build
+publish: | build
 	twine upload dist/*
-	git push; git push --tags
+
+build: | clean
+	python -m build
+
+clean:
+	rm -rf build dist
