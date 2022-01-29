@@ -7,6 +7,24 @@
 
 """
 The Tibetan calendar
+
+Based on 'Tibetan calendar mathematics', 2nd ed., 2014, arXiv: 1401.6285.
+Tibetan calendar a luni-solar calendar based on Indian's Kalacakra Calendar system.
+There are several versions with different epoch data. This implementation is 
+the most popular Phugpa version, which was officially introduced by the Tibet ruler 
+Drogön Chögyal Phagpa in 13th century. The Phugpa calendar has been reformed several
+times and now is widely used in Tibet.
+
+Tibetan Calendar has 12 or 13 months per year, 29 or 30 days per month. It has leap month
+and leap day, also skipped day. This implementation only support functions as: 
+to_jd(year: int, month: int(1-12), leap_month: bool, day: int(1-30), leap_day: bool)
+from_jd(jd: float)
+to_gregorian(year: int, month: int(1-12), leap_month: bool, day: int(1-30), leap_day: bool) 
+from_gregorian(year, month, day)
+
+TODO:
+    add month calendar, as Tibetan calendar has leap day and skipped day, it can't use the 
+    monthcalendarhelper to output calendar.
 """
 import math
 from decimal import Decimal
@@ -238,12 +256,3 @@ def month_length(year, month, leap_month):
     # if 30 is leap day, (30, leap_day=False) is last day
 
     return(jd2 - jd1 + 1)
-
-def monthcalendar(year, month, leap_month):
-    start_weekday = jwday(jd_of_day1(year, month, leap_month))
-    monthlen = month_length(year, month, leap_month)
-    return monthcalendarhelper(start_weekday, monthlen)
-
-
-def format(year, month, day):
-    """Convert a Tibetan date into a string with the format DD MONTH YYYY."""
