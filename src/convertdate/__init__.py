@@ -36,6 +36,7 @@ from . import mayan
 from . import persian
 from . import positivist
 from . import ordinal
+from . import tibetan
 from . import utils
 
 __version__ = '2.4.0'
@@ -60,5 +61,6 @@ __all__ = [
     'positivist',
     'mayan',
     'ordinal',
+    'tibetan',
     'utils',
 ]
