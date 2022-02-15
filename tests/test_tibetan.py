@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 import time
+import unittest
 
 from convertdate import gregorian, tibetan
-
-import unittest
 
 class TestConvertdate(unittest.TestCase):
     testdate = [
