@@ -5,6 +5,7 @@
 # http://opensource.org/licenses/MIT
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
 from math import floor
+import warnings
 
 from . import gregorian
 from .utils import jwday, monthcalendarhelper
@@ -108,7 +109,8 @@ def year_days(year):
     return to_jd(year + 1, 7, 1) - to_jd(year, 7, 1)
 
 
-def month_days(year, month):
+
+def month_length(year, month):
     '''How many days are in a given month of a given year'''
     if month > VEADAR:
         raise ValueError("Incorrect month index")
@@ -131,6 +133,12 @@ def month_days(year, month):
 
     # Nope, it's a 30 day month
     return 30
+
+def month_days(year, month):
+    # retain for backwards compatibility, but warn that this is deprecated
+    warnings.warn("month_days is deprecated, please use month_length",
+        DeprecationWarning, stacklevel=2)
+    return month_length(year, month)
 
 
 def to_jd(year, month, day):
