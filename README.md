@@ -7,6 +7,16 @@ Schwartz. It has been significantly updated and expanded.
 
 [Consult the complete docs for detailed usage info](https://convertdate.readthedocs.io/).
 
+
+![PyPI](https://img.shields.io/pypi/v/convertdate)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/convertdate)
+![PyPI - License](https://img.shields.io/pypi/l/convertdate)
+![PyPI - Downloads](https://img.shields.io/pypi/dd/convertdate)
+![Libraries.io dependency status for latest release](https://img.shields.io/librariesio/release/pypi/convertdate)
+[![convertdate](https://github.com/fitnr/convertdate/actions/workflows/python.yml/badge.svg)](https://github.com/fitnr/convertdate/actions/workflows/python.yml)
+
+--- 
+
 Available calendars:
 
 -   Armenian
