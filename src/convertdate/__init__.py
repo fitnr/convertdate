@@ -58,7 +58,6 @@ __all__ = [
     'mayan',
     'persian',
     'positivist',
-    'mayan',
     'ordinal',
     'utils',
 ]
