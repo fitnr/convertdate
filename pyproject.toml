@@ -5,7 +5,6 @@
 # Copyright (c) 2020-2, fitnr <fitnr@fakeisthenewreal>
 [project]
 name = "convertdate"
-version = "2.4.1"
 description = "Converts between Gregorian dates and other calendar systems"
 authors = [
     {name = "Neil Freeman", email = "contact@fakeisthenewreal.org"}
@@ -17,10 +16,12 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Natural Language :: English",
     "Programming Language :: Python",
-    "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: Religion",
     "Topic :: Scientific/Engineering :: Astronomy",
     "Operating System :: OS Independent",
@@ -29,6 +30,10 @@ requires-python = ">= 3.7, <4"
 dependencies = [
     "pymeeus>=0.3.13, <=1",
     ]
+dynamic = ["version"]
+
+[tool.setuptools.dynamic]
+version = { attr = "convertdate.__version__" }
 
 [project.urls]
 Homepage = "https://github.com/fitnr/convertdate"
