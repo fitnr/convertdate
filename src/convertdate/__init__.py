@@ -41,24 +41,23 @@ from . import utils
 __version__ = '2.4.0'
 
 __all__ = [
-    'holidays',
     'armenian',
     'bahai',
     'coptic',
-    'dublin',
     'daycount',
+    'dublin',
     'french_republican',
     'gregorian',
     'hebrew',
+    'holidays',
     'indian_civil',
     'islamic',
     'iso',
     'julian',
     'julianday',
     'mayan',
+    'ordinal',
     'persian',
     'positivist',
-    'mayan',
-    'ordinal',
     'utils',
 ]
