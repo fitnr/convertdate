@@ -16,7 +16,7 @@ test:
 	python -m unittest
 
 pylint:
-	pylint convertdate/ tests
+	pylint src/convertdate
 
 cov:
 	python -m coverage run --branch --source=convertdate -m unittest
