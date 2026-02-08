@@ -4,8 +4,8 @@
 # Licensed under the MIT license:
 # http://opensource.org/licenses/MIT
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
-from math import floor
 import warnings
+from math import floor
 
 from . import gregorian
 from .utils import jwday, monthcalendarhelper

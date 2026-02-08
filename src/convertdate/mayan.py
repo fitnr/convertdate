@@ -288,7 +288,9 @@ def next_tzolkin(tzolkin, jd):
 
 
 def next_tzolkin_haab(tzolkin, haab, jd):
-    '''For a given haab-tzolk'in combination, and a Julian day count, find the next occurrance of the combination after the date'''
+    '''Find the next occurence of a haab-tzolk'in combination.
+
+    Requires a Julian day count as the starting place for the search.'''
     # get H & T of input jd, and their place in the 18,980 day cycle
     haabcount = _haab_count(*to_haab(jd))
     haab_desired_count = _haab_count(*haab)
