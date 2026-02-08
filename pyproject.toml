@@ -7,10 +7,12 @@
 name = "convertdate"
 description = "Converts between Gregorian dates and other calendar systems"
 authors = [
-    {name = "Neil Freeman", email = "contact@fakeisthenewreal.org"}
+    {name = "Neil Freeman", email = "contact@fakeisthenewreal.org"},
+    {name = "Phil Schwartz"}
     ]
 readme = "README.md"
-license = {file = "LICENSE"}
+license = "MIT"
+license-files = ["LICENSE"]
 keywords = ["calendar", "date", "time"]
 classifiers = [
     "License :: OSI Approved :: MIT License",
