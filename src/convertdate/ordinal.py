@@ -23,8 +23,13 @@ def to_jd(year, dayofyear):
 
 def from_jd(jd):
     '''Convert a Julian day count to an ordinal date.'''
-    year, _, _ = gregorian.from_jd(jd)
-    return year, round(jd - gregorian.to_jd(year, 1, 1) + 1)
+    year, month, day = gregorian.from_jd(jd)
+    # Derive the day of year from the Gregorian date rather than the raw ``jd``.
+    # Both ``to_jd`` values carry the same half-day offset, so their difference
+    # is an exact whole number of days; subtracting ``jd`` directly leaves a
+    # ``.5`` remainder that ``round`` pushes the wrong way (e.g. ``365.5`` ->
+    # ``366``), reporting a non-existent day 366 in common years.
+    return year, int(gregorian.to_jd(year, month, day) - gregorian.to_jd(year, 1, 1)) + 1
 
 
 def from_gregorian(year, month, day):
