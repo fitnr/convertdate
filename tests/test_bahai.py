@@ -12,6 +12,7 @@ from . import CalTestCase
 class TestBahai(CalTestCase):
     pairs = {
         (2016, 2, 26): (172, bahai.AYYAMIHA, 1),
+        (2016, 3, 20): (173, bahai.BAHA, 1),
         (2041, 11, 27): (198, bahai.QAWL, 6),  # ascension of Abdu'l-Bahá 2041
         (2043, 11, 28): (200, bahai.QAWL, 6),  # ascension of Abdu'l-Bahá 2043
         (2038, 3, 1): (194, bahai.ALA, 1),  # beginning of fast 2038
