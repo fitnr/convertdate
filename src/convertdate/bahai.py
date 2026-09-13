@@ -152,7 +152,7 @@ def from_jd(jd):
     gy = gregorian.from_jd(jd)[0]
     n_month, n_day = gregorian_nawruz(gy)
 
-    x = 1 if jd <= gregorian.to_jd(gy, n_month, 20) else 0
+    x = 1 if jd < gregorian.to_jd(gy, n_month, n_day) else 0
     year = gy - (EPOCH_GREGORIAN_YEAR + x) + 1
     days = jd - to_jd(year, 1, 1)
 
