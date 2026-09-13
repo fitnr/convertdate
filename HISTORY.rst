@@ -1,6 +1,12 @@
 History
 =======
 
+2.5.0
+-----
+* Bug fix for Coptic calendar (#65)
+* Bug fix for ordinal calendar (#66)
+* Bug fix for monthcalendar (#58)
+
 2.4.0
 -----
 * Drop official support for Python version 3.5 and 3.6, which have reached end-of-life.
