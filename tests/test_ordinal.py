@@ -1,6 +1,6 @@
 from calendar import isleap
 
-from convertdate import ordinal
+from convertdate import gregorian, ordinal
 
 from . import CalTestCase
 
@@ -57,3 +57,32 @@ class TestOrdinal(CalTestCase):
                 self.assertEqual(ordinal.from_gregorian(year, 2, 29), (year, 60))
 
             self.assertEqual(ordinal.from_gregorian(year, 3, 1), (year, 60 + leap))
+
+    def test_from_jd_dec_31_common_year(self):
+        # An integer Julian day count for December 31 of a common year must map
+        # to ordinal day 365, not the non-existent day 366. Regression for the
+        # ``round(365.5) -> 366`` half-day rounding bug in ``from_jd``.
+        for year in (2021, 2022, 2023, 2025, 2100, 2200):
+            self.assertFalse(isleap(year))
+            jd = gregorian.to_jd(year, 12, 31)  # ...5 (midnight) form
+            self.assertEqual(ordinal.from_jd(jd), (year, 365))
+            # and the integer JDN that gregorian maps to that same day
+            self.assertEqual(ordinal.from_jd(int(jd) + 1), (year, 365))
+
+    def test_from_jd_dec_31_leap_year(self):
+        # Leap-year December 31 stays day 366.
+        for year in (2020, 2024, 2000):
+            self.assertTrue(isleap(year))
+            self.assertEqual(ordinal.from_jd(gregorian.to_jd(year, 12, 31)), (year, 366))
+            self.assertEqual(ordinal.from_jd(int(gregorian.to_jd(year, 12, 31)) + 1), (year, 366))
+
+    def test_from_jd_consistent_with_gregorian(self):
+        # For any Julian day -- integer count or ``.5`` midnight form -- the
+        # ordinal date must describe the same calendar day as gregorian.from_jd,
+        # and never yield a day of year beyond the length of its year.
+        for jd in range(2415020, 2488395, 7):
+            for j in (jd, jd + 0.5):
+                year, doy = ordinal.from_jd(j)
+                self.assertEqual((year, doy), ordinal.from_gregorian(*gregorian.from_jd(j)))
+                self.assertLessEqual(doy, 366 if isleap(year) else 365)
+                self.assertGreaterEqual(doy, 1)
