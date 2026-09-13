@@ -15,7 +15,6 @@ license = "MIT"
 license-files = ["LICENSE"]
 keywords = ["calendar", "date", "time"]
 classifiers = [
-    "License :: OSI Approved :: MIT License",
     "Natural Language :: English",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3.8",
