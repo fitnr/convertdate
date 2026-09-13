@@ -161,7 +161,7 @@ def from_jd(jd):
     # verify this next line...
     year = gy - (bstarty + x) + 1
     days = jd - to_jd(year, 1, 1)
-    bld = to_jd(year, n_day - 1, 1)
+    bld = to_jd(year, 20, 1)
 
     if jd >= bld:
         month = 20
