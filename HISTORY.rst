@@ -1,6 +1,10 @@
 History
 =======
 
+2.5.1
+-----
+* Bug fix for Bahai calendar (#67)
+
 2.5.0
 -----
 * Bug fix for Coptic calendar (#65)
