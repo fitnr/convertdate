@@ -5,6 +5,9 @@ History
 -----
 * Bug fix for Coptic calendar (#65)
 * Bug fix for ordinal calendar (#66)
+
+2.4.1
+-----
 * Bug fix for monthcalendar (#58)
 
 2.4.0
