@@ -8,9 +8,9 @@
 """
 The Bahá'í (Badí) calendar is a solar calendar with 19 months of 19 days.
 
-Every four years, an intercalary period, Ayyam-i-Há, occurs between the 18th and 19th
-months. Dates in this period are returned as month 19, and the month of ‘Alá is always
-reported as month 20.
+An intercalary period, Ayyam-i-Há, occurs between the 18th and 19th months, has
+either four or five days. Dates in this period are returned as month 19, and
+the month of ‘Alá is always reported as month 20.
 
 .. code-block:: python
 
@@ -149,24 +149,14 @@ def to_jd(year, month, day):
 def from_jd(jd):
     '''Calculate Bahai date from Julian day'''
     jd = trunc(jd) + 0.5
-    g = gregorian.from_jd(jd)
-    gy = g[0]
+    gy = gregorian.from_jd(jd)[0]
     n_month, n_day = gregorian_nawruz(gy)
 
-    bstarty = EPOCH_GREGORIAN_YEAR
-
-    if jd <= gregorian.to_jd(gy, n_month, 20):
-        x = 1
-    else:
-        x = 0
-    # verify this next line...
-    bys = gy - (bstarty + (((gregorian.to_jd(gy, 1, 1) <= jd) and x)))
-
-    year = bys + 1
+    x = 1 if jd <= gregorian.to_jd(gy, n_month, 20) else 0
+    year = gy - (EPOCH_GREGORIAN_YEAR + x) + 1
     days = jd - to_jd(year, 1, 1)
-    bld = to_jd(year, n_day - 1, 1)
 
-    if jd >= bld:
+    if jd >= to_jd(year, 20, 1):
         month = 20
     else:
         month = trunc(days / 19) + 1
