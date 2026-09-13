@@ -91,6 +91,16 @@ def leap(year, method=None):
     if year in (3, 7, 11):
         return True
 
+    if method == 'equinox':
+        # Determine astronomically whether the year has a 6th complementary
+        # day (i.e. 366 days). This must be checked before the `year < 15`
+        # short-circuit below, which only describes the schematic arithmetic
+        # methods. Otherwise from_jd() (which is equinox-based) can produce a
+        # 6th sansculottide for a year that to_jd()/leap() then reject, so the
+        # date fails to round-trip.
+        startjd = to_jd(year, 1, 1, method='equinox')
+        return premier_da_la_annee(startjd + 367) - startjd == 366.0
+
     if year < 15:
         return False
 
@@ -103,15 +113,7 @@ def leap(year, method=None):
     if method in (128, 'madler'):
         return year % 4 == 0 and year % 128 != 0
 
-    if method == 'equinox':
-        # Is equinox on 366th day after (year, 1, 1)
-        startjd = to_jd(year, 1, 1, method='equinox')
-        if premier_da_la_annee(startjd + 367) - startjd == 366.0:
-            return True
-    else:
-        raise ValueError("Unknown leap year method. Try: continuous, romme, madler or equinox")
-
-    return False
+    raise ValueError("Unknown leap year method. Try: continuous, romme, madler or equinox")
 
 
 def _previous_fall_equinox(jd):
