@@ -158,6 +158,20 @@ class TestFrenchRepublican(unittest.TestCase):
     def test_french_republican_from_jd_errors(self):
         self.assertRaises(ValueError, fr.from_gregorian, 1789, 1, 1, 'romme')
 
+    def test_french_republican_sixth_complementary_day_roundtrip(self):
+        # Regression: from_jd() (equinox-based) produces the 6th complementary
+        # day for leap years before year 15, but leap()/to_jd() used to reject
+        # it because a `year < 15` short-circuit ran before the equinox
+        # calculation, so the date failed to round-trip. See GH issue.
+        for jd in (1724246.5, 1731551.5, 1739221.5, 1746891.5):
+            date = fr.from_jd(jd)
+            self.assertEqual(date[1:], (13, 6))  # 6th sansculottide
+            self.assertEqual(fr.to_jd(*date), jd)
+        # Historical sextile years remain leap and round-trip too.
+        for year in (3, 7, 11):
+            self.assertTrue(fr.leap(year))
+            self.assertEqual(fr.from_jd(fr.to_jd(year, 13, 6)), (year, 13, 6))
+
     def test_french_republican_start_of_years_from_gregorian_equinoctal(self):
         for f, g in year_starts:
             self.assertEqual(f, fr.from_gregorian(*g))
