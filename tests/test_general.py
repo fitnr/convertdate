@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import time
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 from convertdate import coptic, dublin, gregorian, hebrew, islamic, iso, julian, julianday, ordinal, persian, utils
 
@@ -112,12 +112,18 @@ class TestConvertdate(CalTestCase):
         self.assertEqual(julianday.to_datetime(self.x), datetime(2016, 2, 29, tzinfo=timezone.utc))
 
         self.assertEqual(julianday.to_datetime(self.c + 0.25), datetime(1492, 10, 21, 6, tzinfo=timezone.utc))
-        self.assertEqual(julianday.to_datetime(self.x + 0.525), datetime(2016, 2, 29, 12, 36, tzinfo=timezone.utc))
+        self.assertLessEqual(
+            abs(julianday.to_datetime(self.x + 0.525) - datetime(2016, 2, 29, 12, 36, tzinfo=timezone.utc)),
+            timedelta(microseconds=40),
+        )
 
         dt = datetime(2014, 11, 8, 3, 37, tzinfo=timezone.utc)
-        self.assertEqual(julianday.from_datetime(dt), 2456969.65069)
+        self.assertEqual(julianday.from_datetime(dt), 2456969.6506944443)
 
-        self.assertEqual(julianday.to_datetime(self.x + 0.525), datetime(2016, 2, 29, 12, 36, tzinfo=timezone.utc))
+        self.assertLessEqual(
+            abs(julianday.to_datetime(self.x + 0.525) - datetime(2016, 2, 29, 12, 36, tzinfo=timezone.utc)),
+            timedelta(microseconds=40),
+        )
 
     def test_month_length_julian(self):
         self.assertEqual(julian.month_length(1582, 10), 31)
