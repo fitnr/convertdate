@@ -41,6 +41,14 @@ class TestConvertdate(CalTestCase):
         self.assertEqual(indian_civil.month_length(1922, 1), 31)
         self.assertEqual(indian_civil.month_length(1923, 1), 30)
 
+    def test_chaitra_century_leap_years(self):
+        for year, expected in [(1822, 30), (1878, 31), (1922, 31), (1978, 31), (2022, 30)]:
+            with self.subTest(year=year):
+                self.assertEqual(indian_civil.month_length(year, 1), expected)
+                days = [day for week in indian_civil.monthcalendar(year, 1) for day in week if day is not None]
+                self.assertEqual(days, list(range(1, expected + 1)))
+                self.assertEqual(indian_civil.to_jd(year, 2, 1) - indian_civil.to_jd(year, 1, 1), expected)
+
     def test_monthcalendar_indian_civil(self):
         self.assertEqual(indian_civil.monthcalendar(1936, 8).pop(0).pop(4), 1)
         self.assertEqual(indian_civil.monthcalendar(1927, 2).pop(0).pop(4), 1)
