@@ -431,7 +431,7 @@ def ramadan(year, eve=None):
     """The first day of Ramadan, the month of fasting in the Islamic calendar."""
     jd = islamic.to_jd_gregorianyear(year, 9, 1)
     if eve:
-        jd = jd = 1
+        jd = jd - 1
     return gregorian.from_jd(jd)
 
 
@@ -440,7 +440,7 @@ def ashura(year, eve=None):
     Islamic calendar."""
     jd = islamic.to_jd_gregorianyear(year, 1, 10)
     if eve:
-        jd = jd = 1
+        jd = jd - 1
     return gregorian.from_jd(jd)
 
 
@@ -449,7 +449,7 @@ def eid_alfitr(year, eve=None):
     day of the month of Shawwāl."""
     jd = islamic.to_jd_gregorianyear(year, 10, 1)
     if eve:
-        jd = jd = 1
+        jd = jd - 1
     return gregorian.from_jd(jd)
 
 
@@ -458,7 +458,7 @@ def eid_aladha(year, eve=None):
     day of the month of Zū al-Ḥijjah."""
     jd = islamic.to_jd_gregorianyear(year, 12, 10)
     if eve:
-        jd = jd = 1
+        jd = jd - 1
     return gregorian.from_jd(jd)
 
 

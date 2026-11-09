@@ -4,7 +4,13 @@
 # Licensed under the MIT license:
 # http://opensource.org/licenses/MIT
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
-"""Convert dates between the Hijri calendar and the Gregorian and Julian calendars."""
+"""Convert dates between the Hijri calendar and the Gregorian and Julian calendars.
+
+Like the Gregorian calendar, the historical Islamic calendar has no year 0: the year
+before 1 AH is 1 BH. The conversion functions use the continuous numbering of the
+computational convention (0 = 1 BH, -1 = 2 BH) to simplify comparisons across epochs.
+To present a date in the standard convention, use :meth:`islamic.format`.
+"""
 from math import ceil, floor
 
 from . import gregorian
@@ -83,7 +89,23 @@ def monthcalendar(year, month):
     return monthcalendarhelper(start_weekday, monthlen)
 
 
-def format(year, month, day):
-    """Convert an Islamic date into a string with the format DD MONTH YYYY."""
+def format(year, month, day, style="long"):
+    """Convert an Islamic date into a string.
+
+    Like the Gregorian calendar, the historical Islamic calendar has no year 0:
+    the year before 1 AH is 1 BH. While the computational functions in this
+    module use continuous numbering (0 = 1 BH, -1 = 2 BH), this function
+    converts to the conventional notation, appending "BH" for years before the
+    Hijra.
+
+    With the default style="long", return "DD MONTH YYYY [AH|BH]" using the
+    month names from MONTHS. With style="short", return "Y/M/D [AH|BH]".
+    """
     # pylint: disable=redefined-builtin
-    return "{0:d} {1:} {2:d}".format(day, MONTHS[month - 1], year)
+    era = ""
+    if year <= 0:
+        year = 1 - year
+        era = " BH"
+    if style == "short":
+        return "{0:d}/{1:d}/{2:d}{3:}".format(year, month, day, era)
+    return "{0:d} {1:} {2:d}{3:}".format(day, MONTHS[month - 1], year, era)
