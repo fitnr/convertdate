@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import unittest
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from convertdate import holidays, julian
 
@@ -301,6 +301,7 @@ class TestHolidays(unittest.TestCase):
             'eid_aladha': (2015, 9, 24),
             'ramadan': (2015, 6, 18),
             'eid_alfitr': (2015, 7, 18),
+            'ashura': (2015, 10, 24),
         }
         with self.subTest():
             for name, date in holidays_2015.items():
@@ -311,7 +312,25 @@ class TestHolidays(unittest.TestCase):
             'eid_aladha': (2021, 7, 20),
             'ramadan': (2021, 4, 13),
             'eid_alfitr': (2021, 5, 13),
+            'ashura': (2021, 8, 19),
         }
         with self.subTest():
             for name, date in holidays_2021.items():
                 self.assertEqual(getattr(h21, name), date, name)
+
+    def test_islamic_holidays_eve(self):
+        """Islamic holidays start at sunset, so eve=True returns the previous day."""
+        dates = [
+            (2015, 'eid_aladha', (2015, 9, 24)),
+            (2015, 'ramadan', (2015, 6, 18)),
+            (2015, 'eid_alfitr', (2015, 7, 18)),
+            (2015, 'ashura', (2015, 10, 24)),
+            (2021, 'eid_aladha', (2021, 7, 20)),
+            (2021, 'ramadan', (2021, 4, 13)),
+            (2021, 'eid_alfitr', (2021, 5, 13)),
+            (2021, 'ashura', (2021, 8, 19)),
+        ]
+        for year, name, date in dates:
+            expected = datetime(*date) - timedelta(days=1)
+            expected = (expected.year, expected.month, expected.day)
+            self.assertEqual(getattr(holidays, name)(year, eve=True), expected, name)

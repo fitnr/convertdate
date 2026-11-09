@@ -62,6 +62,12 @@ class TestConvertdate(CalTestCase):
         self.assertEqual(islamic.from_jd(1912648.5), (-100, 1, 1))
         self.assertEqual(islamic.to_jd(-100, 1, 1), 1912648.5)
 
+        self.assertEqual(islamic.format(0, 12, 25), '25 Z\u016b al-\u1e24ijjah 1 BH')
+        self.assertEqual(islamic.format(-1, 12, 25), '25 Z\u016b al-\u1e24ijjah 2 BH')
+        self.assertEqual(islamic.format(1436, 10, 1), '1 Shaww\u0101l 1436')
+        self.assertEqual(islamic.format(0, 12, 25, style='short'), '1/12/25 BH')
+        self.assertEqual(islamic.format(1436, 10, 1, style='short'), '1436/10/1')
+
     def test_iso(self):
         self.assertEqual(iso.from_gregorian(2005, 1, 1), (2004, 53, 6))
         self.assertEqual(iso.to_gregorian(2004, 53, 6), (2005, 1, 1))
