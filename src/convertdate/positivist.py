@@ -103,7 +103,8 @@ def from_jd(jd):
         + yindex
     )
 
-    if yindex == 4:
+    if cent == 4 or yindex == 4:
+        # Last day of a leap year that ends a 4-year or 400-year cycle
         yearday = 365
         year = year - 1
 

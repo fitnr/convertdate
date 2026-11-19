@@ -42,6 +42,14 @@ class TestGregorian(unittest.TestCase):
         with self.assertRaises(ValueError):
             from_jd(EPOCH - 0.5)
 
+    def test_last_day_of_400_year_cycle(self):
+        # 2000 and 2400 are leap years that end a 400-year Gregorian cycle
+        self.assertEqual(from_gregorian(2000, 12, 31), (212, 14, 2))
+        self.assertEqual(from_gregorian(2001, 1, 1), (213, 1, 1))
+        self.assertEqual(from_gregorian(2400, 12, 31), (612, 14, 2))
+        self.assertEqual(from_jd(to_jd(212, 14, 2)), (212, 14, 2))
+        self.assertEqual(from_jd(to_jd(612, 14, 2)), (612, 14, 2))
+
     def test_reflexive_jd(self):
         self.assertEqual(from_jd(to_jd(1, 1, 1)), (1, 1, 1))
         self.assertEqual(from_jd(to_jd(4, 1, 1)), (4, 1, 1))
